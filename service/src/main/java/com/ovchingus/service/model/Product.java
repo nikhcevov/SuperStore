@@ -3,6 +3,7 @@ package com.ovchingus.service.model;
 public class Product {
      private Integer id;
      private String name;
+     private String lolkek;
 
     public Product(Integer id, String name) {
         this.id = id;
