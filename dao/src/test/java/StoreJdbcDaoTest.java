@@ -1,7 +1,6 @@
 import com.ovchingus.dao.core.DaoFactory;
 import com.ovchingus.dao.core.GenericDao;
 import com.ovchingus.dao.core.jdbc.DaoFactoryJdbc;
-import com.ovchingus.dao.core.jdbc.PersistException;
 import com.ovchingus.dao.model.Store;
 import com.ovchingus.dao.util.KeyDb;
 import org.junit.Assert;
@@ -15,7 +14,7 @@ public class StoreJdbcDaoTest {
     private GenericDao dao;
 
     @Before
-    public void setUp() throws PersistException {
+    public void setUp() throws Exception {
 
         DaoFactory<Connection> factory = new DaoFactoryJdbc();
         Connection connection = factory.getContext();

@@ -14,6 +14,10 @@ public class ShopListItem {
     public ShopListItem() {
     }
 
+    public ShopListItem(Product product) {
+        this.product = product;
+    }
+
     public Product getProduct() {
         return product;
     }

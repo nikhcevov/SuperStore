@@ -9,7 +9,6 @@ public class Product implements Identified<KeyDb> {
     private Integer id;
     private String name;
 
-
     public Product() {
     }
 
