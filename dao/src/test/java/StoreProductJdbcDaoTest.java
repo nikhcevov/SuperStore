@@ -15,7 +15,7 @@ public class StoreProductJdbcDaoTest {
     private GenericDao dao;
 
     @Before
-    public void setUp() throws PersistException {
+    public void setUp() throws Exception {
 
         DaoFactory<Connection> factory = new DaoFactoryJdbc();
         Connection connection = factory.getContext();
