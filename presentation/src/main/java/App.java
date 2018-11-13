@@ -4,6 +4,7 @@ public class App {
     private String name3 = "OLOLOLO";
     private String name4 = "asdasd";
     private String name5 = "МистерМакс";
+    private String name6 = "VbcnthAfrica";
 
     public String getName() {
         return name;
