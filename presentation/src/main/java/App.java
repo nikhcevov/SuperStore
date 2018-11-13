@@ -3,6 +3,7 @@ public class App {
     private String name2 = "AKAKAKA";
     private String name3 = "OLOLOLO";
     private String name4 = "asdasd";
+    private String name5 = "МистерМакс";
 
     public String getName() {
         return name;
