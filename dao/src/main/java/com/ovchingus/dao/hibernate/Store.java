@@ -23,7 +23,11 @@ public class Store extends DaoConnection {
     @Column(name = "address")
     private String address;
 
-    @ManyToMany(cascade = {CascadeType.ALL})
+    @ManyToMany(cascade = {CascadeType.DETACH,
+                            CascadeType.MERGE,
+                            CascadeType.REFRESH,
+                            CascadeType.PERSIST
+})
     @JoinTable(
             name = "Store_Product",
             joinColumns = {@JoinColumn(name = "store_id")},

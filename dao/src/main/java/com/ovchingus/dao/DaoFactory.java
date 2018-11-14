@@ -2,6 +2,7 @@ package com.ovchingus.dao;
 
 import com.ovchingus.dao.hibernate.*;
 
+//TODO: DaoFactory do not working! Need to repair it.
 public class DaoFactory {
 
     public DaoConnection daoConnection;
