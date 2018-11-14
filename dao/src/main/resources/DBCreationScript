@@ -23,3 +23,5 @@ CREATE TABLE Store_Product (
   FOREIGN KEY (product_id) REFERENCES Product (product_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
+ set names cp1251;

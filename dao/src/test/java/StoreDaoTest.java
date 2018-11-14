@@ -1,36 +1,36 @@
-import com.ovchingus.dao.DaoFactory;
-import com.ovchingus.dao.GenericDao;
 import com.ovchingus.dao.hibernate.Store;
 import com.ovchingus.dao.hibernate.StoreDao;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class StoreDaoTest {
 
-    private GenericDao dao;
-    private GenericDao daw;
+    private StoreDao sd;
 
     @Before
     public void setUp() {
-        dao = new DaoFactory().getDao("database", Store.class);
-        StoreDao sd = new StoreDao();
-
+        sd = new StoreDao();
     }
 
     @Test
     public void testGetByPK() {
-
         Store store = new Store();
-        store = (Store) dao.findById(4);
+        store = sd.findById(4);
         System.out.println(store);
-        Assert.assertNotNull(store);
+    }
+
+    @Test
+    public void testGetByName() {
+        Store store = new Store();
+        store = sd.findByName("sege");
+        System.out.println(store);
     }
 
     @Test
     public void testUpdate() {
-
-        StoreDao sd = new StoreDao();
         Store store = new Store();
         store.setName("mega");
         store.setAddress("leninskiy, 2");
@@ -40,11 +40,17 @@ public class StoreDaoTest {
     }
 
     @Test
+    public void testGetAll() {
+        List<Store> list = new ArrayList<>();
+        list = sd.findAll();
+        System.out.println(list);
+    }
+
+    @Test
     public void testInsertPK() {
-        StoreDao sd = new StoreDao();
         Store store = new Store();
-        store.setName("ashan");
-        store.setAddress("karaganda");
+        store.setName("eshkere");
+        store.setAddress("mom");
         sd.openCurrentSessionWithTransaction();
         sd.persist(store);
         sd.closeCurrentSessionWithTransaction();
