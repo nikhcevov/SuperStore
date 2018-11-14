@@ -23,6 +23,7 @@ public class Store extends DaoConnection {
     @Column(name = "address")
     private String address;
 
+
     @ManyToMany(cascade = {
             CascadeType.DETACH,
             CascadeType.MERGE,

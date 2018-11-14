@@ -51,9 +51,7 @@ public class StoreDaoTest {
         Store store = new Store();
         store.setName("eshkere");
         store.setAddress("mom");
-        sd.openCurrentSessionWithTransaction();
         sd.persist(store);
-        sd.closeCurrentSessionWithTransaction();
         //dao.persist(store);
     }
 
