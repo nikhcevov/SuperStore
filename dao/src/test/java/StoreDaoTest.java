@@ -60,7 +60,7 @@ public class StoreDaoTest {
     @Test
     public void testDelete() {
         Store store = new Store();
-        store.setId(5);
+        store.setId(4);
         sd.delete(store);
     }
 }
