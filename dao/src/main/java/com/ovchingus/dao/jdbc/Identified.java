@@ -1,6 +1,6 @@
-package com.ovchingus.dao.core.jdbc;
+package com.ovchingus.dao.jdbc;
 
-import com.ovchingus.dao.util.KeyDb;
+import com.ovchingus.dao.KeyDb;
 
 /**
  * Интерфейс идентифицируемых объектов.

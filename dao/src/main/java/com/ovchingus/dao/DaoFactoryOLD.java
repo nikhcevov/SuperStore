@@ -1,15 +1,15 @@
-package com.ovchingus.dao.core;
+package com.ovchingus.dao;
 
 /** Фабрика объектов для работы с базой данных */
-public interface DaoFactory<T> {
+public interface DaoFactoryOLD<T> {
 
     interface DaoCreator<T> {
-        GenericDao create(T context);
+        GenericDaoOLD create(T context);
     }
 
     /** Возвращает подключение к базе данных */
     T getContext() throws Exception;
 
     /** Возвращает объект для управления персистентным состоянием объекта */
-    GenericDao getDao(T context, Class dtoClass) throws Exception;
+    GenericDaoOLD getDao(T context, Class dtoClass) throws Exception;
 }

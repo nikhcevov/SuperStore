@@ -12,6 +12,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="model" target="1.5" />
       <module name="TypeModel" target="1.5" />
     </bytecodeTargetLevel>
   </component>

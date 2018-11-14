@@ -1,26 +1,26 @@
-package com.ovchingus.dao.model;
+package com.ovchingus.dao.jdbc.model;
 
 
-import com.ovchingus.dao.core.jdbc.Identified;
-import com.ovchingus.dao.util.KeyDb;
+import com.ovchingus.dao.KeyDb;
+import com.ovchingus.dao.jdbc.Identified;
 
-public class StoreProduct implements Identified<KeyDb> {
+public class StoreProductJdbc implements Identified<KeyDb> {
 
     private Integer storeId;
     private Integer productId;
     private Double price;
     private Integer qty;
 
-    public StoreProduct() {
+    public StoreProductJdbc() {
     }
 
-    public StoreProduct(Integer productId, Double price, Integer qty) {
+    public StoreProductJdbc(Integer productId, Double price, Integer qty) {
         this.productId = productId;
         this.price = price;
         this.qty = qty;
     }
 
-    public StoreProduct(Integer storeId, Integer productId, Double price, Integer qty) {
+    public StoreProductJdbc(Integer storeId, Integer productId, Double price, Integer qty) {
         this.storeId = storeId;
         this.productId = productId;
         this.price = price;

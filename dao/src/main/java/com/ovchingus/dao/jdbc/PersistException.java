@@ -1,4 +1,4 @@
-package com.ovchingus.dao.core.jdbc;
+package com.ovchingus.dao.jdbc;
 
 //TODO: доделать исключения
 public class PersistException extends Exception {

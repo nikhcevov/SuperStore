@@ -1,8 +1,8 @@
-package com.ovchingus.dao.core.jdbc;
+package com.ovchingus.dao.jdbc;
 
-import com.ovchingus.dao.core.GenericDao;
-import com.ovchingus.dao.model.Store;
-import com.ovchingus.dao.util.KeyDb;
+import com.ovchingus.dao.GenericDaoOLD;
+import com.ovchingus.dao.KeyDb;
+import com.ovchingus.dao.jdbc.model.ProductJdbc;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,27 +10,27 @@ import java.sql.ResultSet;
 import java.util.LinkedList;
 import java.util.List;
 
-public class StoreJdbcDao extends AbstractJdbcDao<Store, KeyDb> implements GenericDao<Store, KeyDb> {
+public class ProductJdbcDao extends AbstractJdbcDao<ProductJdbc, KeyDb> implements GenericDaoOLD<ProductJdbc, KeyDb> {
 
-    public StoreJdbcDao(Connection connection) {
+    ProductJdbcDao(Connection connection) {
         super(connection);
     }
 
     @Override
     protected String getUpdateQuery() {
-        return "UPDATE Store \n" +
-                "SET name = ?, address  = ? \n" +
+        return "UPDATE ProductJdbc \n" +
+                "SET name = ? \n" +
                 "WHERE id = ?;";
     }
 
     @Override
     protected String getDeleteQuery() {
-        return "DELETE FROM Store WHERE id = ?;";
+        return "DELETE FROM ProductJdbc WHERE id = ?;";
     }
 
     @Override
     protected String getSelectQuery() {
-        return "SELECT id, name, address FROM Store ";
+        return "SELECT id, name FROM ProductJdbc ";
     }
 
     @Override
@@ -40,8 +40,8 @@ public class StoreJdbcDao extends AbstractJdbcDao<Store, KeyDb> implements Gener
 
     @Override
     protected String getInsertQuery() {
-        return "INSERT INTO Store (name, address) \n" +
-                "VALUES (?, ?);";
+        return "INSERT INTO ProductJdbc (name) \n" +
+                "VALUES (?);";
     }
 
     @Override
@@ -55,15 +55,14 @@ public class StoreJdbcDao extends AbstractJdbcDao<Store, KeyDb> implements Gener
     }
 
     @Override
-    protected List<Store> parseResultSet(ResultSet rs) throws PersistException {
-        LinkedList<Store> result = new LinkedList<>();
+    protected List<ProductJdbc> parseResultSet(ResultSet rs) throws PersistException {
+        LinkedList<ProductJdbc> result = new LinkedList<>();
         try {
             while (rs.next()) {
-                Store store = new Store();
-                store.setId(rs.getInt("id"));
-                store.setName(rs.getString("name"));
-                store.setAddress(rs.getString("address"));
-                result.add(store);
+                ProductJdbc product = new ProductJdbc();
+                product.setId(rs.getInt("id"));
+                product.setName(rs.getString("name"));
+                result.add(product);
             }
         } catch (Exception e) {
             throw new PersistException(e);
@@ -72,7 +71,7 @@ public class StoreJdbcDao extends AbstractJdbcDao<Store, KeyDb> implements Gener
     }
 
     @Override
-    protected void prepareStatementForDelete(PreparedStatement statement, Store object) throws PersistException {
+    protected void prepareStatementForDelete(PreparedStatement statement, ProductJdbc object) throws PersistException {
         try {
             statement.setInt(1, object.getId());
         } catch (Exception e) {
@@ -81,21 +80,19 @@ public class StoreJdbcDao extends AbstractJdbcDao<Store, KeyDb> implements Gener
     }
 
     @Override
-    protected void prepareStatementForUpdate(PreparedStatement statement, Store object) throws PersistException {
+    protected void prepareStatementForUpdate(PreparedStatement statement, ProductJdbc object) throws PersistException {
         try {
             statement.setString(1, object.getName());
-            statement.setString(2, object.getAddress());
-            statement.setInt(3, object.getId());
+            statement.setInt(2, object.getId());
         } catch (Exception e) {
             throw new PersistException(e);
         }
     }
 
     @Override
-    protected void prepareStatementForInsert(PreparedStatement statement, Store object) throws PersistException {
+    protected void prepareStatementForInsert(PreparedStatement statement, ProductJdbc object) throws PersistException {
         try {
             statement.setString(1, object.getName());
-            statement.setString(2, object.getAddress());
         } catch (Exception e) {
             throw new PersistException(e);
         }

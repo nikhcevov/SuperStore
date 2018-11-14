@@ -1,0 +1,25 @@
+CREATE TABLE Store (
+  store_id int(11) NOT NULL AUTO_INCREMENT,
+  name varchar(50) DEFAULT NULL,
+  address varchar(300) DEFAULT NULL,
+  PRIMARY KEY (store_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE Product (
+  product_id int(11) NOT NULL AUTO_INCREMENT,
+  name varchar(100) DEFAULT NULL,
+  PRIMARY KEY (product_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE Store_Product (
+  store_id int(11) NOT NULL,
+  product_id int(11) NOT NULL,
+  price double DEFAULT NULL,
+  qty int DEFAULT NULL,
+  PRIMARY KEY (store_id,product_id),
+  CONSTRAINT store_product_fk_to_store
+  FOREIGN KEY (store_id) REFERENCES Store (store_id),
+  CONSTRAINT store_product_fk_to_product
+  FOREIGN KEY (product_id) REFERENCES Product (product_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
