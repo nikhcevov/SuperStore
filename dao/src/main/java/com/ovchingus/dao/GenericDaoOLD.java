@@ -1,4 +1,4 @@
-package com.ovchingus.dao.core;
+package com.ovchingus.dao;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ import java.util.List;
  * @param <T>  тип объекта персистенции
  * @param <PK> тип первичного ключа
  */
-public interface GenericDao<T, PK> {
+public interface GenericDaoOLD<T, PK> {
 
     /**
      * Создает новую запись, соответствующую объекту object

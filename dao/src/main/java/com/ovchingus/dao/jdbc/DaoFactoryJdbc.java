@@ -1,17 +1,17 @@
-package com.ovchingus.dao.core.jdbc;
+package com.ovchingus.dao.jdbc;
 
-import com.ovchingus.dao.core.DaoFactory;
-import com.ovchingus.dao.core.GenericDao;
-import com.ovchingus.dao.model.Product;
-import com.ovchingus.dao.model.Store;
-import com.ovchingus.dao.model.StoreProduct;
+import com.ovchingus.dao.DaoFactoryOLD;
+import com.ovchingus.dao.GenericDaoOLD;
+import com.ovchingus.dao.jdbc.model.ProductJdbc;
+import com.ovchingus.dao.jdbc.model.StoreJdbc;
+import com.ovchingus.dao.jdbc.model.StoreProductJdbc;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DaoFactoryJdbc implements DaoFactory<Connection> {
+public class DaoFactoryJdbc implements DaoFactoryOLD<Connection> {
 
     //TODO: вынести в настройки
     private String user = "ovchingu_admin";//Логин пользователя
@@ -32,7 +32,7 @@ public class DaoFactoryJdbc implements DaoFactory<Connection> {
     }
 
     @Override
-    public GenericDao getDao(Connection connection, Class dtoClass) throws PersistException {
+    public GenericDaoOLD getDao(Connection connection, Class dtoClass) throws PersistException {
         DaoCreator<Connection> creator = creators.get(dtoClass);
         if (creator == null)
             throw new PersistException("Dao object for " + dtoClass + " not found.");
@@ -51,8 +51,8 @@ public class DaoFactoryJdbc implements DaoFactory<Connection> {
         creators = new HashMap<>();
 
         // это называется method reference
-        creators.put(Store.class, StoreJdbcDao::new);
-        creators.put(Product.class, ProductJdbcDao::new);
-        creators.put(StoreProduct.class, StoreProductJdbcDao::new);
+        creators.put(StoreJdbc.class, StoreJdbcDao::new);
+        creators.put(ProductJdbc.class, ProductJdbcDao::new);
+        creators.put(StoreProductJdbc.class, StoreProductJdbcDao::new);
     }
 }

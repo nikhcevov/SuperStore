@@ -1,8 +1,8 @@
-package com.ovchingus.dao.core.jdbc;
+package com.ovchingus.dao.jdbc;
 
-import com.ovchingus.dao.core.GenericDao;
-import com.ovchingus.dao.model.StoreProduct;
-import com.ovchingus.dao.util.KeyDb;
+import com.ovchingus.dao.GenericDaoOLD;
+import com.ovchingus.dao.KeyDb;
+import com.ovchingus.dao.jdbc.model.StoreProductJdbc;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,7 +10,7 @@ import java.sql.ResultSet;
 import java.util.LinkedList;
 import java.util.List;
 
-public class StoreProductJdbcDao extends AbstractJdbcDao<StoreProduct, KeyDb> implements GenericDao<StoreProduct, KeyDb> {
+public class StoreProductJdbcDao extends AbstractJdbcDao<StoreProductJdbc, KeyDb> implements GenericDaoOLD<StoreProductJdbc, KeyDb> {
 
     StoreProductJdbcDao(Connection connection) {
         super(connection);
@@ -18,19 +18,19 @@ public class StoreProductJdbcDao extends AbstractJdbcDao<StoreProduct, KeyDb> im
 
     @Override
     protected String getUpdateQuery() {
-        return "UPDATE StoreProduct \n" +
+        return "UPDATE StoreProductJdbc \n" +
                 "SET price = ?, qty = ?  \n" +
                 "WHERE store_id = ? AND product_id = ?;";
     }
 
     @Override
     protected String getDeleteQuery() {
-        return "DELETE FROM StoreProduct WHERE store_id = ? AND product_id = ?;";
+        return "DELETE FROM StoreProductJdbc WHERE store_id = ? AND product_id = ?;";
     }
 
     @Override
     protected String getSelectQuery() {
-        return "SELECT store_id, product_id, price, qty FROM StoreProduct ";
+        return "SELECT store_id, product_id, price, qty FROM StoreProductJdbc ";
     }
 
     @Override
@@ -40,7 +40,7 @@ public class StoreProductJdbcDao extends AbstractJdbcDao<StoreProduct, KeyDb> im
 
     @Override
     protected String getInsertQuery() {
-        return "INSERT INTO StoreProduct (price, qty) \n" +
+        return "INSERT INTO StoreProductJdbc (price, qty) \n" +
                 "VALUES (?, ?);";
     }
 
@@ -56,11 +56,11 @@ public class StoreProductJdbcDao extends AbstractJdbcDao<StoreProduct, KeyDb> im
     }
 
     @Override
-    protected List<StoreProduct> parseResultSet(ResultSet rs) throws PersistException {
-        LinkedList<StoreProduct> result = new LinkedList<>();
+    protected List<StoreProductJdbc> parseResultSet(ResultSet rs) throws PersistException {
+        LinkedList<StoreProductJdbc> result = new LinkedList<>();
         try {
             while (rs.next()) {
-                StoreProduct sp = new StoreProduct();
+                StoreProductJdbc sp = new StoreProductJdbc();
                 sp.setStoreId(rs.getInt("store_id"));
                 sp.setProductId(rs.getInt("product_id"));
                 sp.setPrice(rs.getDouble("price"));
@@ -74,7 +74,7 @@ public class StoreProductJdbcDao extends AbstractJdbcDao<StoreProduct, KeyDb> im
     }
 
     @Override
-    protected void prepareStatementForDelete(PreparedStatement statement, StoreProduct object) throws PersistException {
+    protected void prepareStatementForDelete(PreparedStatement statement, StoreProductJdbc object) throws PersistException {
         try {
             statement.setInt(1, object.getStoreId());
             statement.setInt(2, object.getProductId());
@@ -84,7 +84,7 @@ public class StoreProductJdbcDao extends AbstractJdbcDao<StoreProduct, KeyDb> im
     }
 
     @Override
-    protected void prepareStatementForUpdate(PreparedStatement statement, StoreProduct object) throws PersistException {
+    protected void prepareStatementForUpdate(PreparedStatement statement, StoreProductJdbc object) throws PersistException {
         try {
             statement.setDouble(1, object.getPrice());
             statement.setInt(2, object.getQty());
@@ -96,7 +96,7 @@ public class StoreProductJdbcDao extends AbstractJdbcDao<StoreProduct, KeyDb> im
     }
 
     @Override
-    protected void prepareStatementForInsert(PreparedStatement statement, StoreProduct object) throws PersistException {
+    protected void prepareStatementForInsert(PreparedStatement statement, StoreProductJdbc object) throws PersistException {
         try {
             statement.setDouble(1, object.getPrice());
             statement.setInt(2, object.getQty());

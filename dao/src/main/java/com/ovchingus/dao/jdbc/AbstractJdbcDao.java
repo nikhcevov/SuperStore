@@ -1,13 +1,13 @@
-package com.ovchingus.dao.core.jdbc;
+package com.ovchingus.dao.jdbc;
 
-import com.ovchingus.dao.core.GenericDao;
+import com.ovchingus.dao.GenericDaoOLD;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.List;
 
-public abstract class AbstractJdbcDao<T, PK extends Identified<PK>> implements GenericDao<T, PK> {
+public abstract class AbstractJdbcDao<T, PK extends Identified<PK>> implements GenericDaoOLD<T, PK> {
 
     private Connection connection;
 

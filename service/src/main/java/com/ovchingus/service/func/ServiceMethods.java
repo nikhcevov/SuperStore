@@ -25,7 +25,7 @@ public class ServiceMethods {
     }
 
     /**
-     * Создать список товаров из одьектов Product
+     * Создать список товаров из одьектов ProductJdbc
      */
     public ShopList createShopList(List<Product> list) {
         return null;
