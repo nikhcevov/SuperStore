@@ -20,9 +20,11 @@ public class StoreProduct {
     @Embeddable
     public class StoreProductPK extends DaoConnection implements Serializable {
 
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Column(name = "store_id")
         private Integer storeId;
 
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Column(name = "product_id")
         private Integer productId;
 

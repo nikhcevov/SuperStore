@@ -29,8 +29,11 @@ public class DaoConnection {
     }
 
     private static SessionFactory getSessionFactory() {
-
-        Configuration configuration = new Configuration().configure();
+        Configuration configuration = new Configuration();
+        configuration.addAnnotatedClass(Store.class);
+        configuration.addAnnotatedClass(Product.class);
+        configuration.addAnnotatedClass(StoreProduct.class);
+        configuration.configure();
         StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
                 .applySettings(configuration.getProperties());
         return configuration.buildSessionFactory(builder.build());

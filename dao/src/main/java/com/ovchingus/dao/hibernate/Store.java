@@ -12,6 +12,7 @@ import java.util.Set;
 public class Store extends DaoConnection {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "store_id")
     private Integer id;
 

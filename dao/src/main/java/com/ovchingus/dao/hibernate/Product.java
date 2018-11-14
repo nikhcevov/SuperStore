@@ -11,6 +11,7 @@ import java.util.Set;
 public class Product extends DaoConnection {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id")
     private Integer id;
 
