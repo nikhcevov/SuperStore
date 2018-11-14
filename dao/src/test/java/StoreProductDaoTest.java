@@ -14,7 +14,6 @@ public class StoreProductDaoTest {
 
     @Test
     public void testPersist() {
-
         StoreProduct sp = new StoreProduct();
         StoreProduct.StoreProductPK spPK = new StoreProduct.StoreProductPK();
         spPK.setProductId(4);
@@ -37,6 +36,28 @@ public class StoreProductDaoTest {
         System.out.println(spd.findById(spPK));
         spd.closeCurrentSessionWithTransaction();
     }
+
+    @Test
+    public void testGetAll() {
+        spd.openCurrentSessionWithTransaction();
+        System.out.println(spd.findAll());
+        spd.closeCurrentSessionWithTransaction();
+    }
+
+    @Test
+    public void testUpdate() {
+        StoreProduct sp = new StoreProduct();
+        StoreProduct.StoreProductPK spPK = new StoreProduct.StoreProductPK();
+        sp.setQty(12);
+        spPK.setStoreId(4);
+        spPK.setProductId(4);
+
+        spd.openCurrentSessionWithTransaction();
+        spd.update(sp);
+        spd.closeCurrentSessionWithTransaction();
+    }
+
+
 
 
 }
