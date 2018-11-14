@@ -56,4 +56,11 @@ public class StoreDaoTest {
         sd.closeCurrentSessionWithTransaction();
         //dao.persist(store);
     }
+
+    @Test
+    public void testDelete() {
+        Store store = new Store();
+        store.setId(5);
+        sd.delete(store);
+    }
 }

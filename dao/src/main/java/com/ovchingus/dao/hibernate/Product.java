@@ -15,7 +15,7 @@ public class Product extends DaoConnection {
     @Column(name = "product_id")
     private Integer id;
 
-    @NaturalId
+    @NaturalId(mutable = true)
     @Column(name = "name")
     private String name;
 
