@@ -29,14 +29,25 @@ public class StoreDaoTest {
 
     @Test
     public void testUpdate() {
-        Store store = new Store("ads", "daegshnm");
+
+        StoreDao sd = new StoreDao();
+        Store store = new Store();
+        store.setName("mega");
+        store.setAddress("leninskiy, 2");
         store.setId(4);
-        dao.update(store);
+        sd.update(store);
+        //dao.update(store);
     }
 
     @Test
     public void testInsertPK() {
-        Store store = new Store("ashan", "karaganda");
-        dao.persist(store);
+        StoreDao sd = new StoreDao();
+        Store store = new Store();
+        store.setName("ashan");
+        store.setAddress("karaganda");
+        sd.openCurrentSessionWithTransaction();
+        sd.persist(store);
+        sd.closeCurrentSessionWithTransaction();
+        //dao.persist(store);
     }
 }
