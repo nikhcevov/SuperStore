@@ -10,7 +10,7 @@ public class ProductDao extends DaoConnection implements GenericDao<Product, Int
     }
 
     public void persist(Product entity) {
-        getCurrentSession().persist(entity);
+        getCurrentSession().save(entity);
     }
 
     public void update(Product entity) {

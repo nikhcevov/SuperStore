@@ -11,7 +11,7 @@ public class StoreDao extends DaoConnection implements GenericDao<Store, Integer
 
     public void persist(Store entity) {
         openCurrentSessionWithTransaction();
-        getCurrentSession().persist(entity);
+        getCurrentSession().save(entity);
         closeCurrentSessionWithTransaction();
     }
 

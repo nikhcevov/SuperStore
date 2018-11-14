@@ -1,8 +1,5 @@
-import com.ovchingus.dao.DaoFactory;
-import com.ovchingus.dao.GenericDao;
 import com.ovchingus.dao.hibernate.Product;
 import com.ovchingus.dao.hibernate.ProductDao;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -34,7 +31,7 @@ public class ProductDaoTest {
 
     @Test
     public void testUpdate(){
-        Product product = new Product(4, "Kobachok");
+        Product product = new Product(4, "KobachokOk");
         sd.update(product);
     }
 
