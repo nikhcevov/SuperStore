@@ -1,6 +1,6 @@
 # SuperStore
 ### App for store management.
-### Developing by VovaBranch and MisterMax.
+### Developing by VovaBranch and MasterMax.
 
 #### Постановка задачи: 
 
