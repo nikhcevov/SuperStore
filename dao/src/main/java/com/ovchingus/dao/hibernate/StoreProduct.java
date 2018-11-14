@@ -6,7 +6,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "Store_Product")
-public class StoreProduct {
+public class StoreProduct extends DaoConnection {
 
     @EmbeddedId
     private StoreProductPK id;
@@ -18,7 +18,7 @@ public class StoreProduct {
     private Integer qty;
 
     @Embeddable
-    public class StoreProductPK extends DaoConnection implements Serializable {
+    public static class StoreProductPK implements Serializable {
 
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Column(name = "store_id")

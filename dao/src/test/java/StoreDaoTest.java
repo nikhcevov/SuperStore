@@ -1,8 +1,5 @@
-import com.ovchingus.dao.DaoFactory;
-import com.ovchingus.dao.GenericDao;
 import com.ovchingus.dao.hibernate.Store;
 import com.ovchingus.dao.hibernate.StoreDao;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -56,5 +53,12 @@ public class StoreDaoTest {
         store.setAddress("mom");
         sd.persist(store);
         //dao.persist(store);
+    }
+
+    @Test
+    public void testDelete() {
+        Store store = new Store();
+        store.setId(4);
+        sd.delete(store);
     }
 }

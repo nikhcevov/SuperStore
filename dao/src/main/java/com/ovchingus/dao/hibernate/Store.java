@@ -16,18 +16,20 @@ public class Store extends DaoConnection {
     @Column(name = "store_id")
     private Integer id;
 
-    @NaturalId
+    @NaturalId(mutable = true)
     @Column(name = "name")
     private String name;
 
     @Column(name = "address")
     private String address;
 
-    @ManyToMany(cascade = {CascadeType.DETACH,
-                            CascadeType.MERGE,
-                            CascadeType.REFRESH,
-                            CascadeType.PERSIST
-})
+
+    @ManyToMany(cascade = {
+            CascadeType.DETACH,
+            CascadeType.MERGE,
+            CascadeType.REFRESH,
+            CascadeType.PERSIST
+    })
     @JoinTable(
             name = "Store_Product",
             joinColumns = {@JoinColumn(name = "store_id")},
