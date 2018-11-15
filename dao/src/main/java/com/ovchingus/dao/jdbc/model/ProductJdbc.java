@@ -1,9 +1,9 @@
 package com.ovchingus.dao.jdbc.model;
 
 
-import com.ovchingus.dao.KeyDb;
-import com.ovchingus.dao.hibernate.Product;
+import com.ovchingus.dao.hibernate.mappings.Product;
 import com.ovchingus.dao.jdbc.Identified;
+import com.ovchingus.dao.jdbc.KeyDb;
 
 
 public class ProductJdbc extends Product implements Identified<KeyDb> {

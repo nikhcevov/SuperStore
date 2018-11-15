@@ -1,10 +1,10 @@
 package com.ovchingus.dao.hibernate;
 
-import com.ovchingus.dao.GenericDao;
+import com.ovchingus.dao.hibernate.mappings.Product;
 
 import java.util.List;
 
-public class ProductDao extends DaoConnection implements GenericDao<Product, Integer> {
+public class ProductDao extends DaoConnection<Product, Integer> {
 
     public ProductDao() {
     }

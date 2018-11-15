@@ -1,7 +1,6 @@
 package com.ovchingus.dao.jdbc;
 
 import com.ovchingus.dao.GenericDaoOLD;
-import com.ovchingus.dao.KeyDb;
 import com.ovchingus.dao.jdbc.model.ProductJdbc;
 
 import java.sql.Connection;

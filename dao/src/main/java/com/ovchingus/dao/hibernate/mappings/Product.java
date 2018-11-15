@@ -1,4 +1,4 @@
-package com.ovchingus.dao.hibernate;
+package com.ovchingus.dao.hibernate.mappings;
 
 import org.hibernate.annotations.NaturalId;
 
@@ -8,7 +8,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "Product")
-public class Product extends DaoConnection {
+public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -66,6 +66,6 @@ public class Product extends DaoConnection {
 
     @Override
     public String toString() {
-        return "Product: " + this.id + ", " + this.name + "\n";
+        return "Product: " + this.id + ", " + this.name;
     }
 }

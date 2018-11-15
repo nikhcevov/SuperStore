@@ -1,5 +1,5 @@
-import com.ovchingus.dao.hibernate.Product;
 import com.ovchingus.dao.hibernate.ProductDao;
+import com.ovchingus.dao.hibernate.mappings.Product;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package com.ovchingus.dao.hibernate;
+package com.ovchingus.dao.hibernate.mappings;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -6,7 +6,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "Store_Product")
-public class StoreProduct extends DaoConnection {
+public class StoreProduct {
 
     @EmbeddedId
     private StoreProductPK id;

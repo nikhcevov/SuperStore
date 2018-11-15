@@ -66,3 +66,4 @@ fabric.properties
 dao/target/
 presentation/src/main/resources/
 presentation/src/test/
+!/dao/src/main/java/com/ovchingus/dao/jdbc/DaoFactoryJdbc.java

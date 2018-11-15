@@ -15,4 +15,6 @@ public interface GenericDao<T, PK> {
     public List<T> findAll();
 
     public void deleteAll();
+
+    public T findByName(String name);
 }

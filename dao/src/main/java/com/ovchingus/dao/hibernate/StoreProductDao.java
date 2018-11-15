@@ -1,10 +1,10 @@
 package com.ovchingus.dao.hibernate;
 
-import com.ovchingus.dao.GenericDao;
+import com.ovchingus.dao.hibernate.mappings.StoreProduct;
 
 import java.util.List;
 
-public class StoreProductDao extends DaoConnection implements GenericDao<StoreProduct, StoreProduct.StoreProductPK> {
+public class StoreProductDao extends DaoConnection<StoreProduct, StoreProduct.StoreProductPK> {
 
     public StoreProductDao() {
     }
@@ -35,5 +35,10 @@ public class StoreProductDao extends DaoConnection implements GenericDao<StorePr
         for (StoreProduct entity : entityList) {
             delete(entity);
         }
+    }
+
+    @Override
+    public StoreProduct findByName(String name) {
+        return null;
     }
 }

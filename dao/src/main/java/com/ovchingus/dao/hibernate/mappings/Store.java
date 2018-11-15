@@ -1,4 +1,4 @@
-package com.ovchingus.dao.hibernate;
+package com.ovchingus.dao.hibernate.mappings;
 
 
 import org.hibernate.annotations.NaturalId;
@@ -9,7 +9,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "Store")
-public class Store extends DaoConnection {
+public class Store {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

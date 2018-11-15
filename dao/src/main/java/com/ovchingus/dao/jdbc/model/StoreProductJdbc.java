@@ -1,8 +1,8 @@
 package com.ovchingus.dao.jdbc.model;
 
 
-import com.ovchingus.dao.KeyDb;
 import com.ovchingus.dao.jdbc.Identified;
+import com.ovchingus.dao.jdbc.KeyDb;
 
 public class StoreProductJdbc implements Identified<KeyDb> {
 

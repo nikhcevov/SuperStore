@@ -1,10 +1,10 @@
 package com.ovchingus.dao.hibernate;
 
-import com.ovchingus.dao.GenericDao;
+import com.ovchingus.dao.hibernate.mappings.Store;
 
 import java.util.List;
 
-public class StoreDao extends DaoConnection implements GenericDao<Store, Integer> {
+public class StoreDao extends DaoConnection<Store, Integer> {
 
     public StoreDao() {
     }
@@ -43,5 +43,4 @@ public class StoreDao extends DaoConnection implements GenericDao<Store, Integer
             delete(entity);
         }
     }
-
 }

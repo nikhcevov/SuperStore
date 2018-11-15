@@ -1,7 +1,7 @@
 import com.ovchingus.dao.DaoFactoryOLD;
 import com.ovchingus.dao.GenericDaoOLD;
-import com.ovchingus.dao.KeyDb;
 import com.ovchingus.dao.jdbc.DaoFactoryJdbc;
+import com.ovchingus.dao.jdbc.KeyDb;
 import com.ovchingus.dao.jdbc.model.StoreJdbc;
 import org.junit.Assert;
 import org.junit.Before;

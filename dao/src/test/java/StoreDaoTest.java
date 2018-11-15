@@ -1,5 +1,7 @@
-import com.ovchingus.dao.hibernate.Store;
+import com.ovchingus.dao.DaoFactory;
+import com.ovchingus.dao.GenericDao;
 import com.ovchingus.dao.hibernate.StoreDao;
+import com.ovchingus.dao.hibernate.mappings.Store;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -9,15 +11,18 @@ import java.util.List;
 public class StoreDaoTest {
 
     private StoreDao sd;
+    private GenericDao sdg;
 
     @Before
     public void setUp() {
         sd = new StoreDao();
+        GenericDao sdg = DaoFactory.getDao(Store.class);
     }
 
     @Test
     public void testGetByPK() {
         sd.openCurrentSessionWithTransaction();
+
 
         Store store = new Store();
         store = sd.findById(4);

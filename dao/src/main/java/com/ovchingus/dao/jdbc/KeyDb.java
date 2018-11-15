@@ -1,6 +1,4 @@
-package com.ovchingus.dao;
-
-import com.ovchingus.dao.jdbc.Identified;
+package com.ovchingus.dao.jdbc;
 
 public class KeyDb implements Identified<KeyDb> {
 

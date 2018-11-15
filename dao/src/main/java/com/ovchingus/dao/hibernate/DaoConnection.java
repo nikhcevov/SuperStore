@@ -1,12 +1,16 @@
 package com.ovchingus.dao.hibernate;
 
+import com.ovchingus.dao.GenericDao;
+import com.ovchingus.dao.hibernate.mappings.Product;
+import com.ovchingus.dao.hibernate.mappings.Store;
+import com.ovchingus.dao.hibernate.mappings.StoreProduct;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 
-public class DaoConnection {
+public abstract class DaoConnection<T, PK> implements GenericDao<T, PK> {
 
     private Session currentSession;
 
