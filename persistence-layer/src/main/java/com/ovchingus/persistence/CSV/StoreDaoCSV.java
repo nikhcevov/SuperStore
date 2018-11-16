@@ -15,10 +15,16 @@ import java.util.List;
 
 public class StoreDaoCSV extends ConnectionCSV<StoreEntityCSV, Integer> {
 
+    private String filePath = DaoSettings.getCsvFilePath() + "stores.csv";
+    private String tempPath = DaoSettings.getCsvFilePath() + "tempStores.csv";
+
+
+    public void clearFile() {
+        clear(filePath, tempPath);
+    }
+
     @Override
     public void persist(StoreEntityCSV entity) {
-        String filePath = DaoSettings.getCsvFilePath() + "stores.csv";
-
         try {
             FileUtils.writeStringToFile(new File(filePath),
                     (entity.getId() + "," + entity.getName() + "," + entity.getAddress() + "\n"),
@@ -26,6 +32,7 @@ public class StoreDaoCSV extends ConnectionCSV<StoreEntityCSV, Integer> {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        clearFile();
     }
 
     @Override
@@ -34,12 +41,12 @@ public class StoreDaoCSV extends ConnectionCSV<StoreEntityCSV, Integer> {
         StoreEntityCSV e = findById(entity.getId());
         delete(e);
         persist(entity);
+        clearFile();
     }
 
     @Override
     public StoreEntityCSV findById(Integer id) {
-        String fileName = DaoSettings.getCsvFilePath() + "stores.csv";
-        try (Reader reader = Files.newBufferedReader(Paths.get(fileName));
+        try (Reader reader = Files.newBufferedReader(Paths.get(filePath));
              CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT);) {
 
             for (CSVRecord record : csvParser) {
@@ -48,6 +55,7 @@ public class StoreDaoCSV extends ConnectionCSV<StoreEntityCSV, Integer> {
                     return new StoreEntityCSV(Integer.parseInt(record.get(0)),
                             record.get(1), record.get(2));
             }
+            clearFile();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -56,11 +64,8 @@ public class StoreDaoCSV extends ConnectionCSV<StoreEntityCSV, Integer> {
 
     @Override
     public void delete(StoreEntityCSV entity) {
-        String sourcePath = DaoSettings.getCsvFilePath() + "stores.csv";
-        String outPath = DaoSettings.getCsvFilePath() + "tempStores.csv";
-
-        File sourceFile = new File(sourcePath);
-        File outputFile = new File(outPath);
+        File sourceFile = new File(filePath);
+        File outputFile = new File(tempPath);
 
         try (BufferedReader reader = new BufferedReader(new FileReader(sourceFile));
              BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));) {
@@ -77,6 +82,7 @@ public class StoreDaoCSV extends ConnectionCSV<StoreEntityCSV, Integer> {
             writer.close();
             sourceFile.delete();
             outputFile.renameTo(sourceFile);
+            clearFile();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -84,7 +90,6 @@ public class StoreDaoCSV extends ConnectionCSV<StoreEntityCSV, Integer> {
 
     @Override
     public List<StoreEntityCSV> findAll() {
-        String filePath = DaoSettings.getCsvFilePath() + "stores.csv";
         List<StoreEntityCSV> list = new ArrayList<>();
         try (
                 Reader reader = Files.newBufferedReader(Paths.get(filePath));
@@ -95,7 +100,7 @@ public class StoreDaoCSV extends ConnectionCSV<StoreEntityCSV, Integer> {
                 list.add(new StoreEntityCSV(Integer.parseInt(csvRecord.get(0)),
                         csvRecord.get(1), csvRecord.get(2)));
             }
-
+            clearFile();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -105,11 +110,8 @@ public class StoreDaoCSV extends ConnectionCSV<StoreEntityCSV, Integer> {
 
     @Override
     public void deleteAll() {
-        String sourcePath = DaoSettings.getCsvFilePath() + "stores.csv";
-        String outPath = DaoSettings.getCsvFilePath() + "tempStores.csv";
-
-        File sourceFile = new File(sourcePath);
-        File outputFile = new File(outPath);
+        File sourceFile = new File(filePath);
+        File outputFile = new File(tempPath);
 
         try {
             if (!sourceFile.exists())
@@ -119,16 +121,14 @@ public class StoreDaoCSV extends ConnectionCSV<StoreEntityCSV, Integer> {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
+        clearFile();
         sourceFile.delete();
         outputFile.renameTo(sourceFile);
     }
 
     @Override
     public StoreEntityCSV findByName(String name) {
-        String fileName = DaoSettings.getCsvFilePath() + "stores.csv";
-        try (Reader reader = Files.newBufferedReader(Paths.get(fileName));
+        try (Reader reader = Files.newBufferedReader(Paths.get(filePath));
              CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT);) {
 
             for (CSVRecord record : csvParser) {
@@ -136,11 +136,10 @@ public class StoreDaoCSV extends ConnectionCSV<StoreEntityCSV, Integer> {
                     return new StoreEntityCSV(Integer.parseInt(record.get(0)),
                             record.get(1), record.get(2));
             }
+            clearFile();
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
     }
 }
-
-

@@ -22,12 +22,14 @@ public class StoreDaoCSVTest {
 
     @Test
     public void testa() {
-        dao.persist(new StoreEntityCSV(244, "ai", "d"));
+        //dao.persist(new StoreEntityCSV(244, "ai", "d"));
+        dao.delete(new StoreEntityCSV(244, "ai", "d"));
     }
 
     @Test
-    public void test() {
-
+    public void updateTest() {
+        StoreEntityCSV se = new StoreEntityCSV(2, "magaz", "updated");
+        dao.update(se);
     }
 
     @Test

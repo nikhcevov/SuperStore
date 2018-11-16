@@ -1,5 +1,9 @@
 package com.ovchingus.persistence;
 
+import com.ovchingus.persistence.CSV.ProductDaoCSV;
+import com.ovchingus.persistence.CSV.StoreDaoCSV;
+import com.ovchingus.persistence.CSV.model.ProductEntityCSV;
+import com.ovchingus.persistence.CSV.model.StoreEntityCSV;
 import com.ovchingus.persistence.MySQL.ConnectionMySQL;
 import com.ovchingus.persistence.MySQL.ProductDaoMySQL;
 import com.ovchingus.persistence.MySQL.StoreDaoMySQL;
@@ -21,9 +25,11 @@ public class DaoFactory {
             if (daoType == StoreProductEntityMySQL.class)
                 return new StoreProductDaoMySQL();
         }
-        // TODO:
         if (DaoSettings.isSourceFile())
-            return null;
+            if (daoType == StoreEntityCSV.class)
+                return new StoreDaoCSV();
+        if (daoType == ProductEntityCSV.class)
+            return new ProductDaoCSV();
         return null;
     }
 
