@@ -4,8 +4,8 @@ import com.ovchingus.persistence.CSV.model.StoreEntityCSV;
 import com.ovchingus.persistence.settings.DaoSettings;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
-import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.io.FileUtils;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -19,14 +19,10 @@ public class StoreDaoCSV extends ConnectionCSV<StoreEntityCSV, Integer> {
     public void persist(StoreEntityCSV entity) {
         String filePath = DaoSettings.getCsvFilePath() + "stores.csv";
 
-        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(filePath));
-             FileWriter fileWriter = new FileWriter(filePath, true);
-             CSVPrinter csvPrinter = new CSVPrinter(fileWriter, CSVFormat.DEFAULT);) {
-
-
-            fileWriter.append(entity.getId() + "," + entity.getName() + "," + entity.getAddress());
-            fileWriter.flush();
-
+        try {
+            FileUtils.writeStringToFile(new File(filePath),
+                    (entity.getId() + "," + entity.getName() + "," + entity.getAddress() + "\n"),
+                    true);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -35,7 +31,6 @@ public class StoreDaoCSV extends ConnectionCSV<StoreEntityCSV, Integer> {
     @Override
     public void update(StoreEntityCSV entity) {
         List<StoreEntityCSV> list = findAll();
-
         StoreEntityCSV e = findById(entity.getId());
         delete(e);
         persist(entity);
