@@ -1,19 +1,11 @@
-package com.ovchingus.service.func;
+package com.ovchingus.service.func.model;
 
-import com.ovchingus.persistence.CSV.model.ProductEntityCSV;
-import com.ovchingus.persistence.CSV.model.StoreEntityCSV;
-import com.ovchingus.persistence.DaoFactory;
-import com.ovchingus.persistence.GenericDao;
+import com.ovchingus.service.func.ServiceMethods;
 
 import java.util.List;
 import java.util.Map;
 
-public class ServiceCSV implements ServiceMethods {
-
-    private GenericDao daoStoreEntity = DaoFactory.getDao(StoreEntityCSV.class);
-
-    private GenericDao daoProductEntity = DaoFactory.getDao(ProductEntityCSV.class);
-
+public class ServiceMySQL implements ServiceMethods {
 
     @Override
     public void createStore(String store) {

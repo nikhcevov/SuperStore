@@ -4,33 +4,33 @@ package com.ovchingus.service.func;
 import java.util.List;
 import java.util.Map;
 
-public interface ServiceMethods<ST, PT> {
+public interface ServiceMethods {
 
     /**
      * Создать магазин
      */
-    public void createStore(ST store);
+    public void createStore(String store);
 
     /**
      * Создать товар
      */
-    public void createProduct(PT product);
+    public void createProduct(String product);
 
     /**
      * Создать список товаров из одьектов ProductJdbc
      */
-    public List<ShopList> createShopList(List<PT> list);
+    public List<String> createShopList(List<String> list);
 
     /**
      * Завезти партию товаров в магазин (набор товар-количество
      * с возможностью установить/изменить цену
      */
-    public void insertProductListToStore(ST store, ShopList list);
+    public void insertProductListToStore(String store, String list);
 
     /**
      * Найти магазин, в котором определенный товар самый дешевый
      */
-    public ST findStoreWithCheapestProduct(PT product);
+    public String findStoreWithCheapestProduct(String product);
 
     /**
      * Понять, какие товары можно купить в магазине на некоторую
@@ -38,20 +38,20 @@ public interface ServiceMethods<ST, PT> {
      * или две шоколадки) я так понял тут про уникальный товар а
      * не про набор разных
      */
-    public Map<PT, Integer> findProductListForSum(Double budget);
+    public Map<String, Integer> findProductListForSum(Double budget);
 
     /**
      * Купить партию товаров в магазине (параметры - сколько
      * каких товаров купить, метод возвращает общую стоимость
      * покупки либо её невозможность, если товара не хватает)
      */
-    public Integer buyListOfProductsInOneStore(ST store, Map<PT, Integer> map);
+    public Integer buyListOfProductsInOneStore(String store, Map<String, Integer> map);
 
     /**
      * Найти, в каком магазине партия товаров (набор товар-количество) имеет
      * наименьшую сумму (в целом). Например, «в каком магазине дешевле всего купить
      * 10 гвоздей и 20 шурупов». Наличие товара в магазинах учитывается!
      */
-    public ST findStoreWithCheapestShopList(Map<PT, Integer> map);
+    public String findStoreWithCheapestShopList(Map<String, Integer> map);
 
 }
