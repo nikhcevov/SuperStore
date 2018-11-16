@@ -1,6 +1,6 @@
 SuperStore
 =================
-App for store management. With suppor of stores and lists of products. 
+App for storeEntityMySQL management. With suppor of mySQLStoreEntities and lists of productEntities. 
 ----------------
 
 #### Постановка задачи: 
