@@ -1,6 +1,6 @@
-package com.ovchingus.persistence.CSV.dao;
+package com.ovchingus.persistence.csv.dao;
 
-import com.ovchingus.persistence.CSV.entities.StoreEntityCSV;
+import com.ovchingus.persistence.csv.entities.StoreEntityCSV;
 import com.ovchingus.persistence.settings.DaoSettings;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -10,6 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.*;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -33,24 +34,27 @@ public class StoreDaoCSV extends ConnectionCSV<StoreEntityCSV> {
     }
 
     @Override
-    public void persist(StoreEntityCSV entity) {
+    public boolean persist(StoreEntityCSV entity) {
         try {
             FileUtils.writeStringToFile(new File(filePath),
                     (entity.getId() + "," + entity.getName() + "," + entity.getAddress() + "\n"),
-                    true);
+                    (Charset) null, true);
+            return true;
         } catch (IOException e) {
             e.printStackTrace();
             log.error(e.getMessage());
+            return false;
+        } finally {
+            clearFile();
         }
-        clearFile();
     }
 
     @Override
-    public void update(StoreEntityCSV entity) {
+    public boolean update(StoreEntityCSV entity) {
         StoreEntityCSV e = findById(entity.getId());
         delete(e);
-        persist(entity);
         clearFile();
+        return persist(entity);
     }
 
     @Override
@@ -72,8 +76,7 @@ public class StoreDaoCSV extends ConnectionCSV<StoreEntityCSV> {
     }
 
     @Override
-    @SuppressWarnings("ResultOfMethodCallIgnored")
-    public void delete(StoreEntityCSV entity) {
+    public boolean delete(StoreEntityCSV entity) {
         File sourceFile = new File(filePath);
         File outputFile = new File(tempPath);
         try (BufferedReader reader = new BufferedReader(new FileReader(sourceFile));
@@ -89,12 +92,13 @@ public class StoreDaoCSV extends ConnectionCSV<StoreEntityCSV> {
             }
             reader.close();
             writer.close();
-            sourceFile.delete();
-            outputFile.renameTo(sourceFile);
-            clearFile();
+            return sourceFile.delete() && outputFile.renameTo(sourceFile);
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e.getMessage());
+            return false;
+        } finally {
+            clearFile();
         }
     }
 
@@ -116,14 +120,8 @@ public class StoreDaoCSV extends ConnectionCSV<StoreEntityCSV> {
     }
 
     @Override
-    @SuppressWarnings("ResultOfMethodCallIgnored")
-    public void deleteAll() {
-        File sourceFile = new File(filePath);
-        File outputFile = new File(tempPath);
-        createFileIfNotExist(sourceFile, outputFile);
-        clearFile();
-        sourceFile.delete();
-        outputFile.renameTo(sourceFile);
+    public boolean deleteAll() {
+        return deleteAll(filePath, tempPath);
     }
 
     @Override

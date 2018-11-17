@@ -1,20 +1,18 @@
 package com.ovchingus.service.func.model;
 
-import com.ovchingus.service.func.ServiceMethods;
-
 import java.util.Map;
 
-public class ServiceMySQL implements ServiceMethods {
+public class ServiceMySQL extends Service {
 
 
     @Override
-    public void createStore(Integer storeId, String name, String address) {
-
+    public boolean createStore(Integer storeId, String name, String address) {
+        return true;
     }
 
     @Override
-    public void createProduct(Integer productId, String name) {
-
+    public boolean createProduct(Integer productId, String name) {
+        return true;
     }
 
     /*
@@ -24,13 +22,13 @@ public class ServiceMySQL implements ServiceMethods {
         }
     */
     @Override
-    public void insertProductToStore(String storeName, String productName, Integer qty, Double price) {
-
+    public boolean insertProductToStore(String storeName, String productName, Integer qty, Double price) {
+        return true;
     }
 
     @Override
-    public void updateProduct(String storeName, String productName, Integer qty, Double price) {
-
+    public boolean updateProduct(String storeName, String productName, Integer qty, Double price) {
+        return true;
     }
 
     @Override

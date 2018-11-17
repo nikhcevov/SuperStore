@@ -1,7 +1,7 @@
 import com.ovchingus.persistence.DaoFactory;
 import com.ovchingus.persistence.GenericDao;
-import com.ovchingus.persistence.MySQL.dao.StoreDaoMySQL;
-import com.ovchingus.persistence.MySQL.entities.StoreEntityMySQL;
+import com.ovchingus.persistence.mysql.dao.StoreDaoMySQL;
+import com.ovchingus.persistence.mysql.entities.StoreEntityMySQL;
 import org.junit.Before;
 import org.junit.Test;
 

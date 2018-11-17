@@ -1,9 +1,8 @@
-package com.ovchingus.persistence.CSV.dao;
+package com.ovchingus.persistence.csv.dao;
 
-import com.ovchingus.persistence.CSV.entities.ProductEntityCSV;
-import com.ovchingus.persistence.CSV.entities.ProductInfo;
+import com.ovchingus.persistence.csv.entities.ProductEntityCSV;
+import com.ovchingus.persistence.csv.entities.ProductInfo;
 import com.ovchingus.persistence.settings.DaoSettings;
-import com.sun.istack.internal.Nullable;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -32,7 +31,7 @@ public class ProductDaoCSV extends ConnectionCSV<ProductEntityCSV> {
     }
 
     @Override
-    public void persist(ProductEntityCSV entity) {
+    public boolean persist(ProductEntityCSV entity) {
         StringBuilder sb = new StringBuilder();
         sb.append(entity.getId()).append(",");
         sb.append(entity.getName()).append(",");
@@ -48,21 +47,24 @@ public class ProductDaoCSV extends ConnectionCSV<ProductEntityCSV> {
         try {
             FileUtils.writeStringToFile(new File(filePath), sb.toString(),
                     (Charset) null, true);
+            return true;
         } catch (IOException e) {
             e.printStackTrace();
             log.error(e.getMessage());
+            return false;
+        } finally {
+            clearFile();
         }
-        clearFile();
     }
 
     @Override
-    public void update(ProductEntityCSV entity) {
+    public boolean update(ProductEntityCSV entity) {
         List<ProductEntityCSV> list = findAll();
         for (ProductEntityCSV item : list) {
             if (item.getId().equals(entity.getId()))
                 delete(item);
         }
-        persist(entity);
+        return persist(entity);
     }
 
     @Override
@@ -79,8 +81,7 @@ public class ProductDaoCSV extends ConnectionCSV<ProductEntityCSV> {
     }
 
     @Override
-    @SuppressWarnings("ResultOfMethodCallIgnored")
-    public void delete(ProductEntityCSV entity) {
+    public boolean delete(ProductEntityCSV entity) {
         File sourceFile = new File(filePath);
         File outputFile = new File(tempPath);
         try (BufferedReader reader = new BufferedReader(new FileReader(sourceFile));
@@ -103,12 +104,13 @@ public class ProductDaoCSV extends ConnectionCSV<ProductEntityCSV> {
             }
             reader.close();
             writer.close();
-            sourceFile.delete();
-            outputFile.renameTo(sourceFile);
-            clearFile();
+            return sourceFile.delete() && outputFile.renameTo(sourceFile);
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e.getMessage());
+            return false;
+        } finally {
+            clearFile();
         }
     }
 
@@ -141,18 +143,11 @@ public class ProductDaoCSV extends ConnectionCSV<ProductEntityCSV> {
     }
 
     @Override
-    @SuppressWarnings("ResultOfMethodCallIgnored")
-    public void deleteAll() {
-        File sourceFile = new File(filePath);
-        File outputFile = new File(tempPath);
-        createFileIfNotExist(sourceFile, outputFile);
-        sourceFile.delete();
-        outputFile.renameTo(sourceFile);
-        clearFile();
+    public boolean deleteAll() {
+        return deleteAll(filePath, tempPath);
     }
 
     @Override
-    @Nullable
     public ProductEntityCSV findByName(String name) {
         List<ProductEntityCSV> list = findAll();
         for (ProductEntityCSV item : list) {

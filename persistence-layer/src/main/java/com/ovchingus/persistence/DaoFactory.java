@@ -1,16 +1,16 @@
 package com.ovchingus.persistence;
 
-import com.ovchingus.persistence.CSV.dao.ProductDaoCSV;
-import com.ovchingus.persistence.CSV.dao.StoreDaoCSV;
-import com.ovchingus.persistence.CSV.entities.ProductEntityCSV;
-import com.ovchingus.persistence.CSV.entities.StoreEntityCSV;
-import com.ovchingus.persistence.MySQL.dao.ConnectionMySQL;
-import com.ovchingus.persistence.MySQL.dao.ProductDaoMySQL;
-import com.ovchingus.persistence.MySQL.dao.StoreDaoMySQL;
-import com.ovchingus.persistence.MySQL.dao.StoreProductDaoMySQL;
-import com.ovchingus.persistence.MySQL.entities.ProductEntityMySQL;
-import com.ovchingus.persistence.MySQL.entities.StoreEntityMySQL;
-import com.ovchingus.persistence.MySQL.entities.StoreProductEntityMySQL;
+import com.ovchingus.persistence.csv.dao.ProductDaoCSV;
+import com.ovchingus.persistence.csv.dao.StoreDaoCSV;
+import com.ovchingus.persistence.csv.entities.ProductEntityCSV;
+import com.ovchingus.persistence.csv.entities.StoreEntityCSV;
+import com.ovchingus.persistence.mysql.dao.ConnectionMySQL;
+import com.ovchingus.persistence.mysql.dao.ProductDaoMySQL;
+import com.ovchingus.persistence.mysql.dao.StoreDaoMySQL;
+import com.ovchingus.persistence.mysql.dao.StoreProductDaoMySQL;
+import com.ovchingus.persistence.mysql.entities.ProductEntityMySQL;
+import com.ovchingus.persistence.mysql.entities.StoreEntityMySQL;
+import com.ovchingus.persistence.mysql.entities.StoreProductEntityMySQL;
 import com.ovchingus.persistence.settings.DaoSettings;
 
 //TODO: DaoFactory do not working! Need to repair it.

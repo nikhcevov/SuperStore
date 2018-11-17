@@ -1,4 +1,4 @@
-package com.ovchingus.persistence.CSV.entities;
+package com.ovchingus.persistence.csv.entities;
 
 public class StoreEntityCSV {
 

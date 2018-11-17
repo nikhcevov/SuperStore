@@ -1,6 +1,6 @@
-import com.ovchingus.persistence.CSV.dao.ProductDaoCSV;
-import com.ovchingus.persistence.CSV.entities.ProductEntityCSV;
-import com.ovchingus.persistence.CSV.entities.ProductInfo;
+import com.ovchingus.persistence.csv.dao.ProductDaoCSV;
+import com.ovchingus.persistence.csv.entities.ProductEntityCSV;
+import com.ovchingus.persistence.csv.entities.ProductInfo;
 import org.junit.Before;
 import org.junit.Test;
 

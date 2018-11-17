@@ -1,9 +1,9 @@
-package com.ovchingus.persistence.MySQL.dao;
+package com.ovchingus.persistence.mysql.dao;
 
 import com.ovchingus.persistence.GenericDao;
-import com.ovchingus.persistence.MySQL.entities.ProductEntityMySQL;
-import com.ovchingus.persistence.MySQL.entities.StoreEntityMySQL;
-import com.ovchingus.persistence.MySQL.entities.StoreProductEntityMySQL;
+import com.ovchingus.persistence.mysql.entities.ProductEntityMySQL;
+import com.ovchingus.persistence.mysql.entities.StoreEntityMySQL;
+import com.ovchingus.persistence.mysql.entities.StoreProductEntityMySQL;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -16,7 +16,7 @@ public abstract class ConnectionMySQL<T, PK> implements GenericDao<T, PK> {
 
     private Transaction currentTransaction;
 
-    public Session getCurrentSession() {
+    Session getCurrentSession() {
         return currentSession;
     }
 
@@ -48,10 +48,9 @@ public abstract class ConnectionMySQL<T, PK> implements GenericDao<T, PK> {
         return currentSession;
     }
 
-    public Session openCurrentSessionWithTransaction() {
+    public void openCurrentSessionWithTransaction() {
         currentSession = getSessionFactory().openSession();
         currentTransaction = currentSession.beginTransaction();
-        return currentSession;
     }
 
     public void closeCurrentSession() {

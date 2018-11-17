@@ -1,4 +1,4 @@
-import com.ovchingus.persistence.CSV.entities.StoreEntityCSV;
+import com.ovchingus.persistence.csv.entities.StoreEntityCSV;
 import com.ovchingus.service.func.Settings;
 import com.ovchingus.service.func.model.Service;
 import org.junit.Before;

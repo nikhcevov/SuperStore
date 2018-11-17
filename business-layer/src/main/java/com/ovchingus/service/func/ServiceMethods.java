@@ -8,12 +8,12 @@ public interface ServiceMethods {
     /**
      * Создать магазин
      */
-    public void createStore(Integer storeId, String name, String address);
+    public boolean createStore(Integer storeId, String name, String address);
 
     /**
      * Создать товар
      */
-    public void createProduct(Integer productId, String name);
+    public boolean createProduct(Integer productId, String name);
 
     /**
      * Создать список товаров из одьектов ShopItem
@@ -25,12 +25,12 @@ public interface ServiceMethods {
      * с возможностью установить/изменить цену
      */
     //public void insertProductListToStore(Integer storeId,  String , List<ShopItem> list);
-    public void insertProductToStore(String storeName, String productName, Integer qty, Double price);
+    public boolean insertProductToStore(String storeName, String productName, Integer qty, Double price);
 
     /**
      * Обновить продукт в магазине с возможностью установить/изменить цену
      */
-    public void updateProduct(String storeName, String productName, Integer qty, Double price);
+    public boolean updateProduct(String storeName, String productName, Integer qty, Double price);
 
     /**
      * Найти магазин, в котором определенный товар самый дешевый

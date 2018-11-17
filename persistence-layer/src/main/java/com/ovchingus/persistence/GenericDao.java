@@ -1,20 +1,25 @@
 package com.ovchingus.persistence;
 
+import com.sun.istack.internal.Nullable;
+
 import java.util.List;
 
 public interface GenericDao<T, PK> {
 
-    public void persist(T entity);
+    public boolean persist(T entity);
 
-    public void update(T entity);
+    public boolean update(T entity);
 
+    @Nullable
     public T findById(PK id);
 
-    public void delete(T entity);
+    public boolean delete(T entity);
 
+    @Nullable
     public List<T> findAll();
 
-    public void deleteAll();
+    public boolean deleteAll();
 
+    @Nullable
     public T findByName(String name);
 }

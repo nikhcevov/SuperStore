@@ -2,6 +2,8 @@ package com.ovchingus.persistence.settings;
 
 public class DaoSettings {
 
+    private static int cleanerCounter = 10;
+
     public static void setSourceDatabase() {
         SourceSettings.setSourceDatabase();
     }
@@ -26,9 +28,8 @@ public class DaoSettings {
         DaoSettings.csvFilePath = csvFilePath;
     }
 
-    private static String csvFilePath = ".\\persistence-layer\\src\\main\\java\\com\\ovchingus\\persistence\\CSV\\CSVs\\";
+    private static String csvFilePath = ".\\persistence-layer\\src\\main\\java\\com\\ovchingus\\persistence\\csv\\data\\";
 
-    private static int cleanerCounter = 10;
 
     public static int getCleanFileAfterNumberOfOperations() {
         return cleanerCounter;

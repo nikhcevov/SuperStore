@@ -1,4 +1,4 @@
-package com.ovchingus.persistence.CSV.dao;
+package com.ovchingus.persistence.csv.dao;
 
 import com.ovchingus.persistence.GenericDao;
 import org.apache.logging.log4j.LogManager;
@@ -13,20 +13,27 @@ abstract class ConnectionCSV<T> implements GenericDao<T, Integer> {
 
     abstract void clearFile();
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
-    static void createFileIfNotExist(File sourceFile, File outputFile) {
+    boolean deleteAll(String filePath, String tempPath) {
+        File sourceFile = new File(filePath);
+        File outputFile = new File(tempPath);
+        boolean a = false, b = false;
         try {
             if (!sourceFile.exists())
-                sourceFile.createNewFile();
+                a = sourceFile.createNewFile();
             if (!outputFile.exists())
-                outputFile.createNewFile();
+                b = outputFile.createNewFile();
+            return a && b
+                    && sourceFile.delete()
+                    && outputFile.renameTo(sourceFile);
         } catch (IOException e) {
             e.printStackTrace();
-            log.error(e);
+            log.error(e.getMessage());
+            return false;
+        } finally {
+            clearFile();
         }
     }
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     void clear(String filePath, String tempPath) {
         File sourceFile = new File(filePath);
         File outputFile = new File(tempPath);
@@ -43,12 +50,12 @@ abstract class ConnectionCSV<T> implements GenericDao<T, Integer> {
             }
             reader.close();
             writer.close();
-            sourceFile.delete();
-            outputFile.renameTo(sourceFile);
-            log.info("File " + filePath + " cleared.");
-        } catch (Exception e) {
+            if (sourceFile.delete() && outputFile.renameTo(sourceFile))
+                log.info("File " + filePath + " cleared.");
+            else log.error("File " + filePath + " wasn`t cleared.");
+        } catch (IOException e) {
             e.printStackTrace();
-            log.error(e);
+            log.error(e.getMessage());
         }
     }
 }

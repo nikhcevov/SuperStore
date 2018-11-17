@@ -1,6 +1,6 @@
-package com.ovchingus.persistence.MySQL.dao;
+package com.ovchingus.persistence.mysql.dao;
 
-import com.ovchingus.persistence.MySQL.entities.StoreProductEntityMySQL;
+import com.ovchingus.persistence.mysql.entities.StoreProductEntityMySQL;
 
 import java.util.List;
 
@@ -9,20 +9,23 @@ public class StoreProductDaoMySQL extends ConnectionMySQL<StoreProductEntityMySQ
     public StoreProductDaoMySQL() {
     }
 
-    public void persist(StoreProductEntityMySQL entity) {
+    public boolean persist(StoreProductEntityMySQL entity) {
         getCurrentSession().save(entity);
+        return true;
     }
 
-    public void update(StoreProductEntityMySQL entity) {
+    public boolean update(StoreProductEntityMySQL entity) {
         getCurrentSession().update(entity);
+        return true;
     }
 
     public StoreProductEntityMySQL findById(StoreProductEntityMySQL.StoreProductPK id) {
         return getCurrentSession().get(StoreProductEntityMySQL.class, id);
     }
 
-    public void delete(StoreProductEntityMySQL entity) {
+    public boolean delete(StoreProductEntityMySQL entity) {
         getCurrentSession().delete(entity);
+        return true;
     }
 
     @SuppressWarnings("unchecked")
@@ -30,11 +33,12 @@ public class StoreProductDaoMySQL extends ConnectionMySQL<StoreProductEntityMySQ
         return (List<StoreProductEntityMySQL>) getCurrentSession().createQuery("from StoreProductEntityMySQL").list();
     }
 
-    public void deleteAll() {
+    public boolean deleteAll() {
         List<StoreProductEntityMySQL> entityList = findAll();
         for (StoreProductEntityMySQL entity : entityList) {
             delete(entity);
         }
+        return true;
     }
 
     @Override

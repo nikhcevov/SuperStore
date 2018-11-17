@@ -1,4 +1,4 @@
-package com.ovchingus.persistence.CSV.entities;
+package com.ovchingus.persistence.csv.entities;
 
 import java.util.List;
 

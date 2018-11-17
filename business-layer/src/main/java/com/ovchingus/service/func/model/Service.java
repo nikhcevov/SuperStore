@@ -5,7 +5,7 @@ import com.ovchingus.service.func.Settings;
 
 import java.util.Map;
 
-public class Service implements ServiceMethods {
+public abstract class Service implements ServiceMethods {
 
 
     private ServiceCSV serviceCSV;
@@ -18,23 +18,26 @@ public class Service implements ServiceMethods {
             serviceCSV = new ServiceCSV();
     }
 
-    @Override
-    public void createStore(Integer id, String name, String address) {
+    @SuppressWarnings("unchecked")
+    private <T extends Service> T getSource() {
         if (Settings.isSourceMySQL())
-            serviceMySQL.createStore(id, name, address);
+            return (T) serviceMySQL;
         if (Settings.isSourceCSV())
-            serviceCSV.createStore(id, name, address);
+            return (T) serviceCSV;
+        return null;
     }
 
     @Override
-    public void createProduct(Integer productId, String name) {
-        if (Settings.isSourceMySQL())
-            serviceMySQL.createProduct(productId, name);
-        if (Settings.isSourceCSV())
-            serviceCSV.createProduct(productId, name);
+    public boolean createStore(Integer id, String name, String address) {
+        return getSource().createStore(id, name, address);
     }
 
-    /* //TODO решить что делать с ЭТИМ
+    @Override
+    public boolean createProduct(Integer productId, String name) {
+        return getSource().createProduct(productId, name);
+    }
+
+    /* //TODO add support of list with products
         @Override
         public ShopItem createShopItem(String storeName, String productName, Integer qty, Double price) {
             if (Settings.isSourceMySQL())
@@ -45,55 +48,37 @@ public class Service implements ServiceMethods {
         }
     */
     @Override
-    public void insertProductToStore(String storeName, String productName, Integer qty, Double price) {
-        if (Settings.isSourceMySQL())
-            serviceMySQL.insertProductToStore(storeName, productName, qty, price);
-        if (Settings.isSourceCSV())
-            serviceCSV.insertProductToStore(storeName, productName, qty, price);
+    public boolean insertProductToStore(String storeName, String productName, Integer qty, Double price) {
+        return getSource().insertProductToStore(storeName, productName, qty, price);
     }
 
     @Override
-    public void updateProduct(String storeName, String productName, Integer qty, Double price) {
-        if (Settings.isSourceMySQL())
-            serviceMySQL.updateProduct(storeName, productName, qty, price);
-        if (Settings.isSourceCSV())
-            serviceCSV.updateProduct(storeName, productName, qty, price);
+    public boolean updateProduct(String storeName, String productName, Integer qty, Double price) {
+        return getSource().updateProduct(storeName, productName, qty, price);
     }
 
 
     @Override
     public String findStoreWithCheapestProduct(String productName) {
-        if (Settings.isSourceMySQL())
-            return serviceMySQL.findStoreWithCheapestProduct(productName);
-        if (Settings.isSourceCSV())
-            return serviceCSV.findStoreWithCheapestProduct(productName);
+        getSource().findStoreWithCheapestProduct(productName);
         return null;
     }
 
     @Override
     public Map<String, Integer> findProductListForSum(String storeName, Double budget) {
-        if (Settings.isSourceMySQL())
-            return serviceMySQL.findProductListForSum(storeName, budget);
-        if (Settings.isSourceCSV())
-            return serviceCSV.findProductListForSum(storeName, budget);
+        getSource().findProductListForSum(storeName, budget);
         return null;
     }
 
     @Override
     public Integer buyProductsInOneStore(String storeName, String productName, Integer qty) {
-        if (Settings.isSourceMySQL())
-            return serviceMySQL.buyProductsInOneStore(storeName, productName, qty);
-        if (Settings.isSourceCSV())
-            return serviceCSV.buyProductsInOneStore(storeName, productName, qty);
+        getSource().buyProductsInOneStore(storeName, productName, qty);
         return null;
     }
 
     @Override
     public String findStoreWithCheapestShopList(String query) {
-        if (Settings.isSourceMySQL())
-            return serviceMySQL.findStoreWithCheapestShopList(query);
-        if (Settings.isSourceCSV())
-            return serviceCSV.findStoreWithCheapestShopList(query);
+        getSource().findStoreWithCheapestShopList(query);
         return null;
     }
 
