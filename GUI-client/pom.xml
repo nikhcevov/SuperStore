@@ -34,7 +34,7 @@
     <dependencies>
         <dependency>
             <groupId>com.ovchingus</groupId>
-            <artifactId>service</artifactId>
+            <artifactId>business-layer</artifactId>
             <version>1.0</version>
         </dependency>
 

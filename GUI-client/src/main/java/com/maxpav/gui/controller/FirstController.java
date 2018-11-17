@@ -1,5 +1,6 @@
 package com.maxpav.gui.controller;
 
+import com.ovchingus.service.func.model.Service;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -12,6 +13,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class FirstController {
+
+    private Service service = new Service();
 
     @FXML
     private ResourceBundle resources;
@@ -149,7 +152,7 @@ public class FirstController {
     void createProduct(ActionEvent event) {
         text1.setText("Сalculation");
         if (!textfieldcreateproduct1.getText().equals("") && !textfieldcreateproduct2.getText().equals("")) {
-            //TODO:
+            service.createProduct();
 
 
             text1.setText("Successful");
@@ -238,6 +241,7 @@ public class FirstController {
 
     @FXML
     void initialize() {
+        service.initialize();
         assert textfieldcreatestore1 != null : "fx:id=\"textfieldcreatestore1\" was not injected: check your FXML file 'FirstScene.fxml'.";
         assert textfieldcreateproduct1 != null : "fx:id=\"textfieldcreateproduct1\" was not injected: check your FXML file 'FirstScene.fxml'.";
         assert listview2 != null : "fx:id=\"listview2\" was not injected: check your FXML file 'FirstScene.fxml'.";

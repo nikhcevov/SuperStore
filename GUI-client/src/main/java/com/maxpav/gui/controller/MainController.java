@@ -1,5 +1,6 @@
 package com.maxpav.gui.controller;
 
+import com.ovchingus.service.func.Settings;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -56,10 +57,10 @@ public class MainController {
     @FXML
     void select(ActionEvent event) {
         if (combobox.getValue().equals("Database")) {
-            //TODO: choose Database.
+            Settings.setSourceMySQL();
         }
         if (combobox.getValue().equals("Text File")) {
-            //TODO: choose file.
+            Settings.setSourceCSV();
         }
         button.setDisable(false);
     }
