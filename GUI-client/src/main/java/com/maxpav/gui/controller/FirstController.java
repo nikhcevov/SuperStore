@@ -23,13 +23,22 @@ public class FirstController {
     private TextField textfieldcreatestore1;
 
     @FXML
+    private TextField textfieldcreatestore2;
+
+    @FXML
+    private TextField textfieldcreatestore3;
+
+    @FXML
     private TextField textfieldcreateproduct1;
 
     @FXML
-    private ListView<?> listview2;
+    private TextField textfieldcreateproduct2;
 
     @FXML
-    private ListView<?> listview1;
+    private ListView<String> listview2;
+
+    @FXML
+    private ListView<String> listview1;
 
     @FXML
     private Tab tab1;
@@ -131,43 +140,100 @@ public class FirstController {
     private TextField textfieldchangeprice4;
 
     @FXML
-    void createProduct(ActionEvent event) {
+    private Text text1;
 
+    @FXML
+    private Text text2;
+
+    @FXML
+    void createProduct(ActionEvent event) {
+        text1.setText("Сalculation");
+        if (!textfieldcreateproduct1.getText().equals("") && !textfieldcreateproduct2.getText().equals("")) {
+            //TODO:
+
+
+            text1.setText("Successful");
+        } else text1.setText("Error");
     }
 
     @FXML
-    void changePrice(ActionEvent event) {
+    void updateProduct(ActionEvent event) {
+        text1.setText("Сalculation");
+        if (!textfieldchangeprice1.getText().equals("") && !textfieldchangeprice2.getText().equals("") &&
+                !textfieldchangeprice3.getText().equals("") && !textfieldchangeprice4.getText().equals("")) {
+            //TODO:
 
+
+            text1.setText("Successful");
+        } else text1.setText("Error");
     }
 
     @FXML
     void createStore(ActionEvent event) {
+        text1.setText("Сalculation");
+        if (!textfieldcreatestore1.getText().equals("") && !textfieldcreatestore2.getText().equals("")) {
+            //TODO:
 
+
+            text1.setText("Successful");
+        } else text1.setText("Error");
     }
 
     @FXML
     void delivery(ActionEvent event) {
+        text1.setText("Сalculation");
+        if (!textfielddelivery1.getText().equals("") && !textfielddelivery2.getText().equals("") &&
+                !textfielddelivery3.getText().equals("") && !textfielddelivery4.getText().equals("")) {
+            //TODO:
 
+
+            text1.setText("Successful");
+        } else text1.setText("Error");
     }
 
     @FXML
     void findStoreWhereProductIsCheapest(ActionEvent event) {
+        text2.setText("Сalculation");
+        if (!textfieldFindStoreWhereProductIsCheapest1.getText().equals("")) {
+            //TODO:
 
+
+            text2.setText("Successful");
+        } else text2.setText("Error");
     }
 
     @FXML
     void combinations(ActionEvent event) {
+        text2.setText("Сalculation");
+        if (!textfieldCombinations1.getText().equals("")) {
+            //TODO:
 
+
+            text2.setText("Successful");
+        } else text2.setText("Error");
     }
 
     @FXML
     void buy(ActionEvent event) {
+        text2.setText("Сalculation");
+        if (!textfieldBuy1.getText().equals("") && !textfieldBuy2.getText().equals("") &&
+                !textfieldBuy3.getText().equals("")) {
+            //TODO:
 
+
+            text2.setText("Successful");
+        } else text2.setText("Error");
     }
 
     @FXML
     void findStoreWhereCombinationIsCheapest(ActionEvent event) {
+        text2.setText("Сalculation");
+        if (!textfieldFindStoreWhereCombinationIsCheapest1.getText().equals("")) {
+            //TODO:
 
+
+            text2.setText("Successful");
+        } else text2.setText("Error");
     }
 
     @FXML
@@ -209,6 +275,10 @@ public class FirstController {
         assert textfieldchangeprice2 != null : "fx:id=\"textfieldchangeprice2\" was not injected: check your FXML file 'FirstScene.fxml'.";
         assert textfieldchangeprice3 != null : "fx:id=\"textfieldchangeprice3\" was not injected: check your FXML file 'FirstScene.fxml'.";
         assert textfieldchangeprice4 != null : "fx:id=\"textfieldchangeprice4\" was not injected: check your FXML file 'FirstScene.fxml'.";
-
+        assert text2 != null : "fx:id=\"text2\" was not injected: check your FXML file 'FirstScene.fxml'.";
+        assert text1 != null : "fx:id=\"text1\" was not injected: check your FXML file 'FirstScene.fxml'.";
+        assert textfieldcreatestore2 != null : "fx:id=\"textfieldcreatestore2\" was not injected: check your FXML file 'FirstScene.fxml'.";
+        assert textfieldcreatestore3 != null : "fx:id=\"textfieldcreatestore3\" was not injected: check your FXML file 'FirstScene.fxml'.";
+        assert textfieldcreateproduct1 != null : "fx:id=\"textfieldcreateproduct1\" was not injected: check your FXML file 'FirstScene.fxml'.";
     }
 }
