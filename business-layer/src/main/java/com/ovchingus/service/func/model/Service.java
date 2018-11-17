@@ -5,7 +5,7 @@ import com.ovchingus.service.func.Settings;
 
 import java.util.Map;
 
-public abstract class Service implements ServiceMethods {
+public class Service implements ServiceMethods {
 
 
     private ServiceCSV serviceCSV;
@@ -22,9 +22,7 @@ public abstract class Service implements ServiceMethods {
     private <T extends Service> T getSource() {
         if (Settings.isSourceMySQL())
             return (T) serviceMySQL;
-        if (Settings.isSourceCSV())
-            return (T) serviceCSV;
-        return null;
+        else return (T) serviceCSV;
     }
 
     @Override

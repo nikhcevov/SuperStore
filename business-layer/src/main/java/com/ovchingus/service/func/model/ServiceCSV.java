@@ -18,20 +18,15 @@ public class ServiceCSV extends Service {
     private GenericDao daoProductEntity = DaoFactory.getDao(ProductEntityCSV.class);
 
     @Override
+    @SuppressWarnings("unchecked")
     public boolean createStore(Integer storeId, String name, String address) {
-        StoreEntityCSV storeEntityCSV = new StoreEntityCSV();
-        storeEntityCSV.setId(storeId);
-        storeEntityCSV.setName(name);
-        storeEntityCSV.setAddress(address);
-        return daoStoreEntity.persist(storeEntityCSV);
+        return daoStoreEntity.persist(new StoreEntityCSV(storeId, name, address));
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public boolean createProduct(Integer productId, String name) {
-        ProductEntityCSV productEntityCSV = new ProductEntityCSV();
-        productEntityCSV.setId(productId);
-        productEntityCSV.setName(name);
-        return daoProductEntity.persist(productEntityCSV);
+        return daoProductEntity.persist(new ProductEntityCSV(productId, name));
     }
 
     /*
@@ -41,6 +36,7 @@ public class ServiceCSV extends Service {
         }
     */
     @Override
+    @SuppressWarnings("unchecked")
     public boolean insertProductToStore(String storeName, String productName, Integer qty, Double price) {
         StoreEntityCSV temp = (StoreEntityCSV) daoStoreEntity.findByName(storeName);
         ProductEntityCSV prod = (ProductEntityCSV) daoProductEntity.findByName(storeName);
@@ -59,6 +55,7 @@ public class ServiceCSV extends Service {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public boolean updateProduct(String storeName, String productName, Integer qty, Double price) {
         ProductInfo productInfo = new ProductInfo();
         ProductEntityCSV temp = (ProductEntityCSV) daoProductEntity.findByName(productName);
@@ -79,6 +76,7 @@ public class ServiceCSV extends Service {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public String findStoreWithCheapestProduct(String productName) {
         ProductEntityCSV temp = (ProductEntityCSV) daoProductEntity.findByName(productName);
         List<ProductInfo> list = temp.getProducts();
@@ -102,6 +100,7 @@ public class ServiceCSV extends Service {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Map<String, Integer> findProductListForSum(String storeName, Double budget) {
         Map<String, Integer> map = new HashMap<>();
         List<StoreEntityCSV> temp = daoStoreEntity.findAll();

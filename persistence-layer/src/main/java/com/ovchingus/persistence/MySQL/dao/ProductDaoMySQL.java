@@ -1,46 +1,44 @@
-package com.ovchingus.persistence.MySQL.dao;
+package com.ovchingus.persistence.mysql.dao;
 
-import com.ovchingus.persistence.MySQL.entities.ProductEntityMySQL;
+import com.ovchingus.persistence.mysql.entities.ProductEntityMySQL;
 
 import java.util.List;
 
 public class ProductDaoMySQL extends ConnectionMySQL<ProductEntityMySQL, Integer> {
 
-    public ProductDaoMySQL() {
-    }
-
-    public void persist(ProductEntityMySQL entity) {
+    public boolean persist(ProductEntityMySQL entity) {
         getCurrentSession().save(entity);
+        return true;
     }
 
-    public void update(ProductEntityMySQL entity) {
+    public boolean update(ProductEntityMySQL entity) {
         getCurrentSession().update(entity);
+        return true;
     }
 
     public ProductEntityMySQL findById(Integer id) {
-        ProductEntityMySQL productEntityMySQL = getCurrentSession().get(ProductEntityMySQL.class, id);
-        return productEntityMySQL;
+        return getCurrentSession().get(ProductEntityMySQL.class, id);
     }
 
     public ProductEntityMySQL findByName(String name) {
-        ProductEntityMySQL productEntityMySQL = getCurrentSession().bySimpleNaturalId(ProductEntityMySQL.class).load(name);
-        return productEntityMySQL;
+        return getCurrentSession().bySimpleNaturalId(ProductEntityMySQL.class).load(name);
     }
 
-    public void delete(ProductEntityMySQL entity) {
+    public boolean delete(ProductEntityMySQL entity) {
         getCurrentSession().delete(entity);
+        return true;
     }
 
     @SuppressWarnings("unchecked")
     public List<ProductEntityMySQL> findAll() {
-        List<ProductEntityMySQL> list = (List<ProductEntityMySQL>) getCurrentSession().createQuery("from ProductEntityMySQL").list();
-        return list;
+        return (List<ProductEntityMySQL>) getCurrentSession().createQuery("from ProductEntityMySQL").list();
     }
 
-    public void deleteAll() {
+    public boolean deleteAll() {
         List<ProductEntityMySQL> entityList = findAll();
         for (ProductEntityMySQL entity : entityList) {
             delete(entity);
         }
+        return true;
     }
 }

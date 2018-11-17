@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.effect.InnerShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<AnchorPane fx:id="anchorpane1" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #f45942;"
+            xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.maxpav.gui.controller.MainController">
+    <children>
+        <AnchorPane fx:id="anchorpane2" layoutY="50.0" prefHeight="350.0" prefWidth="600.0"
+                    style="-fx-background-color: #ffffff;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                    AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
+            <children>
+                <ImageView fx:id="image" fitHeight="350.0" fitWidth="620.0" pickOnBounds="true" preserveRatio="true"
+                           AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                    <image>
+                        <Image url="@../images/promo.jpg"/>
+                    </image>
+                </ImageView>
+                <ProgressBar fx:id="progressbar" layoutY="324.0" prefHeight="25.0" prefWidth="600.0" progress="0.0"
+                             style="-fx-background-radius: 0; -fx-background-color: #f45942;"
+                             AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                             AnchorPane.topAnchor="324.0"/>
+                <Button fx:id="button" layoutX="194.0" layoutY="269.0" mnemonicParsing="false" onAction="#enter"
+                        prefHeight="31.0" prefWidth="232.0" style="-fx-background-color: #f45942;" text="Enter">
+                    <font>
+                        <Font name="Mistral" size="24.0"/>
+                    </font>
+                    <effect>
+                        <InnerShadow/>
+                    </effect>
+                </Button>
+            </children>
+        </AnchorPane>
+        <Text fx:id="text" layoutX="242.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SuperStore">
+            <font>
+                <Font name="Mistral" size="36.0"/>
+            </font>
+        </Text>
+        <ComboBox fx:id="combobox" layoutX="456.0" layoutY="13.0" onAction="#select" prefWidth="150.0"
+                  promptText="Source" style="-fx-background-color: #f45942;">
+            <effect>
+                <DropShadow/>
+            </effect>
+        </ComboBox>
+    </children>
+    <effect>
+        <InnerShadow/>
+    </effect>
+</AnchorPane>

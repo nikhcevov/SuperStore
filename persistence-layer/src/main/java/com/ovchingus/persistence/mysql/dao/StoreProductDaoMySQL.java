@@ -6,9 +6,6 @@ import java.util.List;
 
 public class StoreProductDaoMySQL extends ConnectionMySQL<StoreProductEntityMySQL, StoreProductEntityMySQL.StoreProductPK> {
 
-    public StoreProductDaoMySQL() {
-    }
-
     public boolean persist(StoreProductEntityMySQL entity) {
         getCurrentSession().save(entity);
         return true;

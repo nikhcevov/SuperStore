@@ -1,46 +1,44 @@
-package com.ovchingus.persistence.MySQL.dao;
+package com.ovchingus.persistence.mysql.dao;
 
-import com.ovchingus.persistence.MySQL.entities.StoreEntityMySQL;
+import com.ovchingus.persistence.mysql.entities.StoreEntityMySQL;
 
 import java.util.List;
 
 public class StoreDaoMySQL extends ConnectionMySQL<StoreEntityMySQL, Integer> {
 
-    public StoreDaoMySQL() {
-    }
-
-    public void persist(StoreEntityMySQL entity) {
+    public boolean persist(StoreEntityMySQL entity) {
         getCurrentSession().save(entity);
+        return true;
     }
 
-    public void update(StoreEntityMySQL entity) {
+    public boolean update(StoreEntityMySQL entity) {
         getCurrentSession().update(entity);
+        return true;
     }
 
     public StoreEntityMySQL findById(Integer id) {
-        StoreEntityMySQL storeEntityMySQL = getCurrentSession().get(StoreEntityMySQL.class, id);
-        return storeEntityMySQL;
+        return getCurrentSession().get(StoreEntityMySQL.class, id);
     }
 
     public StoreEntityMySQL findByName(String name) {
-        StoreEntityMySQL storeEntityMySQL = getCurrentSession().bySimpleNaturalId(StoreEntityMySQL.class).load(name);
-        return storeEntityMySQL;
+        return getCurrentSession().bySimpleNaturalId(StoreEntityMySQL.class).load(name);
     }
 
-    public void delete(StoreEntityMySQL entity) {
+    public boolean delete(StoreEntityMySQL entity) {
         getCurrentSession().delete(entity);
+        return true;
     }
 
     @SuppressWarnings("unchecked")
     public List<StoreEntityMySQL> findAll() {
-        List<StoreEntityMySQL> list = (List<StoreEntityMySQL>) getCurrentSession().createQuery("from StoreEntityMySQL").list();
-        return list;
+        return (List<StoreEntityMySQL>) getCurrentSession().createQuery("from StoreEntityMySQL").list();
     }
 
-    public void deleteAll() {
+    public boolean deleteAll() {
         List<StoreEntityMySQL> entityList = findAll();
         for (StoreEntityMySQL entity : entityList) {
             delete(entity);
         }
+        return true;
     }
 }

@@ -35,6 +35,11 @@ public class StoreDaoCSV extends ConnectionCSV<StoreEntityCSV> {
 
     @Override
     public boolean persist(StoreEntityCSV entity) {
+        List<StoreEntityCSV> list = findAll();
+        for (StoreEntityCSV item : list)
+            if (item.getId().equals(entity.getId())
+                    || item.getName().equals(entity.getName()))
+                return false;
         try {
             FileUtils.writeStringToFile(new File(filePath),
                     (entity.getId() + "," + entity.getName() + "," + entity.getAddress() + "\n"),

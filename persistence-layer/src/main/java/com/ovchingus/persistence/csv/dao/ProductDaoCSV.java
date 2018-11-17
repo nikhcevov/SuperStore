@@ -32,6 +32,11 @@ public class ProductDaoCSV extends ConnectionCSV<ProductEntityCSV> {
 
     @Override
     public boolean persist(ProductEntityCSV entity) {
+        List<ProductEntityCSV> list = findAll();
+        for (ProductEntityCSV item : list)
+            if (item.getId().equals(entity.getId())
+                    || item.getName().equals(entity.getName()))
+                return false;
         StringBuilder sb = new StringBuilder();
         sb.append(entity.getId()).append(",");
         sb.append(entity.getName()).append(",");

@@ -16,7 +16,8 @@ abstract class ConnectionCSV<T> implements GenericDao<T, Integer> {
     boolean deleteAll(String filePath, String tempPath) {
         File sourceFile = new File(filePath);
         File outputFile = new File(tempPath);
-        boolean a = false, b = false;
+        boolean a = false;
+        boolean b = false;
         try {
             if (!sourceFile.exists())
                 a = sourceFile.createNewFile();
