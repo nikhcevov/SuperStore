@@ -1,5 +1,8 @@
 SuperStore
 =================
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/ac17b56c98b447ac9ac5b790672db35f)](https://app.codacy.com/app/ovchingus/SuperStore?utm_source=github.com&utm_medium=referral&utm_content=ovchingus/SuperStore&utm_campaign=Badge_Grade_Dashboard)
+
 App for storeEntityMySQL management. With suppor of mySQLStoreEntities and lists of productEntities. 
 ----------------
 
