@@ -4,7 +4,6 @@ import com.ovchingus.service.func.ServiceCSV;
 import com.ovchingus.service.func.ServiceMethods;
 import com.ovchingus.service.func.Settings;
 
-import java.util.List;
 import java.util.Map;
 
 public class Service implements ServiceMethods {
@@ -21,44 +20,45 @@ public class Service implements ServiceMethods {
     }
 
     @Override
-    public void createStore(String store) {
+    public void createStore(Integer id, String name, String address) {
         if (Settings.isSourceMySQL())
-            serviceMySQL.createStore(store);
+            serviceMySQL.createStore(id, name, address);
         if (Settings.isSourceCSV())
-            serviceCSV.createStore(store);
+            serviceCSV.createStore(id, name, address);
     }
 
     @Override
-    public void createProduct(String product) {
+    public void createProduct(Integer productId, String name) {
         if (Settings.isSourceMySQL())
-            serviceMySQL.createProduct(product);
+            serviceMySQL.createProduct(productId, name);
         if (Settings.isSourceCSV())
-            serviceCSV.createProduct(product);
+            serviceCSV.createProduct(productId, name);
     }
 
     @Override
-    public List<String> createShopList(List<String> list) {
+    public ShopItem createShopItem(String storeName, String productName, Integer qty, Double price) {
         if (Settings.isSourceMySQL())
-            return serviceMySQL.createShopList(list);
+            serviceMySQL.createShopItem(storeName, productName, qty, price);
         if (Settings.isSourceCSV())
-            return serviceCSV.createShopList(list);
+            serviceCSV.createShopItem(storeName, productName, qty, price);
         return null;
     }
 
     @Override
-    public void insertProductListToStore(String store, String list) {
+    public void insertProductToStore(String storeName, String productName, Integer qty, Double price) {
         if (Settings.isSourceMySQL())
-            serviceMySQL.insertProductListToStore(store, list);
+            serviceMySQL.insertProductToStore(storeName, productName, qty, price);
         if (Settings.isSourceCSV())
-            serviceCSV.insertProductListToStore(store, list);
+            serviceCSV.insertProductToStore(storeName, productName, qty, price);
     }
 
+
     @Override
-    public String findStoreWithCheapestProduct(String product) {
+    public String findStoreWithCheapestProduct(String productName) {
         if (Settings.isSourceMySQL())
-            return serviceMySQL.findStoreWithCheapestProduct(product);
+            return serviceMySQL.findStoreWithCheapestProduct(productName);
         if (Settings.isSourceCSV())
-            return serviceCSV.findStoreWithCheapestProduct(product);
+            return serviceCSV.findStoreWithCheapestProduct(productName);
         return null;
     }
 
@@ -72,20 +72,22 @@ public class Service implements ServiceMethods {
     }
 
     @Override
-    public String findStoreWithCheapestShopList(Map<String, Integer> map) {
+    public Integer buyProductsInOneStore(String storeName, String productName, Integer qty) {
         if (Settings.isSourceMySQL())
-            return serviceMySQL.findStoreWithCheapestShopList(map);
+            return serviceMySQL.buyProductsInOneStore(storeName, productName, qty);
         if (Settings.isSourceCSV())
-            return serviceCSV.findStoreWithCheapestShopList(map);
+            return serviceCSV.buyProductsInOneStore(storeName, productName, qty);
         return null;
     }
 
     @Override
-    public Integer buyListOfProductsInOneStore(String store, Map<String, Integer> map) {
+    public String findStoreWithCheapestShopList(String query) {
         if (Settings.isSourceMySQL())
-            return serviceMySQL.buyListOfProductsInOneStore(store, map);
+            return serviceMySQL.findStoreWithCheapestShopList(query);
         if (Settings.isSourceCSV())
-            return serviceCSV.buyListOfProductsInOneStore(store, map);
+            return serviceCSV.findStoreWithCheapestShopList(query);
         return null;
     }
+
+
 }

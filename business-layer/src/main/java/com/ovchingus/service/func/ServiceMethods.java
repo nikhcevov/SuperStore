@@ -1,7 +1,8 @@
 package com.ovchingus.service.func;
 
 
-import java.util.List;
+import com.ovchingus.service.func.model.ShopItem;
+
 import java.util.Map;
 
 public interface ServiceMethods {
@@ -9,28 +10,29 @@ public interface ServiceMethods {
     /**
      * Создать магазин
      */
-    public void createStore(String store);
+    public void createStore(Integer storeId, String name, String address);
 
     /**
      * Создать товар
      */
-    public void createProduct(String product);
+    public void createProduct(Integer productId, String name);
 
     /**
-     * Создать список товаров из одьектов ProductJdbc
+     * Создать список товаров из одьектов ShopItem
      */
-    public List<String> createShopList(List<String> list);
+    public ShopItem createShopItem(String storeName, String productName, Integer qty, Double price);
 
     /**
      * Завезти партию товаров в магазин (набор товар-количество
      * с возможностью установить/изменить цену
      */
-    public void insertProductListToStore(String store, String list);
+    //public void insertProductListToStore(Integer storeId,  String , List<ShopItem> list);
+    public void insertProductToStore(String storeName, String productName, Integer qty, Double price);
 
     /**
      * Найти магазин, в котором определенный товар самый дешевый
      */
-    public String findStoreWithCheapestProduct(String product);
+    public String findStoreWithCheapestProduct(String productName);
 
     /**
      * Понять, какие товары можно купить в магазине на некоторую
@@ -45,13 +47,14 @@ public interface ServiceMethods {
      * каких товаров купить, метод возвращает общую стоимость
      * покупки либо её невозможность, если товара не хватает)
      */
-    public Integer buyListOfProductsInOneStore(String store, Map<String, Integer> map);
+    //public Integer buyListOfProductsInOneStore(String store, Map<String, Integer> map);
+    public Integer buyProductsInOneStore(String storeName, String productName, Integer qty);
 
     /**
      * Найти, в каком магазине партия товаров (набор товар-количество) имеет
      * наименьшую сумму (в целом). Например, «в каком магазине дешевле всего купить
      * 10 гвоздей и 20 шурупов». Наличие товара в магазинах учитывается!
      */
-    public String findStoreWithCheapestShopList(Map<String, Integer> map);
+    public String findStoreWithCheapestShopList(String query);
 
 }

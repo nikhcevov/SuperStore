@@ -2,33 +2,33 @@ package com.ovchingus.service.func.model;
 
 import com.ovchingus.service.func.ServiceMethods;
 
-import java.util.List;
 import java.util.Map;
 
 public class ServiceMySQL implements ServiceMethods {
 
+
     @Override
-    public void createStore(String store) {
+    public void createStore(Integer storeId, String name, String address) {
 
     }
 
     @Override
-    public void createProduct(String product) {
+    public void createProduct(Integer productId, String name) {
 
     }
 
     @Override
-    public List<String> createShopList(List<String> list) {
+    public ShopItem createShopItem(String storeName, String productName, Integer qty, Double price) {
         return null;
     }
 
     @Override
-    public void insertProductListToStore(String store, String list) {
+    public void insertProductToStore(String storeName, String productName, Integer qty, Double price) {
 
     }
 
     @Override
-    public String findStoreWithCheapestProduct(String product) {
+    public String findStoreWithCheapestProduct(String productName) {
         return null;
     }
 
@@ -38,12 +38,12 @@ public class ServiceMySQL implements ServiceMethods {
     }
 
     @Override
-    public Integer buyListOfProductsInOneStore(String store, Map<String, Integer> map) {
+    public Integer buyProductsInOneStore(String storeName, String productName, Integer qty) {
         return null;
     }
 
     @Override
-    public String findStoreWithCheapestShopList(Map<String, Integer> map) {
+    public String findStoreWithCheapestShopList(String query) {
         return null;
     }
 }
