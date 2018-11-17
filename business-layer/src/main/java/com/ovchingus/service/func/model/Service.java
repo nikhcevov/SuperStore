@@ -12,17 +12,19 @@ public class Service implements ServiceMethods {
     private ServiceMySQL serviceMySQL;
 
     public Service() {
-        if (Settings.isSourceMySQL())
-            serviceMySQL = new ServiceMySQL();
-        if (Settings.isSourceCSV())
-            serviceCSV = new ServiceCSV();
     }
 
     @SuppressWarnings("unchecked")
     private <T extends Service> T getSource() {
-        if (Settings.isSourceMySQL())
+        if (Settings.isSourceMySQL()) {
+            serviceMySQL = new ServiceMySQL();
             return (T) serviceMySQL;
-        else return (T) serviceCSV;
+        }
+        if (Settings.isSourceCSV()) {
+            serviceCSV = new ServiceCSV();
+            return (T) serviceCSV;
+        }
+        return null;
     }
 
     @Override
@@ -58,26 +60,22 @@ public class Service implements ServiceMethods {
 
     @Override
     public String findStoreWithCheapestProduct(String productName) {
-        getSource().findStoreWithCheapestProduct(productName);
-        return null;
+        return getSource().findStoreWithCheapestProduct(productName);
     }
 
     @Override
     public Map<String, Integer> findProductListForSum(String storeName, Double budget) {
-        getSource().findProductListForSum(storeName, budget);
-        return null;
+        return getSource().findProductListForSum(storeName, budget);
     }
 
     @Override
     public Integer buyProductsInOneStore(String storeName, String productName, Integer qty) {
-        getSource().buyProductsInOneStore(storeName, productName, qty);
-        return null;
+        return getSource().buyProductsInOneStore(storeName, productName, qty);
     }
 
     @Override
     public String findStoreWithCheapestShopList(String query) {
-        getSource().findStoreWithCheapestShopList(query);
-        return null;
+        return getSource().findStoreWithCheapestShopList(query);
     }
 
 
