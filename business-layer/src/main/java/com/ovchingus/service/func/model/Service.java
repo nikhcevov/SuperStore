@@ -1,6 +1,5 @@
 package com.ovchingus.service.func.model;
 
-import com.ovchingus.service.func.ServiceCSV;
 import com.ovchingus.service.func.ServiceMethods;
 import com.ovchingus.service.func.Settings;
 
@@ -12,7 +11,7 @@ public class Service implements ServiceMethods {
     private ServiceCSV serviceCSV;
     private ServiceMySQL serviceMySQL;
 
-    public void initialize() {
+    public Service() {
         if (Settings.isSourceMySQL())
             serviceMySQL = new ServiceMySQL();
         if (Settings.isSourceCSV())
@@ -35,21 +34,30 @@ public class Service implements ServiceMethods {
             serviceCSV.createProduct(productId, name);
     }
 
-    @Override
-    public ShopItem createShopItem(String storeName, String productName, Integer qty, Double price) {
-        if (Settings.isSourceMySQL())
-            serviceMySQL.createShopItem(storeName, productName, qty, price);
-        if (Settings.isSourceCSV())
-            serviceCSV.createShopItem(storeName, productName, qty, price);
-        return null;
-    }
-
+    /* //TODO решить что делать с ЭТИМ
+        @Override
+        public ShopItem createShopItem(String storeName, String productName, Integer qty, Double price) {
+            if (Settings.isSourceMySQL())
+                serviceMySQL.createShopItem(storeName, productName, qty, price);
+            if (Settings.isSourceCSV())
+                serviceCSV.createShopItem(storeName, productName, qty, price);
+            return null;
+        }
+    */
     @Override
     public void insertProductToStore(String storeName, String productName, Integer qty, Double price) {
         if (Settings.isSourceMySQL())
             serviceMySQL.insertProductToStore(storeName, productName, qty, price);
         if (Settings.isSourceCSV())
             serviceCSV.insertProductToStore(storeName, productName, qty, price);
+    }
+
+    @Override
+    public void updateProduct(String storeName, String productName, Integer qty, Double price) {
+        if (Settings.isSourceMySQL())
+            serviceMySQL.updateProduct(storeName, productName, qty, price);
+        if (Settings.isSourceCSV())
+            serviceCSV.updateProduct(storeName, productName, qty, price);
     }
 
 
@@ -63,11 +71,11 @@ public class Service implements ServiceMethods {
     }
 
     @Override
-    public Map<String, Integer> findProductListForSum(Double budget) {
+    public Map<String, Integer> findProductListForSum(String storeName, Double budget) {
         if (Settings.isSourceMySQL())
-            return serviceMySQL.findProductListForSum(budget);
+            return serviceMySQL.findProductListForSum(storeName, budget);
         if (Settings.isSourceCSV())
-            return serviceCSV.findProductListForSum(budget);
+            return serviceCSV.findProductListForSum(storeName, budget);
         return null;
     }
 

@@ -1,4 +1,4 @@
-package com.ovchingus.persistence.MySQL.mappings;
+package com.ovchingus.persistence.MySQL.entities;
 
 
 import org.hibernate.annotations.NaturalId;

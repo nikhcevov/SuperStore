@@ -17,13 +17,19 @@ public class ServiceMySQL implements ServiceMethods {
 
     }
 
+    /*
+        @Override
+        public ShopItem createShopItem(String storeName, String productName, Integer qty, Double price) {
+            return null;
+        }
+    */
     @Override
-    public ShopItem createShopItem(String storeName, String productName, Integer qty, Double price) {
-        return null;
+    public void insertProductToStore(String storeName, String productName, Integer qty, Double price) {
+
     }
 
     @Override
-    public void insertProductToStore(String storeName, String productName, Integer qty, Double price) {
+    public void updateProduct(String storeName, String productName, Integer qty, Double price) {
 
     }
 
@@ -33,7 +39,7 @@ public class ServiceMySQL implements ServiceMethods {
     }
 
     @Override
-    public Map<String, Integer> findProductListForSum(Double budget) {
+    public Map<String, Integer> findProductListForSum(String storeName, Double budget) {
         return null;
     }
 

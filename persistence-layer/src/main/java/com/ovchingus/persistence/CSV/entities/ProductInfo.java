@@ -1,12 +1,12 @@
-package com.ovchingus.persistence.CSV.model;
+package com.ovchingus.persistence.CSV.entities;
 
 public class ProductInfo {
-    private Integer id;
+    private Integer storeId;
     private Integer qty;
     private Double price;
 
     public ProductInfo(Integer id, Integer qty, Double price) {
-        this.id = id;
+        this.storeId = id;
         this.qty = qty;
         this.price = price;
     }
@@ -14,12 +14,12 @@ public class ProductInfo {
     public ProductInfo() {
     }
 
-    public Integer getId() {
-        return id;
+    public Integer getStoreId() {
+        return storeId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setStoreId(Integer storeId) {
+        this.storeId = storeId;
     }
 
     public Integer getQty() {

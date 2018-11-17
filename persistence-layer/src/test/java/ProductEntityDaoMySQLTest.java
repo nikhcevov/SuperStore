@@ -1,5 +1,5 @@
-import com.ovchingus.persistence.MySQL.ProductDaoMySQL;
-import com.ovchingus.persistence.MySQL.mappings.ProductEntityMySQL;
+import com.ovchingus.persistence.MySQL.dao.ProductDaoMySQL;
+import com.ovchingus.persistence.MySQL.entities.ProductEntityMySQL;
 import org.junit.Before;
 import org.junit.Test;
 

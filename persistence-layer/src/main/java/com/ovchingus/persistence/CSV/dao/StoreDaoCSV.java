@@ -1,11 +1,13 @@
-package com.ovchingus.persistence.CSV;
+package com.ovchingus.persistence.CSV.dao;
 
-import com.ovchingus.persistence.CSV.model.StoreEntityCSV;
+import com.ovchingus.persistence.CSV.entities.StoreEntityCSV;
 import com.ovchingus.persistence.settings.DaoSettings;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.FileUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -13,14 +15,21 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StoreDaoCSV extends ConnectionCSV<StoreEntityCSV, Integer> {
+public class StoreDaoCSV extends ConnectionCSV<StoreEntityCSV> {
 
     private String filePath = DaoSettings.getCsvFilePath() + "stores.csv";
     private String tempPath = DaoSettings.getCsvFilePath() + "tempStores.csv";
+    private static final Logger log = LogManager.getLogger(StoreDaoCSV.class);
 
+    private int clearAfter = DaoSettings.getCleanFileAfterNumberOfOperations();
+    private int clearedTimes = 0;
 
     public void clearFile() {
-        clear(filePath, tempPath);
+        clearedTimes++;
+        if (clearedTimes >= clearAfter) {
+            clear(filePath, tempPath);
+            clearedTimes = 0;
+        }
     }
 
     @Override
@@ -31,13 +40,13 @@ public class StoreDaoCSV extends ConnectionCSV<StoreEntityCSV, Integer> {
                     true);
         } catch (IOException e) {
             e.printStackTrace();
+            log.error(e.getMessage());
         }
         clearFile();
     }
 
     @Override
     public void update(StoreEntityCSV entity) {
-        List<StoreEntityCSV> list = findAll();
         StoreEntityCSV e = findById(entity.getId());
         delete(e);
         persist(entity);
@@ -47,8 +56,7 @@ public class StoreDaoCSV extends ConnectionCSV<StoreEntityCSV, Integer> {
     @Override
     public StoreEntityCSV findById(Integer id) {
         try (Reader reader = Files.newBufferedReader(Paths.get(filePath));
-             CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT);) {
-
+             CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT)) {
             for (CSVRecord record : csvParser) {
                 Integer curId = Integer.parseInt(record.get(0));
                 if (curId.equals(id))
@@ -58,17 +66,18 @@ public class StoreDaoCSV extends ConnectionCSV<StoreEntityCSV, Integer> {
             clearFile();
         } catch (IOException e) {
             e.printStackTrace();
+            log.error(e.getMessage());
         }
         return null;
     }
 
     @Override
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public void delete(StoreEntityCSV entity) {
         File sourceFile = new File(filePath);
         File outputFile = new File(tempPath);
-
         try (BufferedReader reader = new BufferedReader(new FileReader(sourceFile));
-             BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));) {
+             BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))) {
             String line;
             String outputLine = entity.getId() + "," + entity.getName()
                     + "," + entity.getAddress();
@@ -85,17 +94,15 @@ public class StoreDaoCSV extends ConnectionCSV<StoreEntityCSV, Integer> {
             clearFile();
         } catch (Exception e) {
             e.printStackTrace();
+            log.error(e.getMessage());
         }
     }
 
     @Override
     public List<StoreEntityCSV> findAll() {
         List<StoreEntityCSV> list = new ArrayList<>();
-        try (
-                Reader reader = Files.newBufferedReader(Paths.get(filePath));
-                CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT);
-        ) {
-
+        try (Reader reader = Files.newBufferedReader(Paths.get(filePath));
+             CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT)) {
             for (CSVRecord csvRecord : csvParser) {
                 list.add(new StoreEntityCSV(Integer.parseInt(csvRecord.get(0)),
                         csvRecord.get(1), csvRecord.get(2)));
@@ -103,24 +110,17 @@ public class StoreDaoCSV extends ConnectionCSV<StoreEntityCSV, Integer> {
             clearFile();
         } catch (IOException e) {
             e.printStackTrace();
+            log.error(e.getMessage());
         }
-
         return list;
     }
 
     @Override
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public void deleteAll() {
         File sourceFile = new File(filePath);
         File outputFile = new File(tempPath);
-
-        try {
-            if (!sourceFile.exists())
-                sourceFile.createNewFile();
-            if (!outputFile.exists())
-                outputFile.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        createFileIfNotExist(sourceFile, outputFile);
         clearFile();
         sourceFile.delete();
         outputFile.renameTo(sourceFile);
@@ -129,8 +129,7 @@ public class StoreDaoCSV extends ConnectionCSV<StoreEntityCSV, Integer> {
     @Override
     public StoreEntityCSV findByName(String name) {
         try (Reader reader = Files.newBufferedReader(Paths.get(filePath));
-             CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT);) {
-
+             CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT)) {
             for (CSVRecord record : csvParser) {
                 if (record.get(1).equals(name))
                     return new StoreEntityCSV(Integer.parseInt(record.get(0)),
@@ -139,6 +138,7 @@ public class StoreDaoCSV extends ConnectionCSV<StoreEntityCSV, Integer> {
             clearFile();
         } catch (IOException e) {
             e.printStackTrace();
+            log.error(e.getMessage());
         }
         return null;
     }

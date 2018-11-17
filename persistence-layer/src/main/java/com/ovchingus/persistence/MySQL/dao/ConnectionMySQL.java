@@ -1,9 +1,9 @@
-package com.ovchingus.persistence.MySQL;
+package com.ovchingus.persistence.MySQL.dao;
 
 import com.ovchingus.persistence.GenericDao;
-import com.ovchingus.persistence.MySQL.mappings.ProductEntityMySQL;
-import com.ovchingus.persistence.MySQL.mappings.StoreEntityMySQL;
-import com.ovchingus.persistence.MySQL.mappings.StoreProductEntityMySQL;
+import com.ovchingus.persistence.MySQL.entities.ProductEntityMySQL;
+import com.ovchingus.persistence.MySQL.entities.StoreEntityMySQL;
+import com.ovchingus.persistence.MySQL.entities.StoreProductEntityMySQL;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;

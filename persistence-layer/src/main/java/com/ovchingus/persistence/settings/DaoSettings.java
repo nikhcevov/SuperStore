@@ -26,8 +26,16 @@ public class DaoSettings {
         DaoSettings.csvFilePath = csvFilePath;
     }
 
-    private static String csvFilePath = "C:\\Users\\ovchi\\IdeaProjects\\SuperStore\\persistence-layer\\src\\main\\java\\com\\ovchingus\\persistence\\CSV\\CSVs\\";
+    private static String csvFilePath = ".\\persistence-layer\\src\\main\\java\\com\\ovchingus\\persistence\\CSV\\CSVs\\";
 
+    private static int cleanerCounter = 10;
 
+    public static int getCleanFileAfterNumberOfOperations() {
+        return cleanerCounter;
+    }
+
+    public static void setCleanFileAfterNumberOfOperations(int cleanerCounter) {
+        DaoSettings.cleanerCounter = cleanerCounter;
+    }
 
 }

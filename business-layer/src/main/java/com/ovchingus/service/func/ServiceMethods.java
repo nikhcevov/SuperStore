@@ -1,8 +1,6 @@
 package com.ovchingus.service.func;
 
 
-import com.ovchingus.service.func.model.ShopItem;
-
 import java.util.Map;
 
 public interface ServiceMethods {
@@ -20,7 +18,7 @@ public interface ServiceMethods {
     /**
      * Создать список товаров из одьектов ShopItem
      */
-    public ShopItem createShopItem(String storeName, String productName, Integer qty, Double price);
+    //public ShopItem createShopItem(String storeName, String productName, Integer qty, Double price);
 
     /**
      * Завезти партию товаров в магазин (набор товар-количество
@@ -28,6 +26,11 @@ public interface ServiceMethods {
      */
     //public void insertProductListToStore(Integer storeId,  String , List<ShopItem> list);
     public void insertProductToStore(String storeName, String productName, Integer qty, Double price);
+
+    /**
+     * Обновить продукт в магазине с возможностью установить/изменить цену
+     */
+    public void updateProduct(String storeName, String productName, Integer qty, Double price);
 
     /**
      * Найти магазин, в котором определенный товар самый дешевый
@@ -40,7 +43,7 @@ public interface ServiceMethods {
      * или две шоколадки) я так понял тут про уникальный товар а
      * не про набор разных
      */
-    public Map<String, Integer> findProductListForSum(Double budget);
+    public Map<String, Integer> findProductListForSum(String storeName, Double budget);
 
     /**
      * Купить партию товаров в магазине (параметры - сколько

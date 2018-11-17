@@ -1,6 +1,8 @@
 package com.maxpav.gui.controller;
 
 import com.ovchingus.service.func.model.Service;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -10,6 +12,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
 
 import java.net.URL;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 public class FirstController {
@@ -69,6 +72,9 @@ public class FirstController {
 
     @FXML
     private TextField textfieldCombinations1;
+
+    @FXML
+    private TextField textfieldCombinations2;
 
     @FXML
     private Text text;
@@ -152,9 +158,11 @@ public class FirstController {
     void createProduct(ActionEvent event) {
         text1.setText("Сalculation");
         if (!textfieldcreateproduct1.getText().equals("") && !textfieldcreateproduct2.getText().equals("")) {
-            service.createProduct();
-
-
+            service.createProduct(Integer.parseInt(textfieldcreateproduct1.getText()), textfieldcreateproduct2.getText());
+            ObservableList<String> Items;
+            Items = listview1.getItems();
+            Items.add("The product " + textfieldcreateproduct2.getText() + " was created. ID: " + textfieldcreateproduct1.getText());
+            listview1.setItems(Items);
             text1.setText("Successful");
         } else text1.setText("Error");
     }
@@ -164,9 +172,11 @@ public class FirstController {
         text1.setText("Сalculation");
         if (!textfieldchangeprice1.getText().equals("") && !textfieldchangeprice2.getText().equals("") &&
                 !textfieldchangeprice3.getText().equals("") && !textfieldchangeprice4.getText().equals("")) {
-            //TODO:
-
-
+            ObservableList<String> Items;
+            Items = listview1.getItems();
+            Items.add("Now the product " + textfieldchangeprice2.getText() + " is sold in the store " + textfieldchangeprice1.getText()
+                    + " in quantities " + textfieldchangeprice4.getText() + " by price " + textfieldchangeprice3.getText());
+            listview1.setItems(Items);
             text1.setText("Successful");
         } else text1.setText("Error");
     }
@@ -174,10 +184,14 @@ public class FirstController {
     @FXML
     void createStore(ActionEvent event) {
         text1.setText("Сalculation");
-        if (!textfieldcreatestore1.getText().equals("") && !textfieldcreatestore2.getText().equals("")) {
-            //TODO:
-
-
+        if (!textfieldcreatestore1.getText().equals("") && !textfieldcreatestore2.getText().equals("") &&
+                !textfieldcreatestore3.getText().equals("")) {
+            service.createStore(Integer.parseInt(textfieldcreateproduct1.getText()),
+                    textfieldcreatestore2.getText(), textfieldcreatestore3.getText());
+            ObservableList<String> Items;
+            Items = listview1.getItems();
+            Items.add("The store " + textfieldcreatestore2.getText() + ", " + textfieldcreatestore3.getText() + " was created. ID: " + textfieldcreatestore1.getText());
+            listview1.setItems(Items);
             text1.setText("Successful");
         } else text1.setText("Error");
     }
@@ -187,9 +201,13 @@ public class FirstController {
         text1.setText("Сalculation");
         if (!textfielddelivery1.getText().equals("") && !textfielddelivery2.getText().equals("") &&
                 !textfielddelivery3.getText().equals("") && !textfielddelivery4.getText().equals("")) {
-            //TODO:
-
-
+            service.insertProductToStore(textfielddelivery1.getText(), textfielddelivery2.getText(),
+                    Integer.parseInt(textfielddelivery4.getText()), Double.parseDouble(textfielddelivery3.getText()));
+            ObservableList<String> Items;
+            Items = listview1.getItems();
+            Items.add("Now the product + " + textfielddelivery2.getText() + " is sold in the store " + textfielddelivery1.getText()
+                    + " in quantities " + textfielddelivery4.getText() + " by price " + textfielddelivery3.getText());
+            listview1.setItems(Items);
             text1.setText("Successful");
         } else text1.setText("Error");
     }
@@ -199,19 +217,26 @@ public class FirstController {
         text2.setText("Сalculation");
         if (!textfieldFindStoreWhereProductIsCheapest1.getText().equals("")) {
             //TODO:
-
-
+            ObservableList<String> Items = FXCollections.observableArrayList();
+            Items.add(service.findStoreWithCheapestProduct(textfieldFindStoreWhereProductIsCheapest1.getText()));
+            listview2.setItems(Items);
             text2.setText("Successful");
         } else text2.setText("Error");
     }
 
+
+    //TODO: Combinations: Была функция "service.findProductListForSum" с одним аргументом, после мы изменили на два, доделать.
+
     @FXML
     void combinations(ActionEvent event) {
         text2.setText("Сalculation");
-        if (!textfieldCombinations1.getText().equals("")) {
-            //TODO:
-
-
+        if (!textfieldCombinations1.getText().equals("") && !textfieldCombinations2.getText().equals("")) {
+            Map<String, Integer> map = service.findProductListForSum(Double.parseDouble(textfieldCombinations1.getText()));
+            ObservableList<String> Items = FXCollections.observableArrayList();
+            for (Map.Entry<String, Integer> pair : map.entrySet()) {
+                Items.add(pair.getKey() + pair.getValue());
+            }
+            listview2.setItems(Items);
             text2.setText("Successful");
         } else text2.setText("Error");
     }
@@ -221,9 +246,10 @@ public class FirstController {
         text2.setText("Сalculation");
         if (!textfieldBuy1.getText().equals("") && !textfieldBuy2.getText().equals("") &&
                 !textfieldBuy3.getText().equals("")) {
-            //TODO:
-
-
+            ObservableList<String> Items = FXCollections.observableArrayList();
+            Integer integer = service.buyProductsInOneStore(textfieldBuy1.getText(), textfieldBuy2.getText(), Integer.parseInt(textfieldBuy3.getText()));
+            Items.add("Sum = " + integer + " RUB");
+            listview2.setItems(Items);
             text2.setText("Successful");
         } else text2.setText("Error");
     }
@@ -233,15 +259,15 @@ public class FirstController {
         text2.setText("Сalculation");
         if (!textfieldFindStoreWhereCombinationIsCheapest1.getText().equals("")) {
             //TODO:
-
-
+            ObservableList<String> Items = FXCollections.observableArrayList();
+            Items.add(service.findStoreWithCheapestShopList(textfieldFindStoreWhereCombinationIsCheapest1.getText()));
+            listview1.setItems(Items);
             text2.setText("Successful");
         } else text2.setText("Error");
     }
 
     @FXML
     void initialize() {
-        service.initialize();
         assert textfieldcreatestore1 != null : "fx:id=\"textfieldcreatestore1\" was not injected: check your FXML file 'FirstScene.fxml'.";
         assert textfieldcreateproduct1 != null : "fx:id=\"textfieldcreateproduct1\" was not injected: check your FXML file 'FirstScene.fxml'.";
         assert listview2 != null : "fx:id=\"listview2\" was not injected: check your FXML file 'FirstScene.fxml'.";
@@ -255,6 +281,7 @@ public class FirstController {
         assert textfieldFindStoreWhereCombinationIsCheapest1 != null : "fx:id=\"textfieldFindStoreWhereCombinationIsCheapest1\" was not injected: check your FXML file 'FirstScene.fxml'.";
         assert borderpane2 != null : "fx:id=\"borderpane2\" was not injected: check your FXML file 'FirstScene.fxml'.";
         assert textfieldCombinations1 != null : "fx:id=\"textfieldCombinations1\" was not injected: check your FXML file 'FirstScene.fxml'.";
+        assert textfieldCombinations2 != null : "fx:id=\"textfieldCombinations2\" was not injected: check your FXML file 'FirstScene.fxml'.";
         assert text != null : "fx:id=\"text\" was not injected: check your FXML file 'FirstScene.fxml'.";
         assert button1 != null : "fx:id=\"button1\" was not injected: check your FXML file 'FirstScene.fxml'.";
         assert button4 != null : "fx:id=\"button4\" was not injected: check your FXML file 'FirstScene.fxml'.";

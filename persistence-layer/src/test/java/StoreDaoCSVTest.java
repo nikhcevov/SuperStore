@@ -1,5 +1,5 @@
-import com.ovchingus.persistence.CSV.StoreDaoCSV;
-import com.ovchingus.persistence.CSV.model.StoreEntityCSV;
+import com.ovchingus.persistence.CSV.dao.StoreDaoCSV;
+import com.ovchingus.persistence.CSV.entities.StoreEntityCSV;
 import org.junit.Before;
 import org.junit.Test;
 

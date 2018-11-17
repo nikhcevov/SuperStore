@@ -1,23 +1,34 @@
-package com.ovchingus.persistence.CSV;
+package com.ovchingus.persistence.CSV.dao;
 
-import com.ovchingus.persistence.CSV.model.ProductEntityCSV;
-import com.ovchingus.persistence.CSV.model.ProductInfo;
+import com.ovchingus.persistence.CSV.entities.ProductEntityCSV;
+import com.ovchingus.persistence.CSV.entities.ProductInfo;
 import com.ovchingus.persistence.settings.DaoSettings;
+import com.sun.istack.internal.Nullable;
 import org.apache.commons.io.FileUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductDaoCSV extends ConnectionCSV<ProductEntityCSV, Integer> {
+public class ProductDaoCSV extends ConnectionCSV<ProductEntityCSV> {
 
     private String filePath = DaoSettings.getCsvFilePath() + "products.csv";
     private String tempPath = DaoSettings.getCsvFilePath() + "tempProducts.csv";
+    private Logger log = LogManager.getLogger(ProductEntityCSV.class);
+    private int clearAfter = DaoSettings.getCleanFileAfterNumberOfOperations();
+    private int clearedTimes = 0;
 
     public void clearFile() {
-        clear(filePath, tempPath);
+        clearedTimes++;
+        if (clearedTimes >= clearAfter) {
+            clear(filePath, tempPath);
+            clearedTimes = 0;
+        }
     }
 
     @Override
@@ -25,32 +36,39 @@ public class ProductDaoCSV extends ConnectionCSV<ProductEntityCSV, Integer> {
         StringBuilder sb = new StringBuilder();
         sb.append(entity.getId()).append(",");
         sb.append(entity.getName()).append(",");
-        for (ProductInfo pi : entity.getProducts()) {
-            sb.append(pi.getId()).append(",");
-            sb.append(pi.getQty()).append(",");
-            sb.append(pi.getPrice()).append(",");
-        }
+        if (entity.getProducts() != null)
+            for (ProductInfo pi : entity.getProducts()) {
+                sb.append(pi.getStoreId()).append(",");
+                sb.append(pi.getQty()).append(",");
+                sb.append(pi.getPrice()).append(",");
+            }
         sb.deleteCharAt(sb.length() - 1);
         sb.append('\n');
 
         try {
-            FileUtils.writeStringToFile(new File(filePath), sb.toString(), true);
-            clearFile();
+            FileUtils.writeStringToFile(new File(filePath), sb.toString(),
+                    (Charset) null, true);
         } catch (IOException e) {
             e.printStackTrace();
+            log.error(e.getMessage());
         }
+        clearFile();
     }
 
     @Override
     public void update(ProductEntityCSV entity) {
-
+        List<ProductEntityCSV> list = findAll();
+        for (ProductEntityCSV item : list) {
+            if (item.getId().equals(entity.getId()))
+                delete(item);
+        }
+        persist(entity);
     }
 
     @Override
     public ProductEntityCSV findById(Integer id) {
         ProductEntityCSV pe = new ProductEntityCSV();
         List<ProductEntityCSV> list = findAll();
-
         for (ProductEntityCSV item : list) {
             if (item.getId().equals(id)) {
                 pe = item;
@@ -61,24 +79,22 @@ public class ProductDaoCSV extends ConnectionCSV<ProductEntityCSV, Integer> {
     }
 
     @Override
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public void delete(ProductEntityCSV entity) {
         File sourceFile = new File(filePath);
         File outputFile = new File(tempPath);
-
         try (BufferedReader reader = new BufferedReader(new FileReader(sourceFile));
-             BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));) {
+             BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))) {
             String line;
-
             StringBuilder sb = new StringBuilder();
             sb.append(entity.getId()).append(",");
             sb.append(entity.getName()).append(",");
             for (ProductInfo pi : entity.getProducts()) {
-                sb.append(pi.getId()).append(",");
+                sb.append(pi.getStoreId()).append(",");
                 sb.append(pi.getQty()).append(",");
                 sb.append(pi.getPrice()).append(",");
             }
             sb.deleteCharAt(sb.length() - 1);
-
             while ((line = reader.readLine()) != null) {
                 if (!line.equals(sb.toString())) {
                     writer.write(line);
@@ -92,17 +108,15 @@ public class ProductDaoCSV extends ConnectionCSV<ProductEntityCSV, Integer> {
             clearFile();
         } catch (Exception e) {
             e.printStackTrace();
+            log.error(e.getMessage());
         }
     }
 
     @Override
     public List<ProductEntityCSV> findAll() {
         List<ProductEntityCSV> list = new ArrayList<>();
-        try (
-                Reader reader = Files.newBufferedReader(Paths.get(filePath));
-                BufferedReader br = new BufferedReader(reader);
-        ) {
-
+        try (Reader reader = Files.newBufferedReader(Paths.get(filePath));
+             BufferedReader br = new BufferedReader(reader)) {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] items = line.split(",");
@@ -112,52 +126,41 @@ public class ProductDaoCSV extends ConnectionCSV<ProductEntityCSV, Integer> {
                             Integer.parseInt(items[i++]),
                             Double.parseDouble(items[i])));
                 }
-
                 ProductEntityCSV pcs = new ProductEntityCSV();
                 pcs.setId(Integer.parseInt(items[0]));
                 pcs.setName(items[1]);
                 pcs.setProducts(pi);
                 list.add(pcs);
-                clearFile();
             }
-
         } catch (IOException e) {
             e.printStackTrace();
+            log.error(e.getMessage());
         }
-
+        clearFile();
         return list;
     }
 
     @Override
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public void deleteAll() {
         File sourceFile = new File(filePath);
         File outputFile = new File(tempPath);
-
-        try {
-            if (!sourceFile.exists())
-                sourceFile.createNewFile();
-            if (!outputFile.exists())
-                outputFile.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        createFileIfNotExist(sourceFile, outputFile);
         sourceFile.delete();
         outputFile.renameTo(sourceFile);
         clearFile();
     }
 
     @Override
+    @Nullable
     public ProductEntityCSV findByName(String name) {
-        ProductEntityCSV pe = new ProductEntityCSV();
         List<ProductEntityCSV> list = findAll();
-
         for (ProductEntityCSV item : list) {
             if (item.getName().equals(name)) {
-                pe = item;
+                return item;
             }
         }
         clearFile();
-        return pe;
+        return null;
     }
 }
