@@ -15,7 +15,7 @@
                 <Tab fx:id="tab_Administrator" closable="false" text="Administrator">
                     <content>
                         <AnchorPane fx:id="anchorpane_Administrator" minHeight="0.0" minWidth="0.0" prefHeight="376.0"
-                                    prefWidth="617.0">
+                                    prefWidth="617.0" style="-fx-background-color: #ffffff;">
                             <children>
                                 <ImageView fx:id="image_Administrator" fitHeight="375.0" fitWidth="408.0"
                                            pickOnBounds="true">
@@ -98,7 +98,7 @@
                 <Tab fx:id="tab_Customer" closable="false" text="Customer">
                     <content>
                         <AnchorPane fx:id="anchorpane_Customer" minHeight="0.0" minWidth="0.0" prefHeight="180.0"
-                                    prefWidth="200.0">
+                                    prefWidth="200.0" style="-fx-background-color: #ffffff;">
                             <children>
                                 <ImageView fx:id="image_Customer" fitHeight="375.0" fitWidth="408.0"
                                            pickOnBounds="true">
@@ -179,6 +179,8 @@
                 </Tab>
             </tabs>
         </TabPane>
+        <Button fx:id="buttonsettings" layoutX="576.0" layoutY="4.0" mnemonicParsing="false" onAction="#setSettings"
+                prefHeight="31.0" prefWidth="31.0" style="-fx-background-image: url('images/settings.png')"/>
         <Text fx:id="label" layoutX="343.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SuperStore">
             <font>
                 <Font size="24.0"/>

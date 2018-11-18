@@ -88,41 +88,41 @@ public class ServiceCSV implements ServiceMethods {
     public String findStoreWithCheapestProduct(String productName) {
         ProductEntityCSV temp = (ProductEntityCSV) daoProductEntity.findByName(productName);
         List<ProductInfo> list = temp.getProducts();
-        ProductInfo out = new ProductInfo();
-        if (list == null) {
-            return null;
-        }
-        Double min = 0.0;
-        if (list.get(0).getPrice() >= 0) {
-            min = list.get(0).getPrice();
-        }
-        for (ProductInfo item : list) {
-            if (item.getPrice() < min) {
-                min = item.getPrice();
-                out = item;
+
+        if (temp != null && !list.isEmpty()) {
+            ProductInfo out = null;
+            Double min = 0.0;
+            if (list.get(0).getPrice() >= 0) {
+                min = list.get(0).getPrice();
             }
-        }
-        StoreEntityCSV ans = new StoreEntityCSV();
-        ans = (StoreEntityCSV) daoStoreEntity.findById(out.getStoreId());
-        return ans.getName();
+            for (ProductInfo item : list) {
+                if (item.getPrice() <= min) {
+                    min = item.getPrice();
+                    out = new ProductInfo(item.getStoreId(),
+                            item.getQty(), item.getPrice());
+                }
+            }
+            StoreEntityCSV ans = (StoreEntityCSV) daoStoreEntity.findById(out.getStoreId());
+            return ans.getName();
+        } else return null;
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public Map<String, Integer> findProductListForSum(String storeName, Double budget) {
-        Map<String, Integer> map = new HashMap<>();
-        List<StoreEntityCSV> temp = daoStoreEntity.findAll();
-        List<String> storeNames = new ArrayList<>();
         List<ProductEntityCSV> products = daoProductEntity.findAll();
-        for (StoreEntityCSV item : temp) {
-            storeNames.add(item.getName());
-        }
-        /*
+        int counter = 0;
+        Map<String, Integer> map = new HashMap<>();
+
         for (ProductEntityCSV item : products) {
-            for (item.getProducts())
+            for (ProductInfo it : item.getProducts()) {
+                if (it.getPrice() <= budget) {
+                    counter = (int) (budget / it.getPrice());
+                    map.put(item.getName(), counter);
+                }
+            }
         }
-*/
-        return null;
+        return map;
     }
 
     @Override

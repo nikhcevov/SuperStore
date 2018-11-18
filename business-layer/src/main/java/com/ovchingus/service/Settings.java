@@ -19,4 +19,8 @@ public class Settings {
     public static boolean isSourceCSV() {
         return DaoSettings.isSourceCSV();
     }
+
+    public static String getCsvFilePath() {
+        return DaoSettings.getCsvFilePath();
+    }
 }

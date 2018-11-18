@@ -41,7 +41,6 @@ public class ProductDaoCSV extends ConnectionCSV<ProductEntityCSV> {
                 }
             sb.deleteCharAt(sb.length() - 1);
             sb.append('\n');
-
             try {
                 FileUtils.writeStringToFile(new File(filePath), sb.toString(),
                         (Charset) null, true);

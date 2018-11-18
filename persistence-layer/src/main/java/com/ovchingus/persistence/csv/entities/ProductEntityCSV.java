@@ -40,15 +40,17 @@ public class ProductEntityCSV {
         this.name = name;
     }
 
+
     @Override
     public String toString() {
         StringBuilder out = new StringBuilder("Product - ID: " + id + ", Name: " + name);
+        /* TODO fix this part
         if (!products.isEmpty()) {
             for (ProductInfo item : products)
                 out.append(", [In store with ID: ").append(item.getStoreId())
                         .append(", qty: ").append(item.getQty())
                         .append(", price: ").append(item.getPrice()).append("] ");
-        }
+        }*/
         return out.toString();
     }
 }

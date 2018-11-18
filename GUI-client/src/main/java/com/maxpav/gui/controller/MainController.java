@@ -1,5 +1,6 @@
 package com.maxpav.gui.controller;
 
+import com.maxpav.gui.MainApp;
 import com.ovchingus.service.Settings;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -8,10 +9,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Text;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -46,16 +51,82 @@ public class MainController {
     @FXML
     private AnchorPane anchorpane1;
 
+    private void selectColor(int i) {
+        switch (i) {
+            case 0:
+                anchorpane1.setStyle("-fx-background-color: #3cb371");
+                button.setStyle("-fx-background-color: #f45942");
+                text.setText("THIS IS THE BEST APP TO WORK WITH THE STORE!");
+                break;
+            case 1:
+                anchorpane1.setStyle("-fx-background-color: #f45942");
+                button.setStyle("-fx-background-color: #4286f4");
+                text.setText("IS THE BEST APP TO WORK WITH THE STORE! THIS ");
+                break;
+            case 2:
+                anchorpane1.setStyle("-fx-background-color: #4286f4");
+                button.setStyle("-fx-background-color: #3cb371");
+                text.setText("THE BEST APP TO WORK WITH THE STORE! THIS IS ");
+                break;
+            case 3:
+                anchorpane1.setStyle("-fx-background-color: #3cb371");
+                button.setStyle("-fx-background-color: #f45942");
+                text.setText("BEST APP TO WORK WITH THE STORE! THIS IS THE ");
+                break;
+            case 4:
+                anchorpane1.setStyle("-fx-background-color: #f45942");
+                button.setStyle("-fx-background-color: #4286f4");
+                text.setText("APP TO WORK WITH THE STORE! THIS IS THE BEST ");
+                break;
+            case 5:
+                anchorpane1.setStyle("-fx-background-color: #4286f4");
+                button.setStyle("-fx-background-color: #3cb371");
+                text.setText("TO WORK WITH THE STORE! THIS IS THE BEST APP ");
+                break;
+
+            case 6:
+                anchorpane1.setStyle("-fx-background-color: #3cb371");
+                button.setStyle("-fx-background-color: #f45942");
+                text.setText("WORK WITH THE STORE! THIS IS THE BEST APP TO ");
+                break;
+            case 7:
+                anchorpane1.setStyle("-fx-background-color: #f45942");
+                button.setStyle("-fx-background-color: #4286f4");
+                text.setText("WITH THE STORE! THIS IS THE BEST APP TO WORK ");
+                break;
+            case 8:
+                anchorpane1.setStyle("-fx-background-color: #4286f4");
+                button.setStyle("-fx-background-color: #3cb371");
+                text.setText("THE STORE! THIS IS THE BEST APP TO WORK WITH ");
+                break;
+
+            case 9:
+                anchorpane1.setStyle("-fx-background-color: #f45942");
+                button.setStyle("-fx-background-color: #4286f4");
+                text.setText("STORE! THIS IS THE BEST APP TO WORK WITH THE ");
+                break;
+
+            default:
+                break;
+        }
+    }
+
+
     @FXML
-    void enter(ActionEvent event) {
+    private void enter(ActionEvent event) {
         button.setDisable(true);
+        anchorpane1.getChildren().remove(combobox);
+        text.setLayoutX(15.00);
         progressbar.setProgress(0);
+
         Thread th = new Thread(new bg_Thread());
         th.start();
+        MainApp.mediaPlayer.stop();
+        MainApp.mediaPlayer.play();
     }
 
     @FXML
-    void select(ActionEvent event) {
+    private void select(ActionEvent event) {
         if (combobox.getValue().equals("Database")) {
             Settings.setSourceMySQL();
         }
@@ -66,20 +137,28 @@ public class MainController {
     }
 
 
-    class bg_Thread implements Runnable {
+    private class bg_Thread implements Runnable {
 
         @Override
         public void run() {
+            int color;
             for (int i = 0; i <= 100; i++) {
                 progressbar.setProgress(i / 100.00);
                 try {
-                    Thread.sleep(50);
+                    Thread.sleep(90);
+                    color = i % 10;
+                    selectColor(color);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
 
+            DropShadow ds = new DropShadow();
             button.setStyle("-fx-background-color: #3cb371");
+            text.setLayoutX(210.00);
+            text.setText("ARE YOU READY?");
+            button.setEffect(ds);
+            anchorpane1.setStyle("-fx-background-color: #3cb371");
             button.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
@@ -107,7 +186,9 @@ public class MainController {
         button.setDisable(true);
         combobox.getItems().add("Database");
         combobox.getItems().add("Text File");
-
+        String path = new File("GUI-client/src/main/resources/media/load.mp3").getAbsolutePath();
+        MainApp.media = new Media(new File(path).toURI().toString());
+        MainApp.mediaPlayer = new MediaPlayer(MainApp.media);
 
     }
 }

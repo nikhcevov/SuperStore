@@ -5,17 +5,35 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 
 public class FirstController {
 
     private Service service = new Service();
+    private MediaPlayer mp_successful;
+    private MediaPlayer mp_error;
+    private Media m_successful;
+    private Media m_error;
+
+
+    @FXML
+    private Button buttonsettings;
 
     @FXML
     private TextField textfieldFindStoreWithCheapestShopList_ProductsAndCount;
@@ -146,109 +164,143 @@ public class FirstController {
     @FXML
     private Button buttonFindStoreWithCheapestShopList;
 
-
-    @FXML
-    void createProduct(ActionEvent event) {
-        console_Administrator.setText("Сalculation");
-        if (!textfieldCreateProduct_ProductID.getText().equals("") && !textfieldCreateProduct_ProductName.getText().equals("")) {
-
-            //TODO: Если Boolean метод, сделать проверку.
-            service.createProduct(Integer.parseInt(textfieldCreateProduct_ProductID.getText()),
-                    textfieldCreateProduct_ProductName.getText());
-            ObservableList<String> Items;
-            Items = listview_Administrator.getItems();
-            Items.add("The product " + textfieldCreateProduct_ProductName.getText() + " was created. ID: " +
-                    textfieldCreateProduct_ProductID.getText());
-            listview_Administrator.setItems(Items);
-            console_Administrator.setText("Successful");
-        } else console_Administrator.setText("Error");
+    private boolean Check(String... text) {
+        for (int i = 0; i < text.length; i++) {
+            if (text[i].equals("")) return false;
+        }
+        return true;
     }
 
     @FXML
-    void updateProduct(ActionEvent event) {
+    private void setSettings(ActionEvent event) throws IOException {
+        Stage stage = new Stage();
+        Parent root = FXMLLoader.load(getClass().getResource("/fxml/SettingsScene.fxml"));
+        stage.getIcons().add(new Image("/images/settings.png"));
+        stage.setTitle("Settings");
+        stage.setScene(new Scene(root, 300, 200));
+        stage.setResizable(false);
+        stage.initModality(Modality.WINDOW_MODAL);
+        Stage primaryStage = (Stage) anchorpane_Main.getScene().getWindow();
+        stage.initOwner(primaryStage);
+        stage.show();
+    }
+
+
+    @FXML
+    private void createProduct(ActionEvent event) {
+        console_Administrator.setText("Сalculation");
+        if (!textfieldCreateProduct_ProductID.getText().equals("") && !textfieldCreateProduct_ProductName.getText().equals("")) {
+            ObservableList<String> Items;
+            Items = listview_Administrator.getItems();
+            //TODO: ПРоверка сделана
+            if (service.createProduct(Integer.parseInt(textfieldCreateProduct_ProductID.getText()),
+                    textfieldCreateProduct_ProductName.getText())) {
+                Items.add("Product \"" + textfieldCreateProduct_ProductName.getText() + "\" is CREATED. ID: " +
+                        textfieldCreateProduct_ProductID.getText());
+                listview_Administrator.setItems(Items);
+                successful_Administrator();
+            } else {
+                Items.add("ERROR! Product \"" + textfieldCreateProduct_ProductName.getText() + "\" is NOT CREATED.");
+                listview_Administrator.setItems(Items);
+                error_Administrator();
+            }
+        } else error_Administrator();
+    }
+
+    @FXML
+    private void updateProduct(ActionEvent event) {
         console_Administrator.setText("Сalculation");
         if (!textfieldUpdateProduct_StoreName.getText().equals("") && !textfieldUpdateProduct_ProductName.getText().equals("") &&
                 !textfieldUpdateProduct_Price.getText().equals("") && !textfieldUpdateProduct_Count.getText().equals("")) {
-
-            //TODO: Если Boolean метод, сделать проверку.
-            service.updateProduct(textfieldUpdateProduct_StoreName.getText(), textfieldUpdateProduct_ProductName.getText(),
-                    Integer.parseInt(textfieldUpdateProduct_Count.getText()), Double.parseDouble(textfieldUpdateProduct_Price.getText()));
-
             ObservableList<String> Items;
             Items = listview_Administrator.getItems();
-            Items.add("Now the product " + textfieldUpdateProduct_ProductName.getText() + " is sold in the store " +
-                    textfieldUpdateProduct_StoreName.getText() + " in quantities " + textfieldUpdateProduct_Count.getText() +
-                    " by price " + textfieldUpdateProduct_Price.getText());
-            listview_Administrator.setItems(Items);
-            console_Administrator.setText("Successful");
-        } else console_Administrator.setText("Error");
+            //TODO: Проверка сделана
+            if (service.updateProduct(textfieldUpdateProduct_StoreName.getText(), textfieldUpdateProduct_ProductName.getText(),
+                    Integer.parseInt(textfieldUpdateProduct_Count.getText()), Double.parseDouble(textfieldUpdateProduct_Price.getText()))) {
+                Items.add("\"" + textfieldUpdateProduct_ProductName.getText() + "\" is sold in \"" +
+                        textfieldUpdateProduct_StoreName.getText() + "\" in quantities " +
+                        textfieldUpdateProduct_Count.getText() + " by price " + textfieldUpdateProduct_Price.getText() + " RUB");
+                listview_Administrator.setItems(Items);
+                successful_Administrator();
+            } else {
+                Items.add("ERROR! Product \"" + textfieldUpdateProduct_ProductName.getText() + "\" is NOT UPDATED.");
+                listview_Administrator.setItems(Items);
+                error_Administrator();
+            }
+        } else error_Administrator();
     }
 
     @FXML
-    void createStore(ActionEvent event) {
+    private void createStore(ActionEvent event) {
         console_Administrator.setText("Сalculation");
         if (!textfieldCreateStore_StoreID.getText().equals("") && !textfieldCreateStore_StoreName.getText().equals("") &&
                 !textfieldCreateStore_StoreAdress.getText().equals("")) {
-
-            //TODO: Если Boolean метод, сделать проверку.
-            service.createStore(Integer.parseInt(textfieldCreateStore_StoreID.getText()),
-                    textfieldCreateStore_StoreName.getText(), textfieldCreateStore_StoreAdress.getText());
             ObservableList<String> Items;
             Items = listview_Administrator.getItems();
-            Items.add("The store " + textfieldCreateStore_StoreName.getText() + ", " + textfieldCreateStore_StoreAdress.getText() +
-                    " was created. ID: " + textfieldCreateStore_StoreID.getText());
-            listview_Administrator.setItems(Items);
-            console_Administrator.setText("Successful");
-        } else console_Administrator.setText("Error");
+            //TODO: Проверка сделана
+            if (service.createStore(Integer.parseInt(textfieldCreateStore_StoreID.getText()),
+                    textfieldCreateStore_StoreName.getText(), textfieldCreateStore_StoreAdress.getText())) {
+                Items.add("Store \"" + textfieldCreateStore_StoreName.getText() + "\", \"" + textfieldCreateStore_StoreAdress.getText() +
+                        "\" is CREATED. ID: " + textfieldCreateStore_StoreID.getText());
+                listview_Administrator.setItems(Items);
+                successful_Administrator();
+            } else {
+                Items.add("ERROR! Store \"" + textfieldCreateStore_StoreName.getText() + "\" is NOT CREATED.");
+                listview_Administrator.setItems(Items);
+                error_Administrator();
+            }
+        } else error_Administrator();
     }
 
     @FXML
-    void insertProductToStore(ActionEvent event) {
+    private void insertProductToStore(ActionEvent event) {
         console_Administrator.setText("Сalculation");
         if (!textfieldInsertProductToStore_StoreName.getText().equals("") &&
                 !textfieldInsertProductToStore_ProductName.getText().equals("") &&
                 !textfieldInsertProductToStore_Price.getText().equals("") &&
                 !textfieldInsertProductToStore_Count.getText().equals("")) {
-
-            //TODO: Если Boolean метод, сделать проверку.
-            service.insertProductToStore(textfieldInsertProductToStore_StoreName.getText(),
-                    textfieldInsertProductToStore_ProductName.getText(),
-                    Integer.parseInt(textfieldInsertProductToStore_Count.getText()),
-                    Double.parseDouble(textfieldInsertProductToStore_Price.getText()));
-
             ObservableList<String> Items;
             Items = listview_Administrator.getItems();
-            Items.add("Now the product + " + textfieldInsertProductToStore_ProductName.getText() + " is sold in the store " +
-                    textfieldInsertProductToStore_StoreName.getText() + " in quantities " +
-                    textfieldInsertProductToStore_Count.getText() + " by price " + textfieldInsertProductToStore_Price.getText());
 
-            listview_Administrator.setItems(Items);
-            console_Administrator.setText("Successful");
-        } else console_Administrator.setText("Error");
+            //TODO: Проверка сделана
+            if (service.insertProductToStore(textfieldInsertProductToStore_StoreName.getText(),
+                    textfieldInsertProductToStore_ProductName.getText(),
+                    Integer.parseInt(textfieldInsertProductToStore_Count.getText()),
+                    Double.parseDouble(textfieldInsertProductToStore_Price.getText()))) {
+                Items.add("\"" + textfieldInsertProductToStore_ProductName.getText() + "\" is sold in \"" +
+                        textfieldInsertProductToStore_StoreName.getText() + "\" in quantities " +
+                        textfieldInsertProductToStore_Count.getText() + " by price " + textfieldInsertProductToStore_Price.getText() + " RUB");
+                listview_Administrator.setItems(Items);
+                successful_Administrator();
+            } else {
+                Items.add("ERROR! \"" + textfieldInsertProductToStore_ProductName.getText() + "\" not delivered to \"" + textfieldInsertProductToStore_StoreName.getText() + "\"");
+                listview_Administrator.setItems(Items);
+                error_Administrator();
+            }
+        } else error_Administrator();
     }
 
     @FXML
-    void findStoreWithCheapestProduct(ActionEvent event) {
+    private void findStoreWithCheapestProduct(ActionEvent event) {
         console_Customer.setText("Сalculation");
         if (!textfieldFindStoreWithCheapestProduct_ProductName.getText().equals("")) {
 
-
-            //TODO: Если Boolean метод, сделать проверку.
+            //TODO: Метод возвращает String. Нужна проверка на "null";
             ObservableList<String> Items = FXCollections.observableArrayList();
             Items.add(service.findStoreWithCheapestProduct(textfieldFindStoreWithCheapestProduct_ProductName.getText()));
             listview_Customer.setItems(Items);
-            console_Customer.setText("Successful");
-        } else console_Customer.setText("Error");
+            successful_Customer();
+        } else error_Customer();
     }
 
     @FXML
-    void findProductListForSum(ActionEvent event) {
+    private void findProductListForSum(ActionEvent event) {
         console_Customer.setText("Сalculation");
         if (!textfieldFindProductListForSum_StoreName.getText().equals("") &&
                 !textfieldFindProductListForSum_Price.getText().equals("")) {
 
 
-            //TODO: Если Boolean метод, сделать проверку.
+            //TODO: Метод возвращает Map<String, Integer>. Нужна проверка на "null";
             Map<String, Integer> map = service.findProductListForSum(textfieldFindProductListForSum_StoreName.getText(),
                     Double.parseDouble(textfieldFindProductListForSum_Price.getText()));
             ObservableList<String> Items = FXCollections.observableArrayList();
@@ -256,44 +308,87 @@ public class FirstController {
                 Items.add(pair.getKey() + pair.getValue());
             }
             listview_Customer.setItems(Items);
-            console_Customer.setText("Successful");
-        } else console_Customer.setText("Error");
+            successful_Customer();
+        } else error_Customer();
     }
 
 
     @FXML
-    void buyProductsInOneStore(ActionEvent event) {
+    private void buyProductsInOneStore(ActionEvent event) {
         console_Customer.setText("Сalculation");
         if (!textfieldBuyProductsInOneStore_StoreName.getText().equals("") &&
                 !textfieldBuyProductsInOneStore_ProductName.getText().equals("") &&
                 !textfieldBuyProductsInOneStore_Count.getText().equals("")) {
             ObservableList<String> Items = FXCollections.observableArrayList();
 
-            //TODO: Если Boolean метод, сделать проверку.
+            //TODO: Проверка сделана.
             Integer integer = service.buyProductsInOneStore(textfieldBuyProductsInOneStore_StoreName.getText(),
                     textfieldBuyProductsInOneStore_ProductName.getText(),
                     Integer.parseInt(textfieldBuyProductsInOneStore_Count.getText()));
-            Items.add("Sum = " + integer + " RUB");
+            if (integer != null) {
+                Items.add("Sum = " + integer + " RUB");
+                listview_Customer.setItems(Items);
+                successful_Customer();
+            }
+            Items.add("ERROR! The purchase of products is NOT MADE");
             listview_Customer.setItems(Items);
-            console_Customer.setText("Successful");
-        } else console_Customer.setText("Error");
+            error_Customer();
+        } else error_Customer();
     }
 
     @FXML
-    void findStoreWithCheapestShopList(ActionEvent event) {
+    private void findStoreWithCheapestShopList(ActionEvent event) {
         console_Customer.setText("Сalculation");
         if (!textfieldFindStoreWithCheapestShopList_ProductsAndCount.getText().equals("")) {
             ObservableList<String> Items = FXCollections.observableArrayList();
-
-            //TODO: Если Boolean метод, сделать проверку.
+            //TODO: Метод возвращает String. Нужна проверка на "null";
             Items.add(service.findStoreWithCheapestShopList(textfieldFindStoreWithCheapestShopList_ProductsAndCount.getText()));
             listview_Administrator.setItems(Items);
-            console_Customer.setText("Successful");
-        } else console_Customer.setText("Error");
+            successful_Customer();
+        } else error_Customer();
     }
+
+    private void error_Administrator() {
+        anchorpane_Administrator.setStyle("-fx-background-color: #f45942");
+        mp_error.stop();
+        mp_error.play();
+        console_Administrator.setText("Error");
+    }
+
+    private void successful_Administrator() {
+        anchorpane_Administrator.setStyle("-fx-background-color: #3cb371");
+        mp_successful.stop();
+        mp_successful.play();
+        console_Administrator.setText("Successful");
+    }
+
+    private void error_Customer() {
+        anchorpane_Customer.setStyle("-fx-background-color: #f45942");
+        mp_error.stop();
+        mp_error.play();
+        console_Customer.setText("Error");
+    }
+
+    private void successful_Customer() {
+        anchorpane_Customer.setStyle("-fx-background-color: #3cb371");
+        mp_successful.stop();
+        mp_successful.play();
+        console_Customer.setText("Successful");
+    }
+
 
     @FXML
     void initialize() {
+        String path_successful = new File("GUI-client/src/main/resources/media/successful.mp3").getAbsolutePath();
+        String path_error = new File("GUI-client/src/main/resources/media/error.mp3").getAbsolutePath();
+        m_successful = new Media(new File(path_successful).toURI().toString());
+        m_error = new Media(new File(path_error).toURI().toString());
+        mp_successful = new MediaPlayer(m_successful);
+        mp_error = new MediaPlayer(m_error);
+
+
+
+
         assert textfieldFindStoreWithCheapestShopList_ProductsAndCount != null : "fx:id=\"textfieldFindStoreWithCheapestShopList_ProductsAndCount\" was not injected: check your FXML file 'FirstScene.fxml'.";
         assert anchorpane_Administrator != null : "fx:id=\"anchorpane_Administrator\" was not injected: check your FXML file 'FirstScene.fxml'.";
         assert textfieldInsertProductToStore_ProductName != null : "fx:id=\"textfieldInsertProductToStore_ProductName\" was not injected: check your FXML file 'FirstScene.fxml'.";
@@ -337,6 +432,6 @@ public class FirstController {
         assert buttonCreateProduct != null : "fx:id=\"buttonCreateProduct\" was not injected: check your FXML file 'FirstScene.fxml'.";
         assert buttonUpdateProduct != null : "fx:id=\"buttonUpdateProduct\" was not injected: check your FXML file 'FirstScene.fxml'.";
         assert buttonFindStoreWithCheapestShopList != null : "fx:id=\"buttonFindStoreWithCheapestShopList\" was not injected: check your FXML file 'FirstScene.fxml'.";
-
+        assert buttonsettings != null : "fx:id=\"buttonsettings\" was not injected: check your FXML file 'FirstScene.fxml'.";
     }
 }
