@@ -67,11 +67,14 @@ public class SettingsController {
     @FXML
     private void apply(ActionEvent event) {
         if (comboboxsource.getValue().equals("Database")) {
+            String a = Settings.getCsvFilePath();
             Settings.setSourceMySQL();
         }
         if (comboboxsource.getValue().equals("Text File") && textfieldpath.getText() != null) {
+            Settings.setCsvFilePath(textfieldpath.getText());
             Settings.setSourceCSV();
         }
+
     }
 
     @FXML
@@ -80,6 +83,7 @@ public class SettingsController {
             Settings.setSourceMySQL();
         }
         if (comboboxsource.getValue().equals("Text File") && textfieldpath.getText() != null) {
+            Settings.setCsvFilePath(textfieldpath.getText());
             Settings.setSourceCSV();
         }
         Stage stage = (Stage) anchorpane.getScene().getWindow();
@@ -102,7 +106,6 @@ public class SettingsController {
             textfieldpath.setDisable(true);
             textfieldactionstoupdate.setDisable(true);
         }
-
     }
 
 
@@ -112,11 +115,10 @@ public class SettingsController {
         Stage stage = (Stage) anchorpane.getScene().getWindow();
         File file = directoryChooser.showDialog(stage);
         if (file != null) {
-            textfieldpath.setText(file.getAbsolutePath());
+            textfieldpath.setText(file.getAbsolutePath() + "\\");
             buttonapply.setDisable(false);
             buttonok.setDisable(false);
         }
-
     }
 
     @FXML
@@ -136,6 +138,7 @@ public class SettingsController {
 
         comboboxsource.getItems().add("Database");
         comboboxsource.getItems().add("Text File");
+        textfieldpath.setText(Settings.getCsvFilePath());
 
         if (Settings.isSourceCSV()) {
             comboboxsource.setValue("Text File");

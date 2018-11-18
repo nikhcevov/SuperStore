@@ -126,8 +126,20 @@ public class ServiceCSV implements ServiceMethods {
     }
 
     @Override
-    public Integer buyProductsInOneStore(String storeName, String productName, Integer qty) {
-        return null;
+    public Double buyProductsInOneStore(String storeName, String productName, Integer qty) {
+        StoreEntityCSV store = (StoreEntityCSV) daoStoreEntity.findByName(storeName);
+        ProductEntityCSV product = (ProductEntityCSV) daoProductEntity.findByName(productName);
+        Double sum = null;
+
+        for (ProductInfo item : product.getProducts()) {
+            if (item.getStoreId().equals(store.getId())) {
+                if (item.getQty() >= qty) {
+                    item.setQty(item.getQty() - qty);
+                    sum = item.getPrice() * qty;
+                }
+            }
+        }
+        return sum;
     }
 
     @Override

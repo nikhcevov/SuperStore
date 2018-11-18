@@ -292,9 +292,16 @@ public class FirstController {
 
             //TODO: Метод возвращает String. Нужна проверка на "null";
             ObservableList<String> Items = FXCollections.observableArrayList();
-            Items.add(service.findStoreWithCheapestProduct(textfieldFindStoreWithCheapestProduct_ProductName.getText()));
-            listview_Customer.setItems(Items);
-            successful_Customer();
+            String answer = service.findStoreWithCheapestProduct(textfieldFindStoreWithCheapestProduct_ProductName.getText());
+            if (answer == null) {
+                Items.add("Store is NOT FOUND");
+                listview_Customer.setItems(Items);
+                successful_Customer();
+            } else {
+                Items.add(answer);
+                listview_Customer.setItems(Items);
+                successful_Customer();
+            }
         } else error_Customer();
     }
 
@@ -327,11 +334,11 @@ public class FirstController {
             ObservableList<String> Items = FXCollections.observableArrayList();
 
             //TODO: Проверка сделана.
-            Integer integer = service.buyProductsInOneStore(textfieldBuyProductsInOneStore_StoreName.getText(),
+            Double aDouble = service.buyProductsInOneStore(textfieldBuyProductsInOneStore_StoreName.getText(),
                     textfieldBuyProductsInOneStore_ProductName.getText(),
                     Integer.parseInt(textfieldBuyProductsInOneStore_Count.getText()));
-            if (integer != null) {
-                Items.add("Sum = " + integer + " RUB");
+            if (aDouble != null) {
+                Items.add("Sum = " + aDouble + " RUB");
                 listview_Customer.setItems(Items);
                 successful_Customer();
             }

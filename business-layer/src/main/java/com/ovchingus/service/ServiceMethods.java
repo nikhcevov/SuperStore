@@ -51,7 +51,7 @@ public interface ServiceMethods {
      * покупки либо её невозможность, если товара не хватает)
      */
     //public Integer buyListOfProductsInOneStore(String store, Map<String, Integer> map);
-    public Integer buyProductsInOneStore(String storeName, String productName, Integer qty);
+    public Double buyProductsInOneStore(String storeName, String productName, Integer qty);
 
     /**
      * Найти, в каком магазине партия товаров (набор товар-количество) имеет

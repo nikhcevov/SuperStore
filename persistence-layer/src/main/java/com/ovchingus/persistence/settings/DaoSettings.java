@@ -2,21 +2,24 @@ package com.ovchingus.persistence.settings;
 
 import org.apache.commons.configuration2.XMLConfiguration;
 import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
-import org.apache.commons.configuration2.builder.fluent.Configurations;
+import org.apache.commons.configuration2.builder.fluent.Parameters;
 import org.apache.commons.configuration2.ex.ConfigurationException;
 
 public class DaoSettings {
 
-    private static Configurations configs = new Configurations();
+    private static Parameters params = new Parameters();
 
     private static XMLConfiguration config;
 
-    private static FileBasedConfigurationBuilder<XMLConfiguration> builder;
+    private static FileBasedConfigurationBuilder<XMLConfiguration> builder =
+            new FileBasedConfigurationBuilder<>(XMLConfiguration.class)
+                    .configure(params.xml().setFileName("./dao.cfg.xml")
+                            .setValidating(true));
 
     static {
         try {
-            builder = configs.xmlBuilder("./dao.cfg.xml");
             config = builder.getConfiguration();
+            builder.setAutoSave(true);
         } catch (ConfigurationException e) {
             e.printStackTrace();
         }

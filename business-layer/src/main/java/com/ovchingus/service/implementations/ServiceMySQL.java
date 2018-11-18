@@ -44,7 +44,7 @@ public class ServiceMySQL implements ServiceMethods {
     }
 
     @Override
-    public Integer buyProductsInOneStore(String storeName, String productName, Integer qty) {
+    public Double buyProductsInOneStore(String storeName, String productName, Integer qty) {
         return null;
     }
 

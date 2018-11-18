@@ -5,7 +5,7 @@
     </source>
 
     <csv>
-        <path>C:\Users\ovchi\IdeaProjects\SuperStore\data\</path>
+        <path>.\data\</path>
         <cleaner>
             <!-- > Clean after count of actions with file,
                 if 0 then clear is off<-->
