@@ -27,4 +27,12 @@ public class Settings {
     public static void setCsvFilePath(String path) {
         DaoSettings.setCsvFilePath(path);
     }
+
+    public static void setStepsToUpdateCsv(int count) {
+        DaoSettings.setCleanFileAfterNumberOfOperations(count);
+    }
+
+    public static int getStepsToUpdateCsv() {
+        return DaoSettings.getCleanFileAfterNumberOfOperations();
+    }
 }

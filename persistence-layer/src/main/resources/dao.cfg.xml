@@ -9,7 +9,7 @@
         <cleaner>
             <!-- > Clean after count of actions with file,
                 if 0 then clear is off<-->
-            <steps>10</steps>
+            <steps>0</steps>
         </cleaner>
     </csv>
 

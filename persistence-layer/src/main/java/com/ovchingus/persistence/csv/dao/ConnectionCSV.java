@@ -86,8 +86,8 @@ abstract class ConnectionCSV<T> implements GenericDao<T, Integer> {
                         writer.newLine();
                     }
                 }
-                reader.close();
-                writer.close();
+                //reader.close();
+                //writer.close();
                 if (sourceFile.delete() && outputFile.renameTo(sourceFile))
                     log.info("File " + filePath + " cleared.");
                 else log.error("File " + filePath + " wasn`t cleared.");
