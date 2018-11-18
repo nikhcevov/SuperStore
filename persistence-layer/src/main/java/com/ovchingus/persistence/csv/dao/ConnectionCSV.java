@@ -11,10 +11,20 @@ import java.io.*;
 abstract class ConnectionCSV<T> implements GenericDao<T, Integer> {
 
     private static final Logger log = LogManager.getLogger(ConnectionCSV.class);
+    private int clearAfter = DaoSettings.getCleanFileAfterNumberOfOperations();
     String filePath = DaoSettings.getCsvFilePath();
     String tempPath = DaoSettings.getCsvFilePath();
+    private int clearedTimes = 0;
 
-    abstract void clearFile();
+
+    void clearFile() {
+        clearedTimes++;
+        if (clearedTimes >= clearAfter && clearAfter != 0) {
+            clear(filePath, tempPath);
+            clearedTimes = 0;
+        }
+    }
+
 
     boolean initialize(String filePath, String tempPath) {
         File sourceFile = new File(filePath);
@@ -39,7 +49,6 @@ abstract class ConnectionCSV<T> implements GenericDao<T, Integer> {
             log.error(e.getMessage());
             return false;
         }
-
         return true;
     }
 
@@ -48,8 +57,11 @@ abstract class ConnectionCSV<T> implements GenericDao<T, Integer> {
             File sourceFile = new File(filePath);
             File outputFile = new File(tempPath);
             try {
-                return sourceFile.delete()
-                        && outputFile.renameTo(sourceFile);
+                if (sourceFile.delete()
+                        && outputFile.renameTo(sourceFile)) {
+                    log.info("DeleteAll in " + filePath + " successfully");
+                    return true;
+                } else return false;
             } finally {
                 clearFile();
             }
@@ -59,7 +71,7 @@ abstract class ConnectionCSV<T> implements GenericDao<T, Integer> {
         }
     }
 
-    void clear(String filePath, String tempPath) {
+    private void clear(String filePath, String tempPath) {
         if (initialize(filePath, tempPath)) {
             File sourceFile = new File(filePath);
             File outputFile = new File(tempPath);

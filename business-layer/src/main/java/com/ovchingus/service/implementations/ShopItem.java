@@ -1,4 +1,4 @@
-package com.ovchingus.service.model;
+package com.ovchingus.service.implementations;
 
 public class ShopItem {
     private Integer productId;

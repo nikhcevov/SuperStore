@@ -2,7 +2,6 @@ package com.ovchingus.persistence.csv.dao;
 
 import com.ovchingus.persistence.csv.entities.ProductEntityCSV;
 import com.ovchingus.persistence.csv.entities.ProductInfo;
-import com.ovchingus.persistence.settings.DaoSettings;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,17 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProductDaoCSV extends ConnectionCSV<ProductEntityCSV> {
-    private Logger log = LogManager.getLogger(ProductEntityCSV.class);
-    private int clearAfter = DaoSettings.getCleanFileAfterNumberOfOperations();
-    private int clearedTimes = 0;
-
-    public void clearFile() {
-        clearedTimes++;
-        if (clearedTimes >= clearAfter) {
-            clear(filePath, tempPath);
-            clearedTimes = 0;
-        }
-    }
+    private static final Logger log = LogManager.getLogger(ProductEntityCSV.class);
 
     public ProductDaoCSV() {
         this.filePath += "products.csv";
@@ -40,6 +29,7 @@ public class ProductDaoCSV extends ConnectionCSV<ProductEntityCSV> {
                 if (item.getId().equals(entity.getId())
                         || item.getName().equals(entity.getName()))
                     return false;
+
             StringBuilder sb = new StringBuilder();
             sb.append(entity.getId()).append(",");
             sb.append(entity.getName()).append(",");
@@ -55,6 +45,8 @@ public class ProductDaoCSV extends ConnectionCSV<ProductEntityCSV> {
             try {
                 FileUtils.writeStringToFile(new File(filePath), sb.toString(),
                         (Charset) null, true);
+                log.info("Persist into " + filePath + " successfully" + '\n' + "\t\t"
+                        + entity.toString());
                 return true;
             } catch (IOException e) {
                 e.printStackTrace();
@@ -77,6 +69,7 @@ public class ProductDaoCSV extends ConnectionCSV<ProductEntityCSV> {
                 if (item.getId().equals(entity.getId()))
                     delete(item);
             }
+            log.info("Last 3 actions - Update " + filePath + " successfully");
             return persist(entity);
         } else {
             log.error("Update " + filePath + " rejected. Initialize error");
@@ -88,18 +81,27 @@ public class ProductDaoCSV extends ConnectionCSV<ProductEntityCSV> {
     public ProductEntityCSV findById(Integer id) {
         if (initialize(filePath, tempPath)) {
             ProductEntityCSV pe = new ProductEntityCSV();
+            boolean isFound = false;
             List<ProductEntityCSV> list = findAll();
             for (ProductEntityCSV item : list) {
                 if (item.getId().equals(id)) {
                     pe = item;
+                    isFound = true;
                 }
             }
             clearFile();
-            return pe;
+            if (isFound) {
+                log.info("FindByID in " + filePath + " successfully" + '\n' +
+                        "Found: " + pe.toString());
+                return pe;
+            } else {
+                log.info("Persist into " + filePath + " successfully");
+            }
         } else {
             log.error("FindByID " + filePath + " rejected. Initialize error");
             return null;
         }
+        return null;
     }
 
     @Override
@@ -149,18 +151,20 @@ public class ProductDaoCSV extends ConnectionCSV<ProductEntityCSV> {
                  BufferedReader br = new BufferedReader(reader)) {
                 String line;
                 while ((line = br.readLine()) != null) {
-                    String[] items = line.split(",");
-                    List<ProductInfo> pi = new ArrayList<>();
-                    for (int i = 2; i < items.length; i++) {
-                        pi.add(new ProductInfo(Integer.parseInt(items[i++]),
-                                Integer.parseInt(items[i++]),
-                                Double.parseDouble(items[i])));
+                    if (!line.isEmpty()) {
+                        String[] items = line.split(",");
+                        List<ProductInfo> pi = new ArrayList<>();
+                        for (int i = 2; i < items.length; i++) {
+                            pi.add(new ProductInfo(Integer.parseInt(items[i++]),
+                                    Integer.parseInt(items[i++]),
+                                    Double.parseDouble(items[i])));
+                        }
+                        ProductEntityCSV pcs = new ProductEntityCSV();
+                        pcs.setId(Integer.parseInt(items[0]));
+                        pcs.setName(items[1]);
+                        pcs.setProducts(pi);
+                        list.add(pcs);
                     }
-                    ProductEntityCSV pcs = new ProductEntityCSV();
-                    pcs.setId(Integer.parseInt(items[0]));
-                    pcs.setName(items[1]);
-                    pcs.setProducts(pi);
-                    list.add(pcs);
                 }
             } catch (IOException e) {
                 e.printStackTrace();

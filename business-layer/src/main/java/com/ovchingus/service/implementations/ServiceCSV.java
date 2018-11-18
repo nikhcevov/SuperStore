@@ -1,4 +1,4 @@
-package com.ovchingus.service.model;
+package com.ovchingus.service.implementations;
 
 import com.ovchingus.persistence.DaoFactory;
 import com.ovchingus.persistence.GenericDao;
@@ -40,7 +40,7 @@ public class ServiceCSV implements ServiceMethods {
     @SuppressWarnings("unchecked")
     public boolean insertProductToStore(String storeName, String productName, Integer qty, Double price) {
         StoreEntityCSV temp = (StoreEntityCSV) daoStoreEntity.findByName(storeName);
-        ProductEntityCSV prod = (ProductEntityCSV) daoProductEntity.findByName(storeName);
+        ProductEntityCSV prod = (ProductEntityCSV) daoProductEntity.findByName(productName);
 
         List<ProductInfo> list = prod.getProducts();
         ProductInfo pi = new ProductInfo();
@@ -48,6 +48,11 @@ public class ServiceCSV implements ServiceMethods {
         pi.setQty(qty);
         pi.setPrice(price);
 
+        // check existence of adding element by storeID
+        for (ProductInfo item : list) {
+            if (item.getStoreId().equals(pi.getStoreId()))
+                return false;
+        }
         list.add(pi);
         prod.setProducts(list);
         return daoProductEntity.update(prod);
@@ -58,22 +63,24 @@ public class ServiceCSV implements ServiceMethods {
     @Override
     @SuppressWarnings("unchecked")
     public boolean updateProduct(String storeName, String productName, Integer qty, Double price) {
-        ProductInfo productInfo = new ProductInfo();
         ProductEntityCSV temp = (ProductEntityCSV) daoProductEntity.findByName(productName);
-        List<ProductInfo> list = new ArrayList<>();
+        StoreEntityCSV store = (StoreEntityCSV) daoStoreEntity.findByName(storeName);
+        List<ProductInfo> list = new ArrayList<>(temp.getProducts());
 
-        productInfo.setStoreId(temp.getId());
-        productInfo.getStoreId();
-        productInfo.setQty(qty);
-        productInfo.setPrice(price);
-        list.add(productInfo);
+        if (!(temp == null || store == null)) {
+            for (ProductInfo item : list)
+                if (item.getStoreId().equals(store.getId())) {
+                    item.setPrice(price);
+                    item.setQty(qty);
+                }
 
-        ProductEntityCSV out = new ProductEntityCSV();
-        out.setProducts(list);
-        out.setName(productName);
-        out.setId(temp.getId());
+            ProductEntityCSV out = new ProductEntityCSV();
+            out.setProducts(list);
+            out.setName(productName);
+            out.setId(temp.getId());
 
-        return daoProductEntity.update(out);
+            return daoProductEntity.update(out);
+        } else return false;
     }
 
     @Override

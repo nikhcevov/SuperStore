@@ -1,4 +1,4 @@
-package com.ovchingus.service.model;
+package com.ovchingus.service.implementations;
 
 import com.ovchingus.service.ServiceMethods;
 

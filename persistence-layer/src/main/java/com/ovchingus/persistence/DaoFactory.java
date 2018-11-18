@@ -13,7 +13,7 @@ import com.ovchingus.persistence.mysql.entities.StoreEntityMySQL;
 import com.ovchingus.persistence.mysql.entities.StoreProductEntityMySQL;
 import com.ovchingus.persistence.settings.DaoSettings;
 
-//TODO: DaoFactory do not working! Need to repair it.
+//TODO: DaoFactory did wrong in terms of factory method pattern! Need to repair it.
 public class DaoFactory {
 
     public static GenericDao getDao(Class daoType) {

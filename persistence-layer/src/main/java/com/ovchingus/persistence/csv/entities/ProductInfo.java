@@ -37,4 +37,9 @@ public class ProductInfo {
     public void setPrice(Double price) {
         this.price = price;
     }
+
+    @Override
+    public String toString() {
+        return "ProductInfo - storeID: " + storeId + ", qty: " + qty + ", price: " + price;
+    }
 }

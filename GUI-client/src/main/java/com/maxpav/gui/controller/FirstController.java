@@ -1,6 +1,6 @@
 package com.maxpav.gui.controller;
 
-import com.ovchingus.service.model.Service;
+import com.ovchingus.service.Service;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;

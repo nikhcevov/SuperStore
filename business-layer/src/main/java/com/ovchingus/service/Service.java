@@ -1,7 +1,7 @@
-package com.ovchingus.service.model;
+package com.ovchingus.service;
 
-import com.ovchingus.service.ServiceMethods;
-import com.ovchingus.service.Settings;
+import com.ovchingus.service.implementations.ServiceCSV;
+import com.ovchingus.service.implementations.ServiceMySQL;
 
 import java.util.Map;
 

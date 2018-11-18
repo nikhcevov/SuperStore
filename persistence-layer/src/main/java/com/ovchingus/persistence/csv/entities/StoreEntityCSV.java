@@ -45,4 +45,9 @@ public class StoreEntityCSV {
     public void setAddress(String address) {
         this.address = address;
     }
+
+    @Override
+    public String toString() {
+        return "Store - ID: " + id + ", Name: " + name + ", Address: " + address;
+    }
 }

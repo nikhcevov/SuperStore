@@ -1,7 +1,6 @@
 package com.ovchingus.persistence.csv.dao;
 
 import com.ovchingus.persistence.csv.entities.StoreEntityCSV;
-import com.ovchingus.persistence.settings.DaoSettings;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -18,20 +17,10 @@ import java.util.List;
 
 public class StoreDaoCSV extends ConnectionCSV<StoreEntityCSV> {
     private static final Logger log = LogManager.getLogger(StoreDaoCSV.class);
-    private int clearAfter = DaoSettings.getCleanFileAfterNumberOfOperations();
-    private int clearedTimes = 0;
 
     public StoreDaoCSV() {
         this.filePath += "stores.csv";
         this.tempPath += "tempStores.csv";
-    }
-
-    public void clearFile() {
-        clearedTimes++;
-        if (clearedTimes >= clearAfter) {
-            clear(filePath, tempPath);
-            clearedTimes = 0;
-        }
     }
 
     @Override

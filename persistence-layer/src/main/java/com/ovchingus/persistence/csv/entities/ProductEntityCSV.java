@@ -39,4 +39,16 @@ public class ProductEntityCSV {
     public void setName(String name) {
         this.name = name;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder out = new StringBuilder("Product - ID: " + id + ", Name: " + name);
+        if (!products.isEmpty()) {
+            for (ProductInfo item : products)
+                out.append(", [In store with ID: ").append(item.getStoreId())
+                        .append(", qty: ").append(item.getQty())
+                        .append(", price: ").append(item.getPrice()).append("] ");
+        }
+        return out.toString();
+    }
 }
