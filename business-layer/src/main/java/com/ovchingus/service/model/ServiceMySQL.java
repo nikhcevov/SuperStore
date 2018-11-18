@@ -1,8 +1,10 @@
-package com.ovchingus.service.func.model;
+package com.ovchingus.service.model;
+
+import com.ovchingus.service.ServiceMethods;
 
 import java.util.Map;
 
-public class ServiceMySQL extends Service {
+public class ServiceMySQL implements ServiceMethods {
 
 
     @Override

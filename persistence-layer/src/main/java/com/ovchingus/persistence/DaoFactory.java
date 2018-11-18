@@ -17,7 +17,7 @@ import com.ovchingus.persistence.settings.DaoSettings;
 public class DaoFactory {
 
     public static GenericDao getDao(Class daoType) {
-        if (DaoSettings.isSourceDatabase()) {
+        if (DaoSettings.isSourceMySQL()) {
             if (daoType == StoreEntityMySQL.class)
                 return new StoreDaoMySQL();
             if (daoType == ProductEntityMySQL.class)
@@ -25,7 +25,7 @@ public class DaoFactory {
             if (daoType == StoreProductEntityMySQL.class)
                 return new StoreProductDaoMySQL();
         }
-        if (DaoSettings.isSourceFile())
+        if (DaoSettings.isSourceCSV())
             if (daoType == StoreEntityCSV.class)
                 return new StoreDaoCSV();
         if (daoType == ProductEntityCSV.class)
@@ -34,13 +34,13 @@ public class DaoFactory {
     }
 
     public static void openTransaction(GenericDao dao) {
-        if (DaoSettings.isSourceDatabase()) {
+        if (DaoSettings.isSourceMySQL()) {
             ((ConnectionMySQL) dao).openCurrentSessionWithTransaction();
         }
     }
 
     public static void closeTransaction(GenericDao dao) {
-        if (DaoSettings.isSourceDatabase()) {
+        if (DaoSettings.isSourceMySQL()) {
             ((ConnectionMySQL) dao).openCurrentSessionWithTransaction();
         }
     }

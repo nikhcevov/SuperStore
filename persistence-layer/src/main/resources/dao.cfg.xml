@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<configuration>
+    <source>
+        <current>csv</current>
+    </source>
+
+    <csv>
+        <path>C:\Users\ovchi\IdeaProjects\SuperStore\data\</path>
+        <!-- > Clean after count of actions with file<-->
+        <cleaner>
+            <steps>10</steps>
+        </cleaner>
+    </csv>
+
+    <database>
+
+    </database>
+</configuration>

@@ -1,6 +1,6 @@
 package com.maxpav.gui.controller;
 
-import com.ovchingus.service.func.Settings;
+import com.ovchingus.service.Settings;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;

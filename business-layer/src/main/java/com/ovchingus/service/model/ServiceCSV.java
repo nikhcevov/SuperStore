@@ -1,17 +1,18 @@
-package com.ovchingus.service.func.model;
+package com.ovchingus.service.model;
 
 import com.ovchingus.persistence.DaoFactory;
 import com.ovchingus.persistence.GenericDao;
 import com.ovchingus.persistence.csv.entities.ProductEntityCSV;
 import com.ovchingus.persistence.csv.entities.ProductInfo;
 import com.ovchingus.persistence.csv.entities.StoreEntityCSV;
+import com.ovchingus.service.ServiceMethods;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ServiceCSV extends Service {
+public class ServiceCSV implements ServiceMethods {
 
     private GenericDao daoStoreEntity = DaoFactory.getDao(StoreEntityCSV.class);
 

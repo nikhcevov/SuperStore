@@ -1,7 +1,7 @@
-package com.ovchingus.service.func.model;
+package com.ovchingus.service.model;
 
-import com.ovchingus.service.func.ServiceMethods;
-import com.ovchingus.service.func.Settings;
+import com.ovchingus.service.ServiceMethods;
+import com.ovchingus.service.Settings;
 
 import java.util.Map;
 
@@ -14,14 +14,17 @@ public class Service implements ServiceMethods {
     public Service() {
     }
 
+
     @SuppressWarnings("unchecked")
-    private <T extends Service> T getSource() {
+    private <T extends ServiceMethods> T getSource() {
         if (Settings.isSourceMySQL()) {
-            serviceMySQL = new ServiceMySQL();
+            if (serviceMySQL == null)
+                serviceMySQL = new ServiceMySQL();
             return (T) serviceMySQL;
         }
         if (Settings.isSourceCSV()) {
-            serviceCSV = new ServiceCSV();
+            if (serviceCSV == null)
+                serviceCSV = new ServiceCSV();
             return (T) serviceCSV;
         }
         return null;

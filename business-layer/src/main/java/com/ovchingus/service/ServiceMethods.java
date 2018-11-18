@@ -1,4 +1,4 @@
-package com.ovchingus.service.func;
+package com.ovchingus.service;
 
 
 import java.util.Map;
