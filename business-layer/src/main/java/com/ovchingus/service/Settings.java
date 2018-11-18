@@ -23,4 +23,8 @@ public class Settings {
     public static String getCsvFilePath() {
         return DaoSettings.getCsvFilePath();
     }
+
+    public static void setCsvFilePath(String path) {
+        DaoSettings.setCsvFilePath(path);
+    }
 }

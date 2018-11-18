@@ -162,7 +162,6 @@ public class MainController {
             button.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-
                     AnchorPane pane = null;
                     try {
                         pane = FXMLLoader.load(getClass().getResource("/fxml/FirstScene.fxml"));

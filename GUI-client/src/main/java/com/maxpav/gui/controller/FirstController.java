@@ -210,13 +210,18 @@ public class FirstController {
     @FXML
     private void updateProduct(ActionEvent event) {
         console_Administrator.setText("Сalculation");
-        if (!textfieldUpdateProduct_StoreName.getText().equals("") && !textfieldUpdateProduct_ProductName.getText().equals("") &&
-                !textfieldUpdateProduct_Price.getText().equals("") && !textfieldUpdateProduct_Count.getText().equals("")) {
+
+        if (Check(textfieldUpdateProduct_StoreName.getText(),
+                textfieldUpdateProduct_ProductName.getText(),
+                textfieldUpdateProduct_Price.getText(),
+                textfieldUpdateProduct_Count.getText())) {
             ObservableList<String> Items;
             Items = listview_Administrator.getItems();
             //TODO: Проверка сделана
-            if (service.updateProduct(textfieldUpdateProduct_StoreName.getText(), textfieldUpdateProduct_ProductName.getText(),
-                    Integer.parseInt(textfieldUpdateProduct_Count.getText()), Double.parseDouble(textfieldUpdateProduct_Price.getText()))) {
+            if (service.updateProduct(textfieldUpdateProduct_StoreName.getText(),
+                    textfieldUpdateProduct_ProductName.getText(),
+                    Integer.parseInt(textfieldUpdateProduct_Count.getText()),
+                    Double.parseDouble(textfieldUpdateProduct_Price.getText()))) {
                 Items.add("\"" + textfieldUpdateProduct_ProductName.getText() + "\" is sold in \"" +
                         textfieldUpdateProduct_StoreName.getText() + "\" in quantities " +
                         textfieldUpdateProduct_Count.getText() + " by price " + textfieldUpdateProduct_Price.getText() + " RUB");
@@ -305,7 +310,7 @@ public class FirstController {
                     Double.parseDouble(textfieldFindProductListForSum_Price.getText()));
             ObservableList<String> Items = FXCollections.observableArrayList();
             for (Map.Entry<String, Integer> pair : map.entrySet()) {
-                Items.add(pair.getKey() + pair.getValue());
+                Items.add(pair.getKey() + " : " + pair.getValue());
             }
             listview_Customer.setItems(Items);
             successful_Customer();
@@ -385,8 +390,6 @@ public class FirstController {
         m_error = new Media(new File(path_error).toURI().toString());
         mp_successful = new MediaPlayer(m_successful);
         mp_error = new MediaPlayer(m_error);
-
-
 
 
         assert textfieldFindStoreWithCheapestShopList_ProductsAndCount != null : "fx:id=\"textfieldFindStoreWithCheapestShopList_ProductsAndCount\" was not injected: check your FXML file 'FirstScene.fxml'.";
