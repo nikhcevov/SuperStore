@@ -1,6 +1,6 @@
-package com.ovchingus.persistence.mysqls.dao;
+package com.ovchingus.persistence.mysql.dao;
 
-import com.ovchingus.persistence.mysqls.entities.ProductEntityMySQL;
+import com.ovchingus.persistence.mysql.entities.ProductEntityMySQL;
 
 import java.util.List;
 
