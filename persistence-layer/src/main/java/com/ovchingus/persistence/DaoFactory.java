@@ -4,13 +4,13 @@ import com.ovchingus.persistence.csv.dao.ProductDaoCSV;
 import com.ovchingus.persistence.csv.dao.StoreDaoCSV;
 import com.ovchingus.persistence.csv.entities.ProductEntityCSV;
 import com.ovchingus.persistence.csv.entities.StoreEntityCSV;
-import com.ovchingus.persistence.mysql.dao.ConnectionMySQL;
-import com.ovchingus.persistence.mysql.dao.ProductDaoMySQL;
-import com.ovchingus.persistence.mysql.dao.StoreDaoMySQL;
-import com.ovchingus.persistence.mysql.dao.StoreProductDaoMySQL;
-import com.ovchingus.persistence.mysql.entities.ProductEntityMySQL;
-import com.ovchingus.persistence.mysql.entities.StoreEntityMySQL;
-import com.ovchingus.persistence.mysql.entities.StoreProductEntityMySQL;
+import com.ovchingus.persistence.mysqls.dao.ConnectionMySQL;
+import com.ovchingus.persistence.mysqls.dao.ProductDaoMySQL;
+import com.ovchingus.persistence.mysqls.dao.StoreDaoMySQL;
+import com.ovchingus.persistence.mysqls.dao.StoreProductDaoMySQL;
+import com.ovchingus.persistence.mysqls.entities.ProductEntityMySQL;
+import com.ovchingus.persistence.mysqls.entities.StoreEntityMySQL;
+import com.ovchingus.persistence.mysqls.entities.StoreProductEntityMySQL;
 import com.ovchingus.persistence.settings.DaoSettings;
 
 //TODO: DaoFactory did wrong in terms of factory method pattern! Need to repair it.

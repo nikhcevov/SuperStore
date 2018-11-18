@@ -1,4 +1,4 @@
-package com.ovchingus.persistence.mysql.entities;
+package com.ovchingus.persistence.mysqls.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;

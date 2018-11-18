@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+<AnchorPane fx:id="anchorpane" prefHeight="200.0" prefWidth="300.0" style="-fx-background-color: #cecece;"
+            xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.maxpav.gui.controller.SettingsController">
+    <children>
+        <Text fx:id="textsource" layoutX="14.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Source: "/>
+        <Text fx:id="textpath" layoutX="14.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0"
+              text="Directory path of text file:"/>
+        <ComboBox fx:id="comboboxsource" layoutX="165.0" layoutY="9.0" onAction="#chooseSource" prefHeight="31.0"
+                  prefWidth="121.0"/>
+        <Text fx:id="textactionstoupdate" layoutX="14.0" layoutY="145.0" strokeType="OUTSIDE" strokeWidth="0.0"
+              text="Actions to update:"/>
+        <TextField fx:id="textfieldactionstoupdate" layoutX="253.0" layoutY="124.0" prefHeight="31.0" prefWidth="33.0"
+                   promptText="0"/>
+        <Button fx:id="buttoncancel" layoutX="11.0" layoutY="163.0" mnemonicParsing="false" onAction="#cancel"
+                text="Cancel"/>
+        <Button fx:id="buttonchoose" layoutX="201.0" layoutY="46.0" mnemonicParsing="false" onAction="#choosePath"
+                prefHeight="31.0" prefWidth="85.0" text="Choose"/>
+        <Button fx:id="buttonapply" layoutX="227.0" layoutY="163.0" mnemonicParsing="false" onAction="#apply"
+                text="Apply"/>
+        <Button fx:id="buttonok" layoutX="160.0" layoutY="163.0" mnemonicParsing="false" onAction="#ok"
+                prefHeight="31.0" prefWidth="59.0" text="OK"/>
+        <TextField fx:id="textfieldpath" layoutX="11.0" layoutY="85.0" onAction="#fillTextField" prefHeight="31.0"
+                   prefWidth="275.0"/>
+    </children>
+</AnchorPane>
