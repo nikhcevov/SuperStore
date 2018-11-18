@@ -67,7 +67,7 @@ public class ServiceCSV implements ServiceMethods {
         StoreEntityCSV store = (StoreEntityCSV) daoStoreEntity.findByName(storeName);
         List<ProductInfo> list = new ArrayList<>(temp.getProducts());
 
-        if (!(temp == null || store == null)) {
+        if (temp != null || store != null) {
             for (ProductInfo item : list)
                 if (item.getStoreId().equals(store.getId())) {
                     item.setPrice(price);
