@@ -11,12 +11,12 @@ public class StoreDaoMySQL extends ConnectionMySQL<StoreEntityMySQL, Integer> {
 
     public boolean persist(StoreEntityMySQL entity) {
         getCurrentSession().save(entity);
-        return true;
+        return getCurrentSession().contains(entity);
     }
 
     public boolean update(StoreEntityMySQL entity) {
         getCurrentSession().update(entity);
-        return true;
+        return getCurrentSession().contains(entity);
     }
 
     public StoreEntityMySQL findById(Integer id) {
@@ -29,7 +29,7 @@ public class StoreDaoMySQL extends ConnectionMySQL<StoreEntityMySQL, Integer> {
 
     public boolean delete(StoreEntityMySQL entity) {
         getCurrentSession().delete(entity);
-        return true;
+        return !getCurrentSession().contains(entity);
     }
 
     @SuppressWarnings("unchecked")
@@ -40,7 +40,7 @@ public class StoreDaoMySQL extends ConnectionMySQL<StoreEntityMySQL, Integer> {
     public boolean deleteAll() {
         List<StoreEntityMySQL> entityList = findAll();
         for (StoreEntityMySQL entity : entityList) {
-            delete(entity);
+            if (!delete(entity)) return false;
         }
         return true;
     }

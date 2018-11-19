@@ -6,6 +6,8 @@ import com.ovchingus.persistence.csv.entities.ProductEntityCSV;
 import com.ovchingus.persistence.csv.entities.ProductInfo;
 import com.ovchingus.persistence.csv.entities.StoreEntityCSV;
 import com.ovchingus.service.ServiceMethods;
+import org.apache.commons.collections.MultiMap;
+import org.apache.commons.collections.map.MultiValueMap;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -67,20 +69,18 @@ public class ServiceCSV implements ServiceMethods {
         StoreEntityCSV store = (StoreEntityCSV) daoStoreEntity.findByName(storeName);
         List<ProductInfo> list = new ArrayList<>(temp.getProducts());
 
-        if (temp != null || store != null) {
-            for (ProductInfo item : list)
-                if (item.getStoreId().equals(store.getId())) {
-                    item.setPrice(price);
-                    item.setQty(qty);
-                }
+        for (ProductInfo item : list)
+            if (item.getStoreId().equals(store.getId())) {
+                item.setPrice(price);
+                item.setQty(qty);
+            }
 
-            ProductEntityCSV out = new ProductEntityCSV();
-            out.setProducts(list);
-            out.setName(productName);
-            out.setId(temp.getId());
+        ProductEntityCSV out = new ProductEntityCSV();
+        out.setProducts(list);
+        out.setName(productName);
+        out.setId(temp.getId());
 
-            return daoProductEntity.update(out);
-        } else return false;
+        return daoProductEntity.update(out);
     }
 
     @Override
@@ -89,7 +89,7 @@ public class ServiceCSV implements ServiceMethods {
         ProductEntityCSV temp = (ProductEntityCSV) daoProductEntity.findByName(productName);
         List<ProductInfo> list = temp.getProducts();
 
-        if (temp != null && !list.isEmpty()) {
+        if (!list.isEmpty()) {
             ProductInfo out = null;
             Double min = 0.0;
             if (list.get(0).getPrice() >= 0) {
@@ -102,8 +102,10 @@ public class ServiceCSV implements ServiceMethods {
                             item.getQty(), item.getPrice());
                 }
             }
-            StoreEntityCSV ans = (StoreEntityCSV) daoStoreEntity.findById(out.getStoreId());
-            return ans.getName();
+            if (out != null) {
+                StoreEntityCSV ans = (StoreEntityCSV) daoStoreEntity.findById(out.getStoreId());
+                return ans.getName();
+            } else return null;
         } else return null;
     }
 
@@ -132,11 +134,9 @@ public class ServiceCSV implements ServiceMethods {
         Double sum = null;
 
         for (ProductInfo item : product.getProducts()) {
-            if (item.getStoreId().equals(store.getId())) {
-                if (item.getQty() >= qty) {
-                    item.setQty(item.getQty() - qty);
-                    sum = item.getPrice() * qty;
-                }
+            if (item.getStoreId().equals(store.getId()) && item.getQty() >= qty) {
+                item.setQty(item.getQty() - qty);
+                sum = item.getPrice() * qty;
             }
         }
         return sum;
@@ -144,6 +144,72 @@ public class ServiceCSV implements ServiceMethods {
 
     @Override
     public String findStoreWithCheapestShopList(String query) {
-        return null;
+        List<ProductEntityCSV> prodList = daoProductEntity.findAll();
+
+        List<ProductEntityCSV> list = new ArrayList<>();
+        Map<ProductEntityCSV, Integer> qtyForProd = new HashMap<>();
+        MultiMap storesWithProdList = new MultiValueMap();
+        int counterOfNecessaryProductTypes = 0;
+
+
+        // find products and pull them to map of ProductEntity and qty
+        // A.K. parce query
+        for (String item : query.split(";")) {
+            String name = item.substring(0, item.indexOf(","));
+            Integer qty = Integer.parseInt(item.substring(item.indexOf(",") + 1));
+            ProductEntityCSV prod = (ProductEntityCSV) daoProductEntity.findByName(name);
+            qtyForProd.put(prod, qty);
+            // pull all products from query to Map of [StoreID,list<products>]
+            for (ProductInfo pi : prod.getProducts()) {
+                storesWithProdList.put(pi.getStoreId(), prod);
+            }
+            counterOfNecessaryProductTypes++;
+        }
+
+        Map<Integer, Double> storeIdAndSum = new HashMap<>();
+        // each entry is one store
+        for (Object entryObj : storesWithProdList.entrySet()) {
+            Map.Entry entry = (Map.Entry) entryObj;
+            Integer curStoreID = (Integer) entry.getKey();
+            List<ProductEntityCSV> curProdList = (List<ProductEntityCSV>) entry.getValue();
+            //sum of query in entry
+            Double entrySum = 0.0;
+            //sum found for count of products.
+            // if < then counterOfNecessaryProducts then not all products in store exists.
+            int countOfProductsTypes = 0;
+
+            // for each product in store
+            for (ProductEntityCSV item : curProdList) {
+                // for the first find productInfo for curStoreId
+                for (ProductInfo it : item.getProducts()) {
+                    if (it.getStoreId().equals(curStoreID)) {
+                        // find necessary qty of product
+                        Integer qty = qtyForProd.get(item);
+
+                        if (it.getQty() >= qty) {
+                            entrySum += it.getPrice() * qty;
+                            countOfProductsTypes++;
+                        }
+                    }
+                }
+            }
+            // that mean that all of querring products exist in one store
+            if (countOfProductsTypes == counterOfNecessaryProductTypes)
+                storeIdAndSum.put(curStoreID, entrySum);
+        }
+
+
+        // step3: find stores with cheapest sum
+        Double minSum = Double.MAX_VALUE;
+        Integer minSumStoreID = null;
+        StoreEntityCSV out;
+        for (Map.Entry<Integer, Double> item : storeIdAndSum.entrySet()) {
+            if (minSum >= item.getValue()) {
+                minSum = item.getValue();
+                minSumStoreID = item.getKey();
+            }
+        }
+        out = (StoreEntityCSV) daoStoreEntity.findById(minSumStoreID);
+        return out.getName();
     }
 }

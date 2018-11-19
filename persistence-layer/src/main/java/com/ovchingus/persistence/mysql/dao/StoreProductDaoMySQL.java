@@ -8,12 +8,12 @@ public class StoreProductDaoMySQL extends ConnectionMySQL<StoreProductEntityMySQ
 
     public boolean persist(StoreProductEntityMySQL entity) {
         getCurrentSession().save(entity);
-        return true;
+        return getCurrentSession().contains(entity);
     }
 
     public boolean update(StoreProductEntityMySQL entity) {
         getCurrentSession().update(entity);
-        return true;
+        return getCurrentSession().contains(entity);
     }
 
     public StoreProductEntityMySQL findById(StoreProductEntityMySQL.StoreProductPK id) {
@@ -22,7 +22,7 @@ public class StoreProductDaoMySQL extends ConnectionMySQL<StoreProductEntityMySQ
 
     public boolean delete(StoreProductEntityMySQL entity) {
         getCurrentSession().delete(entity);
-        return true;
+        return !getCurrentSession().contains(entity);
     }
 
     @SuppressWarnings("unchecked")
@@ -33,7 +33,7 @@ public class StoreProductDaoMySQL extends ConnectionMySQL<StoreProductEntityMySQ
     public boolean deleteAll() {
         List<StoreProductEntityMySQL> entityList = findAll();
         for (StoreProductEntityMySQL entity : entityList) {
-            delete(entity);
+            if (!delete(entity)) return false;
         }
         return true;
     }
