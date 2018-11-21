@@ -30,9 +30,9 @@ public class ServiceMySQL implements ServiceMethods {
 
         store.setName(name);
         store.setAddress(address);
-        connection.openCurrentSession();
+        daoStoreEntity.openCurrentSession();
         boolean condition = daoStoreEntity.persist(store);
-        connection.closeCurrentSession();
+        daoStoreEntity.closeCurrentSession();
         return condition;
     }
 
@@ -44,9 +44,9 @@ public class ServiceMySQL implements ServiceMethods {
         if (productId != null)
             prod.setId(productId);
         prod.setName(name);
-        connection.openCurrentSession();
+        daoProductEntity.openCurrentSession();
         boolean condition = daoProductEntity.persist(prod);
-        connection.closeCurrentSession();
+        daoProductEntity.closeCurrentSession();
         return condition;
     }
 
@@ -62,6 +62,36 @@ public class ServiceMySQL implements ServiceMethods {
         StoreEntitySQLServer store;
         ProductEntitySQLServer product;
         boolean result;
+
+        daoStoreEntity.openCurrentSession();
+        store = (StoreEntitySQLServer) daoStoreEntity.findByName(storeName);
+        daoStoreEntity.closeCurrentSession();
+
+        daoProductEntity.openCurrentSession();
+        product = (ProductEntitySQLServer) daoProductEntity.findByName(productName);
+        daoProductEntity.closeCurrentSession();
+
+        daoStoreProductEntity.openCurrentSession();
+        if (store != null && product != null) {
+            StoreProductEntitySQLServer sp = new StoreProductEntitySQLServer();
+            StoreProductEntitySQLServer.StoreProductPK spPK = new StoreProductEntitySQLServer.StoreProductPK();
+            spPK.setStoreId(store.getId());
+            spPK.setProductId(product.getId());
+            sp.setId(spPK);
+            sp.setQty(qty);
+            sp.setPrice(price);
+            result = daoStoreProductEntity.persist(sp);
+        } else result = false;
+        daoStoreProductEntity.closeCurrentSession();
+        return result;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public boolean updateProduct(String storeName, String productName, Integer qty, Double price) {
+        StoreEntitySQLServer store;
+        ProductEntitySQLServer product;
+        boolean result;
         StoreProductDaoSQLServer dao = new StoreProductDaoSQLServer();
 
         daoStoreEntity.openCurrentSession();
@@ -72,7 +102,7 @@ public class ServiceMySQL implements ServiceMethods {
         product = (ProductEntitySQLServer) daoProductEntity.findByName(productName);
         daoProductEntity.closeCurrentSession();
 
-        //daoStoreProductEntity.openCurrentSession();
+        daoStoreProductEntity.openCurrentSession();
         if (store != null && product != null) {
             StoreProductEntitySQLServer sp = new StoreProductEntitySQLServer();
             StoreProductEntitySQLServer.StoreProductPK spPK = new StoreProductEntitySQLServer.StoreProductPK();
@@ -81,17 +111,10 @@ public class ServiceMySQL implements ServiceMethods {
             sp.setId(spPK);
             sp.setQty(qty);
             sp.setPrice(price);
-            dao.openCurrentSessionWithTransaction();
-            result = dao.persist(sp);//daoStoreProductEntity.persist(sp);
-            dao.closeCurrentSessionWithTransaction();
+            result = daoStoreProductEntity.update(sp);//daoStoreProductEntity.persist(sp);
         } else result = false;
-        //daoStoreProductEntity.closeCurrentSession();
+        daoStoreProductEntity.closeCurrentSession();
         return result;
-    }
-
-    @Override
-    public boolean updateProduct(String storeName, String productName, Integer qty, Double price) {
-        return true;
     }
 
     @Override

@@ -206,20 +206,36 @@ public class FirstController {
     @FXML
     private void createProduct(ActionEvent event) {
         console_Administrator.setText("Сalculation");
-        if (Check(textfieldCreateProduct_ProductID.getText(), textfieldCreateProduct_ProductName.getText()) ||
-                (Settings.isSourceMySQL() && !textfieldCreateProduct_ProductName.getText().equals(""))) {
+        boolean check = Settings.isSourceMySQL() && !textfieldCreateProduct_ProductName.getText().equals("");
+        if (Check(textfieldCreateProduct_ProductID.getText(), textfieldCreateProduct_ProductName.getText())
+                || check) {
             ObservableList<String> Items;
             Items = listview_Administrator.getItems();
-            if (service.createProduct(Integer.parseInt(textfieldCreateProduct_ProductID.getText()),
-                    textfieldCreateProduct_ProductName.getText())) {
-                Items.add("Product \"" + textfieldCreateProduct_ProductName.getText() + "\" is CREATED. ID: " +
-                        textfieldCreateProduct_ProductID.getText());
-                listview_Administrator.setItems(Items);
-                successful_Administrator();
-            } else {
-                Items.add("ERROR! Product \"" + textfieldCreateProduct_ProductName.getText() + "\" is NOT CREATED.");
-                listview_Administrator.setItems(Items);
-                error_Administrator();
+            if (Settings.isSourceCSV()) {
+                if (service.createProduct(Integer.parseInt(textfieldCreateProduct_ProductID.getText()),
+                        textfieldCreateProduct_ProductName.getText())) {
+                    Items.add("Product \"" + textfieldCreateProduct_ProductName.getText() + "\" is CREATED. ID: " +
+                            textfieldCreateProduct_ProductID.getText());
+                    listview_Administrator.setItems(Items);
+                    successful_Administrator();
+                } else {
+                    Items.add("ERROR! Product \"" + textfieldCreateProduct_ProductName.getText() + "\" is NOT CREATED.");
+                    listview_Administrator.setItems(Items);
+                    error_Administrator();
+                }
+            }
+            if (Settings.isSourceMySQL()) {
+                if (service.createProduct(null, textfieldCreateProduct_ProductName.getText())) {
+                    Items.add("Product \"" + textfieldCreateProduct_ProductName.getText() + "\" is CREATED. ID: " +
+                            textfieldCreateProduct_ProductID.getText());
+                    listview_Administrator.setItems(Items);
+                    successful_Administrator();
+                } else {
+                    Items.add("ERROR! Product \"" + textfieldCreateProduct_ProductName.getText() + "\" is NOT CREATED.");
+                    listview_Administrator.setItems(Items);
+                    error_Administrator();
+                }
+
             }
         } else error_Administrator();
     }
@@ -248,7 +264,7 @@ public class FirstController {
                 }
             }
             if (Settings.isSourceMySQL()) {
-                if (service.createStore(0, textfieldCreateStore_StoreName.getText(), textfieldCreateStore_StoreAdress.getText())) {
+                if (service.createStore(null, textfieldCreateStore_StoreName.getText(), textfieldCreateStore_StoreAdress.getText())) {
                     Items.add("Store \"" + textfieldCreateStore_StoreName.getText() + "\", \"" + textfieldCreateStore_StoreAdress.getText() +
                             "\" is CREATED.");
                     listview_Administrator.setItems(Items);
