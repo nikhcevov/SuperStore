@@ -1,27 +1,27 @@
-import com.ovchingus.persistence.mysql.dao.ProductDaoMySQL;
-import com.ovchingus.persistence.mysql.entities.ProductEntityMySQL;
+import com.ovchingus.persistence.sqlserver.dao.ProductDaoSQLServer;
+import com.ovchingus.persistence.sqlserver.entities.ProductEntitySQLServer;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ProductEntityDaoMySQLTest {
 
-    private ProductDaoMySQL sd;
+    private ProductDaoSQLServer sd;
 
     @Before
     public void setUp() {
-        sd = new ProductDaoMySQL();
+        sd = new ProductDaoSQLServer();
     }
 
     @Test
     public void testGetByPK() {
         sd.openCurrentSessionWithTransaction();
 
-        ProductEntityMySQL productEntityMySQL;
-        productEntityMySQL = sd.findById(5);
-        System.out.println(productEntityMySQL);
+        ProductEntitySQLServer productEntitySQLServer;
+        productEntitySQLServer = sd.findById(5);
+        System.out.println(productEntitySQLServer);
 
         sd.closeCurrentSessionWithTransaction();
     }
@@ -30,9 +30,9 @@ public class ProductEntityDaoMySQLTest {
     public void testGetByName() {
         sd.openCurrentSessionWithTransaction();
 
-        ProductEntityMySQL productEntityMySQL;
-        productEntityMySQL = sd.findByName("Pivas");
-        System.out.println(productEntityMySQL);
+        ProductEntitySQLServer productEntitySQLServer;
+        productEntitySQLServer = sd.findByName("Pivas");
+        System.out.println(productEntitySQLServer);
 
         sd.closeCurrentSessionWithTransaction();
     }
@@ -41,8 +41,8 @@ public class ProductEntityDaoMySQLTest {
     public void testUpdate(){
         sd.openCurrentSessionWithTransaction();
 
-        ProductEntityMySQL productEntityMySQL = new ProductEntityMySQL(4, "KobachokOk");
-        sd.update(productEntityMySQL);
+        ProductEntitySQLServer productEntitySQLServer = new ProductEntitySQLServer(4, "KobachokOk");
+        sd.update(productEntitySQLServer);
 
         sd.closeCurrentSessionWithTransaction();
     }
@@ -51,9 +51,9 @@ public class ProductEntityDaoMySQLTest {
     public void testDelete(){
         sd.openCurrentSessionWithTransaction();
 
-        ProductEntityMySQL productEntityMySQL = new ProductEntityMySQL();
-        productEntityMySQL.setId(4);
-        sd.delete(productEntityMySQL);
+        ProductEntitySQLServer productEntitySQLServer = new ProductEntitySQLServer();
+        productEntitySQLServer.setId(4);
+        sd.delete(productEntitySQLServer);
 
         sd.closeCurrentSessionWithTransaction();
     }
@@ -62,8 +62,8 @@ public class ProductEntityDaoMySQLTest {
     public void testInsertPK(){
         sd.openCurrentSessionWithTransaction();
 
-        ProductEntityMySQL productEntityMySQL = new ProductEntityMySQL("Selyodka");
-        sd.persist(productEntityMySQL);
+        ProductEntitySQLServer productEntitySQLServer = new ProductEntitySQLServer("Селедка");
+        sd.persist(productEntitySQLServer);
 
         sd.closeCurrentSessionWithTransaction();
     }
@@ -72,11 +72,12 @@ public class ProductEntityDaoMySQLTest {
     public void testGetAll() {
         sd.openCurrentSessionWithTransaction();
 
-        List<ProductEntityMySQL> list = new ArrayList<>();
+        List<ProductEntitySQLServer> list;
         list = sd.findAll();
         System.out.println(list);
 
         sd.closeCurrentSessionWithTransaction();
+        Assert.assertNotNull(list);
     }
 
 

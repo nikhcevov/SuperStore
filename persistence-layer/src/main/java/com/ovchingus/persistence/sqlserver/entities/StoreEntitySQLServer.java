@@ -1,15 +1,16 @@
-package com.ovchingus.persistence.mysql.entities;
+package com.ovchingus.persistence.sqlserver.entities;
 
 
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "Store")
-public class StoreEntityMySQL {
+public class StoreEntitySQLServer implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,24 +32,24 @@ public class StoreEntityMySQL {
             CascadeType.PERSIST
     })
     @JoinTable(
-            name = "Store_Product",
+            name = "StoreProduct",
             joinColumns = {@JoinColumn(name = "store_id")},
             inverseJoinColumns = {@JoinColumn(name = "product_id")}
     )
-    private Set<ProductEntityMySQL> productEntitiesMySQL = new HashSet<>();
+    private Set<ProductEntitySQLServer> productEntitiesMySQL = new HashSet<>();
 
-    public StoreEntityMySQL(String name, String address, Set<ProductEntityMySQL> productEntitiesMySQL) {
+    public StoreEntitySQLServer(String name, String address, Set<ProductEntitySQLServer> productEntitiesMySQL) {
         this.name = name;
         this.address = address;
         this.productEntitiesMySQL = productEntitiesMySQL;
     }
 
-    public StoreEntityMySQL(String name, String address) {
+    public StoreEntitySQLServer(String name, String address) {
         this.name = name;
         this.address = address;
     }
 
-    public StoreEntityMySQL() {
+    public StoreEntitySQLServer() {
     }
 
     public Integer getId() {
@@ -75,16 +76,16 @@ public class StoreEntityMySQL {
         this.address = address;
     }
 
-    public Set<ProductEntityMySQL> getProductEntitiesMySQL() {
+    public Set<ProductEntitySQLServer> getProductEntitiesMySQL() {
         return productEntitiesMySQL;
     }
 
-    public void setProductEntitiesMySQL(Set<ProductEntityMySQL> productEntities) {
+    public void setProductEntitiesMySQL(Set<ProductEntitySQLServer> productEntities) {
         this.productEntitiesMySQL = productEntities;
     }
 
     @Override
     public String toString() {
-        return "StoreEntityMySQL: " + this.id + ", " + this.name + ", " + this.address;
+        return "StoreEntitySQLServer: " + this.id + ", " + this.name + ", " + this.address;
     }
 }

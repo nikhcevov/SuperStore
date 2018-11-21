@@ -1,20 +1,53 @@
 package com.ovchingus.service.implementations;
 
+import com.ovchingus.persistence.DaoFactory;
+import com.ovchingus.persistence.GenericDao;
+import com.ovchingus.persistence.sqlserver.dao.ConnectionSQLServer;
+import com.ovchingus.persistence.sqlserver.dao.StoreProductDaoSQLServer;
+import com.ovchingus.persistence.sqlserver.entities.ProductEntitySQLServer;
+import com.ovchingus.persistence.sqlserver.entities.StoreEntitySQLServer;
+import com.ovchingus.persistence.sqlserver.entities.StoreProductEntitySQLServer;
 import com.ovchingus.service.ServiceMethods;
 
 import java.util.Map;
 
 public class ServiceMySQL implements ServiceMethods {
 
+    private GenericDao daoProductEntity = DaoFactory.getDao(ProductEntitySQLServer.class);
+    private GenericDao daoStoreEntity = DaoFactory.getDao(StoreEntitySQLServer.class);
+    private GenericDao daoStoreProductEntity = DaoFactory.getDao(StoreProductEntitySQLServer.class);
+
+    public GenericDao getConnection() {
+        return connection;
+    }
+
+    private GenericDao connection = DaoFactory.getDao(ConnectionSQLServer.class);
 
     @Override
+    @SuppressWarnings("unchecked")
     public boolean createStore(Integer storeId, String name, String address) {
-        return true;
+        StoreEntitySQLServer store = new StoreEntitySQLServer();
+
+        store.setName(name);
+        store.setAddress(address);
+        connection.openCurrentSession();
+        boolean condition = daoStoreEntity.persist(store);
+        connection.closeCurrentSession();
+        return condition;
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public boolean createProduct(Integer productId, String name) {
-        return true;
+        ProductEntitySQLServer prod = new ProductEntitySQLServer();
+
+        if (productId != null)
+            prod.setId(productId);
+        prod.setName(name);
+        connection.openCurrentSession();
+        boolean condition = daoProductEntity.persist(prod);
+        connection.closeCurrentSession();
+        return condition;
     }
 
     /*
@@ -24,8 +57,36 @@ public class ServiceMySQL implements ServiceMethods {
         }
     */
     @Override
+    @SuppressWarnings("unchecked")
     public boolean insertProductToStore(String storeName, String productName, Integer qty, Double price) {
-        return true;
+        StoreEntitySQLServer store;
+        ProductEntitySQLServer product;
+        boolean result;
+        StoreProductDaoSQLServer dao = new StoreProductDaoSQLServer();
+
+        daoStoreEntity.openCurrentSession();
+        store = (StoreEntitySQLServer) daoStoreEntity.findByName(storeName);
+        daoStoreEntity.closeCurrentSession();
+
+        daoProductEntity.openCurrentSession();
+        product = (ProductEntitySQLServer) daoProductEntity.findByName(productName);
+        daoProductEntity.closeCurrentSession();
+
+        //daoStoreProductEntity.openCurrentSession();
+        if (store != null && product != null) {
+            StoreProductEntitySQLServer sp = new StoreProductEntitySQLServer();
+            StoreProductEntitySQLServer.StoreProductPK spPK = new StoreProductEntitySQLServer.StoreProductPK();
+            spPK.setStoreId(store.getId());
+            spPK.setProductId(product.getId());
+            sp.setId(spPK);
+            sp.setQty(qty);
+            sp.setPrice(price);
+            dao.openCurrentSessionWithTransaction();
+            result = dao.persist(sp);//daoStoreProductEntity.persist(sp);
+            dao.closeCurrentSessionWithTransaction();
+        } else result = false;
+        //daoStoreProductEntity.closeCurrentSession();
+        return result;
     }
 
     @Override

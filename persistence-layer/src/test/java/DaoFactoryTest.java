@@ -1,6 +1,6 @@
 import com.ovchingus.persistence.DaoFactory;
 import com.ovchingus.persistence.GenericDao;
-import com.ovchingus.persistence.mysql.entities.StoreEntityMySQL;
+import com.ovchingus.persistence.sqlserver.entities.StoreEntitySQLServer;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,32 +11,32 @@ public class DaoFactoryTest {
 
     @Before
     public void setUp() {
-        daoStore = DaoFactory.getDao(StoreEntityMySQL.class);
+        daoStore = DaoFactory.getDao(StoreEntitySQLServer.class);
     }
 
     @Test
     public void persistTest() {
-        StoreEntityMySQL storeEntityMySQL = new StoreEntityMySQL();
-        storeEntityMySQL.setName("yamagata versa");
-        storeEntityMySQL.setAddress("macadamia bladder, 11");
+        StoreEntitySQLServer storeEntitySQLServer = new StoreEntitySQLServer();
+        storeEntitySQLServer.setName("yamagata versa");
+        storeEntitySQLServer.setAddress("macadamia bladder, 11");
         DaoFactory.openTransaction(daoStore);
-        daoStore.persist(storeEntityMySQL);
+        daoStore.persist(storeEntitySQLServer);
         DaoFactory.closeTransaction(daoStore);
         Assert.assertNotNull(daoStore);
     }
 
     @Test
     public void multiInsertTest() {
-        StoreEntityMySQL storeEntityMySQL = new StoreEntityMySQL("patyarachka", "movzoley lenina");
-        StoreEntityMySQL storeEntityMySQL1 = new StoreEntityMySQL("chl", "en");
-        StoreEntityMySQL storeEntityMySQL2 = new StoreEntityMySQL("piz", "zza");
-        StoreEntityMySQL storeEntityMySQL3 = new StoreEntityMySQL("storeName", "address of storeName");
+        StoreEntitySQLServer storeEntitySQLServer = new StoreEntitySQLServer("patyarachka", "movzoley lenina");
+        StoreEntitySQLServer storeEntitySQLServer1 = new StoreEntitySQLServer("chl", "en");
+        StoreEntitySQLServer storeEntitySQLServer2 = new StoreEntitySQLServer("piz", "zza");
+        StoreEntitySQLServer storeEntitySQLServer3 = new StoreEntitySQLServer("storeName", "address of storeName");
 
         DaoFactory.openTransaction(daoStore);
-        daoStore.persist(storeEntityMySQL);
-        daoStore.persist(storeEntityMySQL1);
-        daoStore.persist(storeEntityMySQL2);
-        daoStore.persist(storeEntityMySQL3);
+        daoStore.persist(storeEntitySQLServer);
+        daoStore.persist(storeEntitySQLServer1);
+        daoStore.persist(storeEntitySQLServer2);
+        daoStore.persist(storeEntitySQLServer3);
         DaoFactory.closeTransaction(daoStore);
     }
 

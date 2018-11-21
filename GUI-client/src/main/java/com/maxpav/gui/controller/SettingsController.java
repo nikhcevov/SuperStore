@@ -1,5 +1,6 @@
 package com.maxpav.gui.controller;
 
+import com.maxpav.gui.controller.customelements.NumberTextField;
 import com.ovchingus.service.Settings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,6 +18,12 @@ import java.util.ResourceBundle;
 
 public class SettingsController {
 
+    private FirstController parent;
+
+    public void setParent(FirstController parent) {
+        this.parent = parent;
+    }
+
     @FXML
     private ResourceBundle resources;
 
@@ -31,9 +38,6 @@ public class SettingsController {
 
     @FXML
     private ComboBox<String> comboboxsource;
-
-    @FXML
-    private Button buttonapply;
 
     @FXML
     private Button buttonchoose;
@@ -54,7 +58,7 @@ public class SettingsController {
     private Text textsource;
 
     @FXML
-    private TextField textfieldactionstoupdate;
+    private NumberTextField textfieldactionstoupdate;
 
 
     @FXML
@@ -65,26 +69,23 @@ public class SettingsController {
 
 
     @FXML
-    private void apply(ActionEvent event) {
-        if (comboboxsource.getValue().equals("Database")) {
-            String a = Settings.getCsvFilePath();
-            Settings.setSourceMySQL();
-        }
-        if (comboboxsource.getValue().equals("Text File") && textfieldpath.getText() != null) {
-            Settings.setCsvFilePath(textfieldpath.getText());
-            Settings.setSourceCSV();
-        }
-
-    }
-
-    @FXML
     void ok(ActionEvent event) {
         if (comboboxsource.getValue().equals("Database")) {
             Settings.setSourceMySQL();
+            parent.getTextfieldCreateStore_StoreID().setText("");
+            parent.getTextfieldCreateProduct_ProductID().setText("");
+            parent.getTextfieldCreateStore_StoreID().setDisable(true);
+            parent.getTextfieldCreateProduct_ProductID().setDisable(true);
         }
         if (comboboxsource.getValue().equals("Text File") && textfieldpath.getText() != null) {
             Settings.setCsvFilePath(textfieldpath.getText());
+            if (textfieldactionstoupdate.getText().equals("")) {
+                Settings.setStepsToUpdateCsv(0);
+            }
+            Settings.setStepsToUpdateCsv(Integer.parseInt(textfieldactionstoupdate.getText()));
             Settings.setSourceCSV();
+            parent.getTextfieldCreateStore_StoreID().setDisable(false);
+            parent.getTextfieldCreateProduct_ProductID().setDisable(false);
         }
         Stage stage = (Stage) anchorpane.getScene().getWindow();
         stage.close();
@@ -100,11 +101,13 @@ public class SettingsController {
         if (comboboxsource.getValue().equals("Text File")) {
             buttonchoose.setDisable(false);
             textfieldpath.setDisable(false);
+            textfieldactionstoupdate.setDisable(false);
         }
         if (comboboxsource.getValue().equals("Database")) {
             buttonchoose.setDisable(true);
             textfieldpath.setDisable(true);
             textfieldactionstoupdate.setDisable(true);
+
         }
     }
 
@@ -116,7 +119,6 @@ public class SettingsController {
         File file = directoryChooser.showDialog(stage);
         if (file != null) {
             textfieldpath.setText(file.getAbsolutePath() + "\\");
-            buttonapply.setDisable(false);
             buttonok.setDisable(false);
         }
     }
@@ -124,8 +126,8 @@ public class SettingsController {
     @FXML
     void initialize() {
 
+
         assert anchorpane != null : "fx:id=\"anchorpane\" was not injected: check your FXML file 'SettingsScene.fxml'.";
-        assert buttonapply != null : "fx:id=\"buttonapply\" was not injected: check your FXML file 'SettingsScene.fxml'.";
         assert buttonchoose != null : "fx:id=\"buttonchoose\" was not injected: check your FXML file 'SettingsScene.fxml'.";
         assert textactionstoupdate != null : "fx:id=\"textactionstoupdate\" was not injected: check your FXML file 'SettingsScene.fxml'.";
         assert buttoncancel != null : "fx:id=\"buttoncancel\" was not injected: check your FXML file 'SettingsScene.fxml'.";
@@ -138,6 +140,7 @@ public class SettingsController {
 
         comboboxsource.getItems().add("Database");
         comboboxsource.getItems().add("Text File");
+        textfieldactionstoupdate.setText(Integer.toString(Settings.getStepsToUpdateCsv()));
         textfieldpath.setText(Settings.getCsvFilePath());
 
         if (Settings.isSourceCSV()) {

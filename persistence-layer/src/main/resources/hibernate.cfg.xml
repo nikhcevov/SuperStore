@@ -4,15 +4,26 @@
         "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
     <session-factory>
-        <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
-        <property name="hibernate.connection.url">jdbc:mysql://64.62.211.134:3306/ovchingu_ShopAppDB</property>
+        <!--
+        <property name="hibernate.connection.driver_class">com.sqlserver.cj.jdbc.Driver</property>
+        <property name="hibernate.connection.url">jdbc:sqlserver://64.62.211.134:3306/ovchingu_ShopAppDB</property>
         <property name="hibernate.connection.username">ovchingu_admin</property>
         <property name="hibernate.connection.password">0egCOr2gONb</property>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
         <property name="show_sql">true</property>
+        -->
 
-        <mapping class="com.ovchingus.persistence.mysql.entities.StoreEntityMySQL"/>
-        <mapping class="com.ovchingus.persistence.mysql.entities.ProductEntityMySQL"/>
-        <mapping class="com.ovchingus.persistence.mysql.entities.StoreProductEntityMySQL"/>
+        <property name="hibernate.hbm2ddl.auto">update</property>
+        <property name="hibernate.c3p0.idle_test_period">3600</property>
+        <property name="hibernate.max_fetch_depth">3</property>
+        <property name="connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
+        <property name="connection.url">
+            jdbc:sqlserver://localhost:1433;databaseName=SuperStoreDB;integratedSecurity=true
+        </property>
+        <property name="dialect">org.hibernate.dialect.SQLServerDialect</property>
+
+        <mapping class="com.ovchingus.persistence.sqlserver.entities.StoreEntitySQLServer"/>
+        <mapping class="com.ovchingus.persistence.sqlserver.entities.ProductEntitySQLServer"/>
+        <mapping class="com.ovchingus.persistence.sqlserver.entities.StoreProductEntitySQLServer"/>
     </session-factory>
 </hibernate-configuration>

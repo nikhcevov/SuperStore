@@ -1,16 +1,16 @@
-package com.ovchingus.persistence.mysql.dao;
+package com.ovchingus.persistence.sqlserver.dao;
 
 import com.ovchingus.persistence.GenericDao;
-import com.ovchingus.persistence.mysql.entities.ProductEntityMySQL;
-import com.ovchingus.persistence.mysql.entities.StoreEntityMySQL;
-import com.ovchingus.persistence.mysql.entities.StoreProductEntityMySQL;
+import com.ovchingus.persistence.sqlserver.entities.ProductEntitySQLServer;
+import com.ovchingus.persistence.sqlserver.entities.StoreEntitySQLServer;
+import com.ovchingus.persistence.sqlserver.entities.StoreProductEntitySQLServer;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 
-public abstract class ConnectionMySQL<T, PK> implements GenericDao<T, PK> {
+public abstract class ConnectionSQLServer<T, PK> implements GenericDao<T, PK> {
 
     private Session currentSession;
 
@@ -34,18 +34,17 @@ public abstract class ConnectionMySQL<T, PK> implements GenericDao<T, PK> {
 
     private static SessionFactory getSessionFactory() {
         Configuration configuration = new Configuration();
-        configuration.addAnnotatedClass(StoreEntityMySQL.class);
-        configuration.addAnnotatedClass(ProductEntityMySQL.class);
-        configuration.addAnnotatedClass(StoreProductEntityMySQL.class);
+        configuration.addAnnotatedClass(StoreEntitySQLServer.class);
+        configuration.addAnnotatedClass(ProductEntitySQLServer.class);
+        configuration.addAnnotatedClass(StoreProductEntitySQLServer.class);
         configuration.configure();
         StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
                 .applySettings(configuration.getProperties());
         return configuration.buildSessionFactory(builder.build());
     }
 
-    public Session openCurrentSession() {
+    public void openCurrentSession() {
         currentSession = getSessionFactory().openSession();
-        return currentSession;
     }
 
     public void openCurrentSessionWithTransaction() {
@@ -54,7 +53,7 @@ public abstract class ConnectionMySQL<T, PK> implements GenericDao<T, PK> {
     }
 
     public void closeCurrentSession() {
-        currentSession.clear();
+        currentSession.close();
     }
 
     public void closeCurrentSessionWithTransaction() {

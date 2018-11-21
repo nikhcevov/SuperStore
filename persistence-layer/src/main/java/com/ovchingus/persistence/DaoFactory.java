@@ -4,26 +4,29 @@ import com.ovchingus.persistence.csv.dao.ProductDaoCSV;
 import com.ovchingus.persistence.csv.dao.StoreDaoCSV;
 import com.ovchingus.persistence.csv.entities.ProductEntityCSV;
 import com.ovchingus.persistence.csv.entities.StoreEntityCSV;
-import com.ovchingus.persistence.mysql.dao.ConnectionMySQL;
-import com.ovchingus.persistence.mysql.dao.ProductDaoMySQL;
-import com.ovchingus.persistence.mysql.dao.StoreDaoMySQL;
-import com.ovchingus.persistence.mysql.dao.StoreProductDaoMySQL;
-import com.ovchingus.persistence.mysql.entities.ProductEntityMySQL;
-import com.ovchingus.persistence.mysql.entities.StoreEntityMySQL;
-import com.ovchingus.persistence.mysql.entities.StoreProductEntityMySQL;
 import com.ovchingus.persistence.settings.DaoSettings;
+import com.ovchingus.persistence.sqlserver.dao.ConnectionSQLServer;
+import com.ovchingus.persistence.sqlserver.dao.ProductDaoSQLServer;
+import com.ovchingus.persistence.sqlserver.dao.StoreDaoSQLServer;
+import com.ovchingus.persistence.sqlserver.dao.StoreProductDaoSQLServer;
+import com.ovchingus.persistence.sqlserver.entities.ProductEntitySQLServer;
+import com.ovchingus.persistence.sqlserver.entities.StoreEntitySQLServer;
+import com.ovchingus.persistence.sqlserver.entities.StoreProductEntitySQLServer;
 
 //TODO: DaoFactory did wrong in terms of factory method pattern! Need to repair it.
 public class DaoFactory {
 
     public static GenericDao getDao(Class daoType) {
         if (DaoSettings.isSourceMySQL()) {
-            if (daoType == StoreEntityMySQL.class)
-                return new StoreDaoMySQL();
-            if (daoType == ProductEntityMySQL.class)
-                return new ProductDaoMySQL();
-            if (daoType == StoreProductEntityMySQL.class)
-                return new StoreProductDaoMySQL();
+            if (daoType == StoreEntitySQLServer.class)
+                return new StoreDaoSQLServer();
+            if (daoType == ProductEntitySQLServer.class)
+                return new ProductDaoSQLServer();
+            if (daoType == StoreProductEntitySQLServer.class)
+                return new StoreProductDaoSQLServer();
+            // especially bad that is need for program load time initialize connection
+            if (daoType == ConnectionSQLServer.class)
+                return new StoreDaoSQLServer();
         }
         if (DaoSettings.isSourceCSV())
             if (daoType == StoreEntityCSV.class)
@@ -35,13 +38,13 @@ public class DaoFactory {
 
     public static void openTransaction(GenericDao dao) {
         if (DaoSettings.isSourceMySQL()) {
-            ((ConnectionMySQL) dao).openCurrentSessionWithTransaction();
+            ((ConnectionSQLServer) dao).openCurrentSessionWithTransaction();
         }
     }
 
     public static void closeTransaction(GenericDao dao) {
         if (DaoSettings.isSourceMySQL()) {
-            ((ConnectionMySQL) dao).openCurrentSessionWithTransaction();
+            ((ConnectionSQLServer) dao).openCurrentSessionWithTransaction();
         }
     }
 

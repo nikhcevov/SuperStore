@@ -21,9 +21,7 @@ public class MainApp extends Application {
         primaryStage.setTitle("SuperStore");
         primaryStage.setScene(new Scene(root, 600, 400));
         primaryStage.setResizable(false);
-
         primaryStage.show();
-
     }
 
     public static void main(String[] args) {

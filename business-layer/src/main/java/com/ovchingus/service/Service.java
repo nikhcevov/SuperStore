@@ -8,15 +8,21 @@ import java.util.Map;
 public class Service implements ServiceMethods {
 
 
-    private ServiceCSV serviceCSV;
-    private ServiceMySQL serviceMySQL;
+    private static ServiceCSV serviceCSV;
+    private static ServiceMySQL serviceMySQL;
 
-    public Service() {
+    public static void load() {
+        if (Settings.isSourceCSV())
+            return;
+        if (Settings.isSourceMySQL()) {
+            getSource();
+            serviceMySQL.getConnection().openCurrentSession();
+            serviceMySQL.getConnection().closeCurrentSession();
+        }
     }
 
-
     @SuppressWarnings("unchecked")
-    private <T extends ServiceMethods> T getSource() {
+    private static <T extends ServiceMethods> T getSource() {
         if (Settings.isSourceMySQL()) {
             if (serviceMySQL == null)
                 serviceMySQL = new ServiceMySQL();

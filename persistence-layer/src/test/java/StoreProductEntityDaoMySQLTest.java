@@ -1,37 +1,40 @@
-import com.ovchingus.persistence.mysql.dao.StoreProductDaoMySQL;
-import com.ovchingus.persistence.mysql.entities.StoreProductEntityMySQL;
+import com.ovchingus.persistence.sqlserver.dao.StoreProductDaoSQLServer;
+import com.ovchingus.persistence.sqlserver.entities.StoreProductEntitySQLServer;
 import org.junit.Before;
 import org.junit.Test;
 
 public class StoreProductEntityDaoMySQLTest {
 
-    private StoreProductDaoMySQL spd;
+    private StoreProductDaoSQLServer spd;
 
     @Before
     public void setUp() {
-        spd = new StoreProductDaoMySQL();
+        spd = new StoreProductDaoSQLServer();
     }
 
     @Test
     public void testPersist() {
-        StoreProductEntityMySQL sp = new StoreProductEntityMySQL();
-        StoreProductEntityMySQL.StoreProductPK spPK = new StoreProductEntityMySQL.StoreProductPK();
-        spPK.setProductId(4);
-        spPK.setStoreId(4);
+        StoreProductEntitySQLServer sp = new StoreProductEntitySQLServer();
+        StoreProductEntitySQLServer.StoreProductPK spPK = new StoreProductEntitySQLServer.StoreProductPK();
+        boolean test;
+        spPK.setProductId(6);
+        spPK.setStoreId(26);
         sp.setId(spPK);
         sp.setPrice(250.1);
         sp.setQty(13);
         spd.openCurrentSessionWithTransaction();
-        spd.persist(sp);
+        test = spd.persist(sp);
         spd.closeCurrentSessionWithTransaction();
+        System.out.println(test);
     }
 
     @Test
     public void testGetByPK() {
-        StoreProductEntityMySQL sp = new StoreProductEntityMySQL();
-        StoreProductEntityMySQL.StoreProductPK spPK = new StoreProductEntityMySQL.StoreProductPK();
-        spPK.setStoreId(4);
-        spPK.setProductId(4);
+        StoreProductEntitySQLServer sp = new StoreProductEntitySQLServer();
+        StoreProductEntitySQLServer.StoreProductPK spPK = new StoreProductEntitySQLServer.StoreProductPK();
+        spPK.setStoreId(25);
+        spPK.setProductId(5);
+        sp.setId(spPK);
         spd.openCurrentSessionWithTransaction();
         System.out.println(spd.findById(spPK));
         spd.closeCurrentSessionWithTransaction();
@@ -46,8 +49,8 @@ public class StoreProductEntityDaoMySQLTest {
 
     @Test
     public void testUpdate() {
-        StoreProductEntityMySQL sp = new StoreProductEntityMySQL();
-        StoreProductEntityMySQL.StoreProductPK spPK = new StoreProductEntityMySQL.StoreProductPK();
+        StoreProductEntitySQLServer sp = new StoreProductEntitySQLServer();
+        StoreProductEntitySQLServer.StoreProductPK spPK = new StoreProductEntitySQLServer.StoreProductPK();
         sp.setQty(12);
         spPK.setStoreId(4);
         spPK.setProductId(4);

@@ -1,6 +1,10 @@
 package com.maxpav.gui.controller;
 
+import com.maxpav.gui.controller.customelements.DoubleTextField;
+import com.maxpav.gui.controller.customelements.NumberTextField;
+import com.maxpav.gui.controller.customelements.WithoutCommaTextField;
 import com.ovchingus.service.Service;
+import com.ovchingus.service.Settings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -23,6 +27,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
+
 public class FirstController {
 
     private Service service = new Service();
@@ -30,7 +35,16 @@ public class FirstController {
     private MediaPlayer mp_error;
     private Media m_successful;
     private Media m_error;
+    private SettingsController children;
 
+
+    public NumberTextField getTextfieldCreateProduct_ProductID() {
+        return textfieldCreateProduct_ProductID;
+    }
+
+    public NumberTextField getTextfieldCreateStore_StoreID() {
+        return textfieldCreateStore_StoreID;
+    }
 
     @FXML
     private Button buttonsettings;
@@ -45,13 +59,13 @@ public class FirstController {
     private TextField textfieldInsertProductToStore_ProductName;
 
     @FXML
-    private TextField textfieldCreateProduct_ProductName;
+    private WithoutCommaTextField textfieldCreateProduct_ProductName;
 
     @FXML
     private TextField textfieldFindProductListForSum_StoreName;
 
     @FXML
-    private TextField textfieldCreateProduct_ProductID;
+    private NumberTextField textfieldCreateProduct_ProductID;
 
     @FXML
     private Button buttonFindStoreWithCheapestProduct;
@@ -63,13 +77,13 @@ public class FirstController {
     private Button buttonBuyProductsInOneStore;
 
     @FXML
-    private TextField textfieldInsertProductToStore_Price;
+    private DoubleTextField textfieldInsertProductToStore_Price;
 
     @FXML
-    private TextField textfieldFindProductListForSum_Price;
+    private DoubleTextField textfieldFindProductListForSum_Price;
 
     @FXML
-    private TextField textfieldBuyProductsInOneStore_Count;
+    private NumberTextField textfieldBuyProductsInOneStore_Count;
 
     @FXML
     private Tab tab_Customer;
@@ -78,7 +92,7 @@ public class FirstController {
     private ImageView image_Customer;
 
     @FXML
-    private TextField textfieldUpdateProduct_Price;
+    private DoubleTextField textfieldUpdateProduct_Price;
 
     @FXML
     private TextField textfieldBuyProductsInOneStore_ProductName;
@@ -93,16 +107,16 @@ public class FirstController {
     private BorderPane borderpane_Administrator;
 
     @FXML
-    private TextField textfieldInsertProductToStore_Count;
+    private NumberTextField textfieldInsertProductToStore_Count;
 
     @FXML
-    private TextField textfieldUpdateProduct_Count;
+    private NumberTextField textfieldUpdateProduct_Count;
 
     @FXML
     private TextField textfieldFindStoreWithCheapestProduct_ProductName;
 
     @FXML
-    private TextField textfieldCreateStore_StoreName;
+    private WithoutCommaTextField textfieldCreateStore_StoreName;
 
     @FXML
     private TextField textfieldUpdateProduct_StoreName;
@@ -144,7 +158,7 @@ public class FirstController {
     private TabPane tabpane_Main;
 
     @FXML
-    private TextField textfieldCreateStore_StoreID;
+    private NumberTextField textfieldCreateStore_StoreID;
 
     @FXML
     private Text console_Customer;
@@ -173,11 +187,15 @@ public class FirstController {
 
     @FXML
     private void setSettings(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/SettingsScene.fxml"));
+        Parent settings = (Parent) loader.load();
+        children = loader.getController();  // Теперь текущий контроллер "знает" о существовании "потомка"
+        children.setParent(this);
+
         Stage stage = new Stage();
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/SettingsScene.fxml"));
         stage.getIcons().add(new Image("/images/settings.png"));
         stage.setTitle("Settings");
-        stage.setScene(new Scene(root, 300, 200));
+        stage.setScene(new Scene(settings, 300, 200));
         stage.setResizable(false);
         stage.initModality(Modality.WINDOW_MODAL);
         Stage primaryStage = (Stage) anchorpane_Main.getScene().getWindow();
@@ -185,14 +203,13 @@ public class FirstController {
         stage.show();
     }
 
-
     @FXML
     private void createProduct(ActionEvent event) {
         console_Administrator.setText("Сalculation");
-        if (!textfieldCreateProduct_ProductID.getText().equals("") && !textfieldCreateProduct_ProductName.getText().equals("")) {
+        if (Check(textfieldCreateProduct_ProductID.getText(), textfieldCreateProduct_ProductName.getText()) ||
+                (Settings.isSourceMySQL() && !textfieldCreateProduct_ProductName.getText().equals(""))) {
             ObservableList<String> Items;
             Items = listview_Administrator.getItems();
-            //TODO: ПРоверка сделана
             if (service.createProduct(Integer.parseInt(textfieldCreateProduct_ProductID.getText()),
                     textfieldCreateProduct_ProductName.getText())) {
                 Items.add("Product \"" + textfieldCreateProduct_ProductName.getText() + "\" is CREATED. ID: " +
@@ -208,51 +225,39 @@ public class FirstController {
     }
 
     @FXML
-    private void updateProduct(ActionEvent event) {
-        console_Administrator.setText("Сalculation");
-
-        if (Check(textfieldUpdateProduct_StoreName.getText(),
-                textfieldUpdateProduct_ProductName.getText(),
-                textfieldUpdateProduct_Price.getText(),
-                textfieldUpdateProduct_Count.getText())) {
-            ObservableList<String> Items;
-            Items = listview_Administrator.getItems();
-            //TODO: Проверка сделана
-            if (service.updateProduct(textfieldUpdateProduct_StoreName.getText(),
-                    textfieldUpdateProduct_ProductName.getText(),
-                    Integer.parseInt(textfieldUpdateProduct_Count.getText()),
-                    Double.parseDouble(textfieldUpdateProduct_Price.getText()))) {
-                Items.add("\"" + textfieldUpdateProduct_ProductName.getText() + "\" is sold in \"" +
-                        textfieldUpdateProduct_StoreName.getText() + "\" in quantities " +
-                        textfieldUpdateProduct_Count.getText() + " by price " + textfieldUpdateProduct_Price.getText() + " RUB");
-                listview_Administrator.setItems(Items);
-                successful_Administrator();
-            } else {
-                Items.add("ERROR! Product \"" + textfieldUpdateProduct_ProductName.getText() + "\" is NOT UPDATED.");
-                listview_Administrator.setItems(Items);
-                error_Administrator();
-            }
-        } else error_Administrator();
-    }
-
-    @FXML
     private void createStore(ActionEvent event) {
         console_Administrator.setText("Сalculation");
-        if (!textfieldCreateStore_StoreID.getText().equals("") && !textfieldCreateStore_StoreName.getText().equals("") &&
-                !textfieldCreateStore_StoreAdress.getText().equals("")) {
+        boolean check = Settings.isSourceMySQL() && !textfieldCreateStore_StoreName.getText().equals("")
+                && !textfieldCreateStore_StoreAdress.getText().equals("");
+        if (Check(textfieldCreateStore_StoreID.getText(), textfieldCreateStore_StoreName.getText(),
+                textfieldCreateStore_StoreAdress.getText())
+                || check) {
             ObservableList<String> Items;
             Items = listview_Administrator.getItems();
-            //TODO: Проверка сделана
-            if (service.createStore(Integer.parseInt(textfieldCreateStore_StoreID.getText()),
-                    textfieldCreateStore_StoreName.getText(), textfieldCreateStore_StoreAdress.getText())) {
-                Items.add("Store \"" + textfieldCreateStore_StoreName.getText() + "\", \"" + textfieldCreateStore_StoreAdress.getText() +
-                        "\" is CREATED. ID: " + textfieldCreateStore_StoreID.getText());
-                listview_Administrator.setItems(Items);
-                successful_Administrator();
-            } else {
-                Items.add("ERROR! Store \"" + textfieldCreateStore_StoreName.getText() + "\" is NOT CREATED.");
-                listview_Administrator.setItems(Items);
-                error_Administrator();
+            if (Settings.isSourceCSV()) {
+                if (service.createStore(Integer.parseInt(textfieldCreateStore_StoreID.getText()),
+                        textfieldCreateStore_StoreName.getText(), textfieldCreateStore_StoreAdress.getText())) {
+                    Items.add("Store \"" + textfieldCreateStore_StoreName.getText() + "\", \"" + textfieldCreateStore_StoreAdress.getText() +
+                            "\" is CREATED.");
+                    listview_Administrator.setItems(Items);
+                    successful_Administrator();
+                } else {
+                    Items.add("ERROR! Store \"" + textfieldCreateStore_StoreName.getText() + "\" is NOT CREATED.");
+                    listview_Administrator.setItems(Items);
+                    error_Administrator();
+                }
+            }
+            if (Settings.isSourceMySQL()) {
+                if (service.createStore(0, textfieldCreateStore_StoreName.getText(), textfieldCreateStore_StoreAdress.getText())) {
+                    Items.add("Store \"" + textfieldCreateStore_StoreName.getText() + "\", \"" + textfieldCreateStore_StoreAdress.getText() +
+                            "\" is CREATED.");
+                    listview_Administrator.setItems(Items);
+                    successful_Administrator();
+                } else {
+                    Items.add("ERROR! Store \"" + textfieldCreateStore_StoreName.getText() + "\" is NOT CREATED.");
+                    listview_Administrator.setItems(Items);
+                    error_Administrator();
+                }
             }
         } else error_Administrator();
     }
@@ -260,14 +265,10 @@ public class FirstController {
     @FXML
     private void insertProductToStore(ActionEvent event) {
         console_Administrator.setText("Сalculation");
-        if (!textfieldInsertProductToStore_StoreName.getText().equals("") &&
-                !textfieldInsertProductToStore_ProductName.getText().equals("") &&
-                !textfieldInsertProductToStore_Price.getText().equals("") &&
-                !textfieldInsertProductToStore_Count.getText().equals("")) {
+        if (Check(textfieldInsertProductToStore_StoreName.getText(), textfieldInsertProductToStore_ProductName.getText(),
+                textfieldInsertProductToStore_Price.getText(), textfieldInsertProductToStore_Count.getText())) {
             ObservableList<String> Items;
             Items = listview_Administrator.getItems();
-
-            //TODO: Проверка сделана
             if (service.insertProductToStore(textfieldInsertProductToStore_StoreName.getText(),
                     textfieldInsertProductToStore_ProductName.getText(),
                     Integer.parseInt(textfieldInsertProductToStore_Count.getText()),
@@ -286,119 +287,172 @@ public class FirstController {
     }
 
     @FXML
+    private void updateProduct(ActionEvent event) {
+        console_Administrator.setText("Сalculation");
+
+        if (Check(textfieldUpdateProduct_StoreName.getText(),
+                textfieldUpdateProduct_ProductName.getText(),
+                textfieldUpdateProduct_Price.getText(),
+                textfieldUpdateProduct_Count.getText())) {
+            ObservableList<String> Items;
+            Items = listview_Administrator.getItems();
+            if (service.updateProduct(textfieldUpdateProduct_StoreName.getText(),
+                    textfieldUpdateProduct_ProductName.getText(),
+                    Integer.parseInt(textfieldUpdateProduct_Count.getText()),
+                    Double.parseDouble(textfieldUpdateProduct_Price.getText()))) {
+                Items.add("\"" + textfieldUpdateProduct_ProductName.getText() + "\" is sold in \"" +
+                        textfieldUpdateProduct_StoreName.getText() + "\" in quantities " +
+                        textfieldUpdateProduct_Count.getText() + " by price " + textfieldUpdateProduct_Price.getText() + " RUB");
+                listview_Administrator.setItems(Items);
+                successful_Administrator();
+            } else {
+                Items.add("ERROR! Product \"" + textfieldUpdateProduct_ProductName.getText() + "\" is NOT UPDATED.");
+                listview_Administrator.setItems(Items);
+                error_Administrator();
+            }
+        } else error_Administrator();
+    }
+
+    @FXML
     private void findStoreWithCheapestProduct(ActionEvent event) {
         console_Customer.setText("Сalculation");
-        if (!textfieldFindStoreWithCheapestProduct_ProductName.getText().equals("")) {
-
-            //TODO: Метод возвращает String. Нужна проверка на "null";
-            ObservableList<String> Items = FXCollections.observableArrayList();
+        ObservableList<String> Items = FXCollections.observableArrayList();
+        if (Check(textfieldFindStoreWithCheapestProduct_ProductName.getText())) {
             String answer = service.findStoreWithCheapestProduct(textfieldFindStoreWithCheapestProduct_ProductName.getText());
-            if (answer == null) {
-                Items.add("Store is NOT FOUND");
-                listview_Customer.setItems(Items);
-                successful_Customer();
-            } else {
+            if (answer != null) {
                 Items.add(answer);
                 listview_Customer.setItems(Items);
                 successful_Customer();
+            } else {
+                Items.add("Store is NOT FOUND");
+                listview_Customer.setItems(Items);
+                error_Customer();
             }
-        } else error_Customer();
+        } else {
+            Items.add("Not all fields are filled!");
+            listview_Customer.setItems(Items);
+            error_Customer();
+        }
     }
 
     @FXML
     private void findProductListForSum(ActionEvent event) {
         console_Customer.setText("Сalculation");
-        if (!textfieldFindProductListForSum_StoreName.getText().equals("") &&
-                !textfieldFindProductListForSum_Price.getText().equals("")) {
-
-
-            //TODO: Метод возвращает Map<String, Integer>. Нужна проверка на "null";
+        ObservableList<String> Items = FXCollections.observableArrayList();
+        if (Check(textfieldFindProductListForSum_StoreName.getText(), textfieldFindProductListForSum_Price.getText())) {
             Map<String, Integer> map = service.findProductListForSum(textfieldFindProductListForSum_StoreName.getText(),
                     Double.parseDouble(textfieldFindProductListForSum_Price.getText()));
-            ObservableList<String> Items = FXCollections.observableArrayList();
-            for (Map.Entry<String, Integer> pair : map.entrySet()) {
-                Items.add(pair.getKey() + " : " + pair.getValue());
+            if (!map.isEmpty()) {
+                for (Map.Entry<String, Integer> pair : map.entrySet()) {
+                    Items.add(pair.getKey() + " : " + pair.getValue());
+                    listview_Customer.setItems(Items);
+                    successful_Customer();
+                }
+            } else {
+                Items.add("Product list is NOT COMPILED");
+                listview_Customer.setItems(Items);
+                error_Customer();
             }
+        } else {
+            Items.add("Not all fields are filled!");
             listview_Customer.setItems(Items);
-            successful_Customer();
-        } else error_Customer();
+            error_Customer();
+        }
     }
-
 
     @FXML
     private void buyProductsInOneStore(ActionEvent event) {
         console_Customer.setText("Сalculation");
-        if (!textfieldBuyProductsInOneStore_StoreName.getText().equals("") &&
-                !textfieldBuyProductsInOneStore_ProductName.getText().equals("") &&
-                !textfieldBuyProductsInOneStore_Count.getText().equals("")) {
-            ObservableList<String> Items = FXCollections.observableArrayList();
-
-            //TODO: Проверка сделана.
-            Double aDouble = service.buyProductsInOneStore(textfieldBuyProductsInOneStore_StoreName.getText(),
+        ObservableList<String> Items = FXCollections.observableArrayList();
+        if (Check(textfieldBuyProductsInOneStore_StoreName.getText(), textfieldBuyProductsInOneStore_ProductName.getText(),
+                textfieldBuyProductsInOneStore_Count.getText())) {
+            Double answer = service.buyProductsInOneStore(textfieldBuyProductsInOneStore_StoreName.getText(),
                     textfieldBuyProductsInOneStore_ProductName.getText(),
                     Integer.parseInt(textfieldBuyProductsInOneStore_Count.getText()));
-            if (aDouble != null) {
-                Items.add("Sum = " + aDouble + " RUB");
+            if (answer != null) {
+                Items.add("Sum = " + answer + " RUB");
                 listview_Customer.setItems(Items);
                 successful_Customer();
+            } else {
+                Items.add("Purchase of products is NOT MADE");
+                listview_Customer.setItems(Items);
+                error_Customer();
             }
-            Items.add("ERROR! The purchase of products is NOT MADE");
+        } else {
+            Items.add("Not all fields are filled!");
             listview_Customer.setItems(Items);
             error_Customer();
-        } else error_Customer();
+        }
     }
 
     @FXML
     private void findStoreWithCheapestShopList(ActionEvent event) {
         console_Customer.setText("Сalculation");
-        if (!textfieldFindStoreWithCheapestShopList_ProductsAndCount.getText().equals("")) {
-            ObservableList<String> Items = FXCollections.observableArrayList();
-            //TODO: Метод возвращает String. Нужна проверка на "null";
-            Items.add(service.findStoreWithCheapestShopList(textfieldFindStoreWithCheapestShopList_ProductsAndCount.getText()));
-            listview_Administrator.setItems(Items);
-            successful_Customer();
-        } else error_Customer();
+        ObservableList<String> Items = FXCollections.observableArrayList();
+        if (Check(textfieldFindStoreWithCheapestShopList_ProductsAndCount.getText())) {
+            String answer = service.findStoreWithCheapestShopList(textfieldFindStoreWithCheapestShopList_ProductsAndCount.getText());
+            if (answer != null) {
+                Items.add(answer);
+                listview_Customer.setItems(Items);
+                successful_Customer();
+            } else {
+                Items.add("Store is NOT FOUND");
+                listview_Customer.setItems(Items);
+                error_Customer();
+            }
+        } else {
+            Items.add("Not all fields are filled!");
+            listview_Customer.setItems(Items);
+            error_Customer();
+        }
     }
 
     private void error_Administrator() {
         anchorpane_Administrator.setStyle("-fx-background-color: #f45942");
         mp_error.stop();
         mp_error.play();
-        console_Administrator.setText("Error");
+        console_Administrator.setText("Unsuccessfully");
     }
 
     private void successful_Administrator() {
         anchorpane_Administrator.setStyle("-fx-background-color: #3cb371");
         mp_successful.stop();
         mp_successful.play();
-        console_Administrator.setText("Successful");
+        console_Administrator.setText("Successfully");
     }
 
     private void error_Customer() {
         anchorpane_Customer.setStyle("-fx-background-color: #f45942");
+
         mp_error.stop();
         mp_error.play();
-        console_Customer.setText("Error");
+        console_Customer.setText("Unsuccessfully");
     }
 
     private void successful_Customer() {
         anchorpane_Customer.setStyle("-fx-background-color: #3cb371");
         mp_successful.stop();
         mp_successful.play();
-        console_Customer.setText("Successful");
+        console_Customer.setText("Successfully");
     }
 
 
     @FXML
     void initialize() {
+        if (Settings.isSourceMySQL()) {
+            textfieldCreateProduct_ProductID.setDisable(true);
+            textfieldCreateStore_StoreID.setDisable(true);
+        } else {
+            textfieldCreateStore_StoreID.setDisable(false);
+            textfieldCreateProduct_ProductID.setDisable(false);
+        }
+
         String path_successful = new File("GUI-client/src/main/resources/media/successful.mp3").getAbsolutePath();
         String path_error = new File("GUI-client/src/main/resources/media/error.mp3").getAbsolutePath();
         m_successful = new Media(new File(path_successful).toURI().toString());
         m_error = new Media(new File(path_error).toURI().toString());
         mp_successful = new MediaPlayer(m_successful);
         mp_error = new MediaPlayer(m_error);
-
-
         assert textfieldFindStoreWithCheapestShopList_ProductsAndCount != null : "fx:id=\"textfieldFindStoreWithCheapestShopList_ProductsAndCount\" was not injected: check your FXML file 'FirstScene.fxml'.";
         assert anchorpane_Administrator != null : "fx:id=\"anchorpane_Administrator\" was not injected: check your FXML file 'FirstScene.fxml'.";
         assert textfieldInsertProductToStore_ProductName != null : "fx:id=\"textfieldInsertProductToStore_ProductName\" was not injected: check your FXML file 'FirstScene.fxml'.";

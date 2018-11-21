@@ -16,6 +16,7 @@
       <module name="GUI-client" target="1.8" />
       <module name="persistence-layer" target="1.8" />
       <module name="SuperStore" target="1.8" />
+      <module name="web" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

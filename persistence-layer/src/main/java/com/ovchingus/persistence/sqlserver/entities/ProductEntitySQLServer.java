@@ -1,14 +1,15 @@
-package com.ovchingus.persistence.mysql.entities;
+package com.ovchingus.persistence.sqlserver.entities;
 
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "Product")
-public class ProductEntityMySQL {
+public class ProductEntitySQLServer implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,23 +22,23 @@ public class ProductEntityMySQL {
     private String name;
 
     @ManyToMany(mappedBy = "productEntitiesMySQL")
-    private Set<StoreEntityMySQL> storeEntitiesMySQL = new HashSet<>();
+    private Set<StoreEntitySQLServer> storeEntitiesMySQL = new HashSet<>();
 
-    public ProductEntityMySQL(Integer id, String name) {
+    public ProductEntitySQLServer(Integer id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public ProductEntityMySQL(String name) {
+    public ProductEntitySQLServer(String name) {
         this.name = name;
     }
 
-    public ProductEntityMySQL(String name, Set<StoreEntityMySQL> storeEntitiesMySQL) {
+    public ProductEntitySQLServer(String name, Set<StoreEntitySQLServer> storeEntitiesMySQL) {
         this.name = name;
         this.storeEntitiesMySQL = storeEntitiesMySQL;
     }
 
-    public ProductEntityMySQL() {
+    public ProductEntitySQLServer() {
     }
 
     public Integer getId() {
@@ -56,16 +57,16 @@ public class ProductEntityMySQL {
         this.name = name;
     }
 
-    public Set<StoreEntityMySQL> getStoreEntitiesMySQL() {
+    public Set<StoreEntitySQLServer> getStoreEntitiesMySQL() {
         return storeEntitiesMySQL;
     }
 
-    public void setStoreEntitiesMySQL(Set<StoreEntityMySQL> mySQLStoreEntities) {
+    public void setStoreEntitiesMySQL(Set<StoreEntitySQLServer> mySQLStoreEntities) {
         this.storeEntitiesMySQL = mySQLStoreEntities;
     }
 
     @Override
     public String toString() {
-        return "ProductEntityMySQL: " + this.id + ", " + this.name;
+        return "ProductEntitySQLServer: " + this.id + ", " + this.name;
     }
 }

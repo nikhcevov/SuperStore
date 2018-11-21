@@ -17,7 +17,6 @@ import java.util.Map;
 public class ServiceCSV implements ServiceMethods {
 
     private GenericDao daoStoreEntity = DaoFactory.getDao(StoreEntityCSV.class);
-
     private GenericDao daoProductEntity = DaoFactory.getDao(ProductEntityCSV.class);
 
     @Override
@@ -44,22 +43,21 @@ public class ServiceCSV implements ServiceMethods {
         StoreEntityCSV temp = (StoreEntityCSV) daoStoreEntity.findByName(storeName);
         ProductEntityCSV prod = (ProductEntityCSV) daoProductEntity.findByName(productName);
 
-        List<ProductInfo> list = prod.getProducts();
-        ProductInfo pi = new ProductInfo();
-        pi.setStoreId(temp.getId());
-        pi.setQty(qty);
-        pi.setPrice(price);
-
-        // check existence of adding element by storeID
-        for (ProductInfo item : list) {
-            if (item.getStoreId().equals(pi.getStoreId()))
-                return false;
-        }
-        list.add(pi);
-        prod.setProducts(list);
-        return daoProductEntity.update(prod);
-
-
+        if (temp != null && prod != null) {
+            List<ProductInfo> list = prod.getProducts();
+            ProductInfo pi = new ProductInfo();
+            pi.setStoreId(temp.getId());
+            pi.setQty(qty);
+            pi.setPrice(price);
+            // check existence of adding element by storeID
+            for (ProductInfo item : list) {
+                if (item.getStoreId().equals(pi.getStoreId()))
+                    return false;
+            }
+            list.add(pi);
+            prod.setProducts(list);
+            return daoProductEntity.update(prod);
+        } else return false;
     }
 
     @Override
@@ -67,53 +65,59 @@ public class ServiceCSV implements ServiceMethods {
     public boolean updateProduct(String storeName, String productName, Integer qty, Double price) {
         ProductEntityCSV temp = (ProductEntityCSV) daoProductEntity.findByName(productName);
         StoreEntityCSV store = (StoreEntityCSV) daoStoreEntity.findByName(storeName);
-        List<ProductInfo> list = new ArrayList<>(temp.getProducts());
 
-        for (ProductInfo item : list)
-            if (item.getStoreId().equals(store.getId())) {
-                item.setPrice(price);
-                item.setQty(qty);
+        if (temp != null && store != null) {
+            List<ProductInfo> list = new ArrayList<>(temp.getProducts());
+            if (!list.isEmpty()) {
+                for (ProductInfo item : list)
+                    if (item.getStoreId().equals(store.getId())) {
+                        item.setPrice(price);
+                        item.setQty(qty);
+                    }
+                ProductEntityCSV out = new ProductEntityCSV();
+                out.setProducts(list);
+                out.setName(productName);
+                out.setId(temp.getId());
+                return daoProductEntity.update(out);
             }
-
-        ProductEntityCSV out = new ProductEntityCSV();
-        out.setProducts(list);
-        out.setName(productName);
-        out.setId(temp.getId());
-
-        return daoProductEntity.update(out);
+        }
+        return false;
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public String findStoreWithCheapestProduct(String productName) {
         ProductEntityCSV temp = (ProductEntityCSV) daoProductEntity.findByName(productName);
-        List<ProductInfo> list = temp.getProducts();
 
-        if (!list.isEmpty()) {
-            ProductInfo out = null;
-            Double min = 0.0;
-            if (list.get(0).getPrice() >= 0) {
-                min = list.get(0).getPrice();
-            }
-            for (ProductInfo item : list) {
-                if (item.getPrice() <= min) {
-                    min = item.getPrice();
-                    out = new ProductInfo(item.getStoreId(),
-                            item.getQty(), item.getPrice());
+        if (temp != null) {
+            List<ProductInfo> list = temp.getProducts();
+            if (!list.isEmpty()) {
+                ProductInfo out = null;
+                Double min = 0.0;
+                if (list.get(0).getPrice() >= 0) {
+                    min = list.get(0).getPrice();
+                }
+                for (ProductInfo item : list) {
+                    if (item.getPrice() <= min) {
+                        min = item.getPrice();
+                        out = new ProductInfo(item.getStoreId(),
+                                item.getQty(), item.getPrice());
+                    }
+                }
+                if (out != null) {
+                    StoreEntityCSV ans = (StoreEntityCSV) daoStoreEntity.findById(out.getStoreId());
+                    return ans.getName();
                 }
             }
-            if (out != null) {
-                StoreEntityCSV ans = (StoreEntityCSV) daoStoreEntity.findById(out.getStoreId());
-                return ans.getName();
-            } else return null;
-        } else return null;
+        }
+        return null;
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public Map<String, Integer> findProductListForSum(String storeName, Double budget) {
         List<ProductEntityCSV> products = daoProductEntity.findAll();
-        int counter = 0;
+        int counter;
         Map<String, Integer> map = new HashMap<>();
 
         for (ProductEntityCSV item : products) {
@@ -133,24 +137,28 @@ public class ServiceCSV implements ServiceMethods {
         ProductEntityCSV product = (ProductEntityCSV) daoProductEntity.findByName(productName);
         Double sum = null;
 
-        for (ProductInfo item : product.getProducts()) {
-            if (item.getStoreId().equals(store.getId()) && item.getQty() >= qty) {
-                item.setQty(item.getQty() - qty);
-                sum = item.getPrice() * qty;
+        if (store != null && product != null) {
+            for (ProductInfo item : product.getProducts()) {
+                if (item.getStoreId().equals(store.getId()) && item.getQty() >= qty) {
+                    item.setQty(item.getQty() - qty);
+                    sum = item.getPrice() * qty;
+                    updateProduct(storeName, productName, item.getQty(), item.getPrice());
+                }
             }
         }
         return sum;
     }
 
-    @Override
-    public String findStoreWithCheapestShopList(String query) {
-        List<ProductEntityCSV> prodList = daoProductEntity.findAll();
 
-        List<ProductEntityCSV> list = new ArrayList<>();
+    /**
+     * ATTENTION !!!!!!!!!!!! DON`T LOOK INSIDE
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public String findStoreWithCheapestShopList(String query) {
         Map<ProductEntityCSV, Integer> qtyForProd = new HashMap<>();
         MultiMap storesWithProdList = new MultiValueMap();
         int counterOfNecessaryProductTypes = 0;
-
 
         // find products and pull them to map of ProductEntity and qty
         // A.K. parce query
@@ -158,14 +166,15 @@ public class ServiceCSV implements ServiceMethods {
             String name = item.substring(0, item.indexOf(","));
             Integer qty = Integer.parseInt(item.substring(item.indexOf(",") + 1));
             ProductEntityCSV prod = (ProductEntityCSV) daoProductEntity.findByName(name);
-            qtyForProd.put(prod, qty);
-            // pull all products from query to Map of [StoreID,list<products>]
-            for (ProductInfo pi : prod.getProducts()) {
-                storesWithProdList.put(pi.getStoreId(), prod);
-            }
-            counterOfNecessaryProductTypes++;
+            if (prod != null) {
+                qtyForProd.put(prod, qty);
+                // pull all products from query to Map of [StoreID,list<products>]
+                for (ProductInfo pi : prod.getProducts()) {
+                    storesWithProdList.put(pi.getStoreId(), prod);
+                }
+                counterOfNecessaryProductTypes++;
+            } else return null;
         }
-
         Map<Integer, Double> storeIdAndSum = new HashMap<>();
         // each entry is one store
         for (Object entryObj : storesWithProdList.entrySet()) {
@@ -173,7 +182,7 @@ public class ServiceCSV implements ServiceMethods {
             Integer curStoreID = (Integer) entry.getKey();
             List<ProductEntityCSV> curProdList = (List<ProductEntityCSV>) entry.getValue();
             //sum of query in entry
-            Double entrySum = 0.0;
+            double entrySum = 0.0;
             //sum found for count of products.
             // if < then counterOfNecessaryProducts then not all products in store exists.
             int countOfProductsTypes = 0;
@@ -198,7 +207,6 @@ public class ServiceCSV implements ServiceMethods {
                 storeIdAndSum.put(curStoreID, entrySum);
         }
 
-
         // step3: find stores with cheapest sum
         Double minSum = Double.MAX_VALUE;
         Integer minSumStoreID = null;
@@ -210,6 +218,8 @@ public class ServiceCSV implements ServiceMethods {
             }
         }
         out = (StoreEntityCSV) daoStoreEntity.findById(minSumStoreID);
-        return out.getName();
+        if (out != null)
+            return out.getName();
+        else return null;
     }
 }

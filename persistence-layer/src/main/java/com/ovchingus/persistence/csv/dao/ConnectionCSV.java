@@ -97,4 +97,12 @@ abstract class ConnectionCSV<T> implements GenericDao<T, Integer> {
             }
         } else log.error("File " + filePath + " wasn`t cleared. Initialize error");
     }
+
+    @Override
+    public void closeCurrentSession() {
+    }
+
+    @Override
+    public void openCurrentSession() {
+    }
 }

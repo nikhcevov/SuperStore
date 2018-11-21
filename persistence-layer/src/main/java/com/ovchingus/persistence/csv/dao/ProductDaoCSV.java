@@ -198,4 +198,10 @@ public class ProductDaoCSV extends ConnectionCSV<ProductEntityCSV> {
             return null;
         }
     }
+
+    @Override
+    public boolean contains(String name) {
+        ProductEntityCSV product = findByName(name);
+        return product != null;
+    }
 }

@@ -18,4 +18,10 @@ public interface GenericDao<T, PK> {
     public boolean deleteAll();
 
     public T findByName(String name);
+
+    public boolean contains(String name);
+
+    public void openCurrentSession();
+
+    public void closeCurrentSession();
 }

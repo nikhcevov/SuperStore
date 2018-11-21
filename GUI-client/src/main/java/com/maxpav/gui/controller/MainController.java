@@ -1,6 +1,7 @@
 package com.maxpav.gui.controller;
 
 import com.maxpav.gui.MainApp;
+import com.ovchingus.service.Service;
 import com.ovchingus.service.Settings;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -22,6 +23,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class MainController {
+
 
     @FXML
     private Button button;
@@ -138,10 +140,17 @@ public class MainController {
 
 
     private class bg_Thread implements Runnable {
+        Thread loader = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Service.load();
+            }
+        });
 
         @Override
         public void run() {
             int color;
+            loader.start();
             for (int i = 0; i <= 100; i++) {
                 progressbar.setProgress(i / 100.00);
                 try {

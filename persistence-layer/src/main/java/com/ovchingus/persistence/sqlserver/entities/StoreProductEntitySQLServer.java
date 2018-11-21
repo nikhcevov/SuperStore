@@ -1,12 +1,12 @@
-package com.ovchingus.persistence.mysql.entities;
+package com.ovchingus.persistence.sqlserver.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Store_Product")
-public class StoreProductEntityMySQL {
+@Table(name = "StoreProduct")
+public class StoreProductEntitySQLServer implements Serializable {
 
     @EmbeddedId
     private StoreProductPK id;
@@ -20,11 +20,9 @@ public class StoreProductEntityMySQL {
     @Embeddable
     public static class StoreProductPK implements Serializable {
 
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Column(name = "store_id")
         private Integer storeId;
 
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Column(name = "product_id")
         private Integer productId;
 
@@ -72,18 +70,18 @@ public class StoreProductEntityMySQL {
         }
     }
 
-    public StoreProductEntityMySQL(StoreProductPK id, Double price, Integer qty) {
+    public StoreProductEntitySQLServer(StoreProductPK id, Double price, Integer qty) {
         this.id = id;
         this.price = price;
         this.qty = qty;
     }
 
-    public StoreProductEntityMySQL(Double price, Integer qty) {
+    public StoreProductEntitySQLServer(Double price, Integer qty) {
         this.price = price;
         this.qty = qty;
     }
 
-    public StoreProductEntityMySQL() {
+    public StoreProductEntitySQLServer() {
     }
 
     public StoreProductPK getId() {
@@ -112,6 +110,6 @@ public class StoreProductEntityMySQL {
 
     @Override
     public String toString() {
-        return "StoreProductEntityMySQL: " + this.id + ", " + this.price + ", " + this.qty;
+        return "StoreProductEntitySQLServer: " + this.id + ", " + this.price + ", " + this.qty;
     }
 }
