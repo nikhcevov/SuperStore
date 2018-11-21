@@ -19,9 +19,9 @@ public class StoreDaoSQLServer extends ConnectionSQLServer<StoreEntitySQLServer,
     }
 
     public boolean update(StoreEntitySQLServer entity) {
-        if (findByName(entity.getName()) != null)
-            getCurrentSession().update(entity);
-        else return false;
+        if (findByName(entity.getName()) != null) {
+            getCurrentSession().merge(entity);
+        } else return false;
         return findByName(entity.getName()) != null;
     }
 

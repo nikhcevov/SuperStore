@@ -16,8 +16,9 @@ public class StoreProductDaoSQLServer extends ConnectionSQLServer<StoreProductEn
     }
 
     public boolean update(StoreProductEntitySQLServer entity) {
-        if (findById(entity.getId()) != null)
-            getCurrentSession().update(entity);
+        if (findById(entity.getId()) != null) {
+            getCurrentSession().merge(entity);
+        }
         else return false;
         return findById(entity.getId()) != null;
     }

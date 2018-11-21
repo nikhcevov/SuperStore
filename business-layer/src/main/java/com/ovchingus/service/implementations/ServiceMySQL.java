@@ -62,6 +62,7 @@ public class ServiceMySQL implements ServiceMethods {
         StoreEntitySQLServer store;
         ProductEntitySQLServer product;
         boolean result;
+        StoreProductDaoSQLServer dao = new StoreProductDaoSQLServer();
 
         daoStoreEntity.openCurrentSession();
         store = (StoreEntitySQLServer) daoStoreEntity.findByName(storeName);
@@ -71,7 +72,7 @@ public class ServiceMySQL implements ServiceMethods {
         product = (ProductEntitySQLServer) daoProductEntity.findByName(productName);
         daoProductEntity.closeCurrentSession();
 
-        daoStoreProductEntity.openCurrentSession();
+        //daoStoreProductEntity.openCurrentSession();
         if (store != null && product != null) {
             StoreProductEntitySQLServer sp = new StoreProductEntitySQLServer();
             StoreProductEntitySQLServer.StoreProductPK spPK = new StoreProductEntitySQLServer.StoreProductPK();
@@ -80,9 +81,11 @@ public class ServiceMySQL implements ServiceMethods {
             sp.setId(spPK);
             sp.setQty(qty);
             sp.setPrice(price);
-            result = daoStoreProductEntity.persist(sp);
+            dao.openCurrentSessionWithTransaction();
+            result = dao.persist(sp);//daoStoreProductEntity.persist(sp);
+            dao.closeCurrentSessionWithTransaction();
         } else result = false;
-        daoStoreProductEntity.closeCurrentSession();
+        //daoStoreProductEntity.closeCurrentSession();
         return result;
     }
 
@@ -102,7 +105,7 @@ public class ServiceMySQL implements ServiceMethods {
         product = (ProductEntitySQLServer) daoProductEntity.findByName(productName);
         daoProductEntity.closeCurrentSession();
 
-        daoStoreProductEntity.openCurrentSession();
+        //daoStoreProductEntity.openCurrentSession();
         if (store != null && product != null) {
             StoreProductEntitySQLServer sp = new StoreProductEntitySQLServer();
             StoreProductEntitySQLServer.StoreProductPK spPK = new StoreProductEntitySQLServer.StoreProductPK();
@@ -111,9 +114,12 @@ public class ServiceMySQL implements ServiceMethods {
             sp.setId(spPK);
             sp.setQty(qty);
             sp.setPrice(price);
-            result = daoStoreProductEntity.update(sp);//daoStoreProductEntity.persist(sp);
+            dao.openCurrentSessionWithTransaction();
+
+            result = dao.update(sp);//daoStoreProductEntity.persist(sp);
+            dao.closeCurrentSessionWithTransaction();
         } else result = false;
-        daoStoreProductEntity.closeCurrentSession();
+        //daoStoreProductEntity.closeCurrentSession();
         return result;
     }
 
